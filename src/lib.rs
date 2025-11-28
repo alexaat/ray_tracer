@@ -1,4 +1,7 @@
-fn generate_pixel(x: u32, y: u32) -> Point{
+use wasm_bindgen::prelude::*;
+
+
+pub fn generate_pixel(x: u32, y: u32) -> Point{
     let r = rand::random_range(0..255);
     let g = rand::random_range(0..255);
     let b = rand::random_range(0..255);
