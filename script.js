@@ -39,20 +39,15 @@ async function run(){
 run();
 
 
-/*    
-
+/*
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
-
-
 ctx.fillStyle = '#FF0000'; // Set color to red
 ctx.fillRect(0, 0, 50, 50); // Draw rectangle
 ctx.fillStyle = '#00FF00'; // Set color to red
 ctx.fillRect(0, 50, 50, 50); // Draw rectangle
 ctx.fillStyle = '#0000FF'; // Set color to red
 ctx.fillRect(0, 100, 50, 50); // Draw rectangle
-
-
 // Convert canvas to data URL
 const imageData = canvas.toDataURL('image/png');
 // Link to download image
