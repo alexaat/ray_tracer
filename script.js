@@ -9,24 +9,29 @@ async function run(){
 
     function get_px(x,y){
         let point = generate_pixel(x,y);
-        const r = point.color.r.toString(16);
-        const g = point.color.g.toString(16);
-        const b = point.color.b.toString(16);
+        let r = point.color.r.toString(16);
+        r = r.length == 1 ? "0" + r : r;
+        let g = point.color.g.toString(16);
+        g = g.length == 1 ? "0" + g : g;
+        let b = point.color.b.toString(16);
+        b = b.length == 1 ? "0" + b : b;
         
-        const color = `#${r}0${g}0${b}`;
+        const color = `#${r}${g}${b}`;
 
         console.log(color);
         ctx.fillStyle = color;
 
-        ctx.fillRect(y, x, 50, 50)
+        ctx.fillRect(y, x, 1, 1)
 
 
     }
 
-    get_px(0,0);
-    get_px(0,50);
-    get_px(0,100);
-
+    for (let y = 0; y < 500;  y++){
+        for (let x = 0; x<500; x++){
+             get_px(x,y);
+        }
+       
+    }
 
     // Convert canvas to data URL
     const imageData = canvas.toDataURL('image/png');
