@@ -1,4 +1,3 @@
-use rand::Rng;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
