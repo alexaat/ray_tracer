@@ -1,3 +1,4 @@
+
 use wasm_bindgen::prelude::*;
 use rand::Rng;
 use crate::constants::{IMAGE_HEIGHT, IMAGE_WIDTH};
@@ -23,6 +24,11 @@ pub fn get_image_dimensions() -> Dimen{
     Dimen { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
 }
 
+#[wasm_bindgen]
+pub fn get_shapes_titles() -> Vec<String>{
+    vec!["block".to_string(), "plane".to_string()]
+}
+
 #[derive(Debug)]
 #[wasm_bindgen]
 pub struct Point {
@@ -44,4 +50,8 @@ pub struct Color {
 pub struct Dimen{
     pub width: u32,
     pub height: u32
+}
+
+pub fn add(x: i32, y: i32) -> i32{
+    x + y
 }

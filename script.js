@@ -1,4 +1,4 @@
-import init, {generate_pixel, get_image_dimensions} from "./pkg/ray_tracer.js";
+import init, {generate_pixel, get_image_dimensions, get_shapes_titles} from "./pkg/ray_tracer.js";
 
 //elements
 const canvas = document.getElementById('myCanvas');
@@ -7,6 +7,7 @@ const myCanvas = document.querySelector("#myCanvas");
 const imageWidth = document.querySelector("#imageWidth"); 
 const imageHeight = document.querySelector("#imageHeight");
 const generateImageButton = document.querySelector("#generateImage");
+const shapesOption = document.querySelector("#shapesOption");
 
 //state
 let outputImageWidth = 10;
@@ -23,6 +24,9 @@ async function run(){
 
     //init generateImage button
     init_generate_image_button();
+
+    //init shapes selector
+    init_shapes_selector();
 }
 
 run();
@@ -62,6 +66,20 @@ function init_generate_image_button(){
 
 }
 
+function init_shapes_selector(){
+    const shapes_titles = get_shapes_titles();
+
+
+    for (let title of shapes_titles){
+        console.log(title);
+        let opt = document.createElement('option');
+        opt.value = title;
+        opt.innerHTML = title;
+        shapesOption.appendChild(opt);
+    }
+
+    console.log(shapes_titles);
+}
 
 function get_px(x,y){
     let point = generate_pixel(x,y);

@@ -1,7 +1,5 @@
-//use crate::get_image_dimensions;
-
 fn main(){
     println!("running...");
-    //let dimen = get_image_dimensions();
-    //println!("{:?}", dimen);
+    let sum = ray_tracer::add(1, 8);
+    println!("{:?}", sum);
 }
