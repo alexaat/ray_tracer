@@ -1,8 +1,8 @@
 use wasm_bindgen::prelude::*;
 use rand::Rng;
-
 use crate::constants::{IMAGE_HEIGHT, IMAGE_WIDTH};
 mod constants;
+
 
 #[wasm_bindgen]
 pub fn generate_pixel(x: u32, y: u32) -> Point {
@@ -19,7 +19,7 @@ pub fn generate_pixel(x: u32, y: u32) -> Point {
 }
 
 #[wasm_bindgen]
-pub fn get_image_dimentions() -> Dimen{
+pub fn get_image_dimensions() -> Dimen{
     Dimen { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
 }
 
