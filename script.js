@@ -1,4 +1,4 @@
-import init, {generate_pixel} from "./pkg/ray_tracer.js";
+import init, {generate_pixel, get_image_dimentions} from "./pkg/ray_tracer.js";
 
 const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
@@ -18,19 +18,23 @@ async function run(){
         
         const color = `#${r}${g}${b}`;
 
-        console.log(color);
         ctx.fillStyle = color;
-
-        ctx.fillRect(y, x, 1, 1)
-
-
+        ctx.fillRect(x, y, 1, 1)
     }
 
-    for (let y = 0; y < 500;  y++){
-        for (let x = 0; x<500; x++){
-             get_px(x,y);
-        }
-       
+    let {width, height} = get_output_image_size();
+    document.querySelector("#imageWidth").value = width; 
+    document.querySelector("#imageHeight").value = height;
+    const myCanvas = document.querySelector("#myCanvas");
+    myCanvas.width = width;
+    myCanvas.height = height; 
+
+    console.log(`width: ${width}, height: ${height}`);
+
+    for (let y = 0; y <height;  y++){
+        for (let x = 0; x<width; x++){
+            get_px(x,y);
+        }       
     }
 
     // Convert canvas to data URL
@@ -43,6 +47,13 @@ async function run(){
 
 run();
 
+
+function get_output_image_size(){
+    let dimen = get_image_dimentions();
+    let width = dimen.width;
+    let height = dimen.height;
+    return {width, height}
+}
 
 /*
 const canvas = document.getElementById('myCanvas');
