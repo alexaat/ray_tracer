@@ -1,13 +1,12 @@
 use wasm_bindgen::prelude::*;
 use rand::Rng;
 
-
 #[wasm_bindgen]
 pub fn generate_pixel(x: u32, y: u32) -> Point {
-
-    let r =  rand::thread_rng().gen_range(0..255) as u8;    
-    let g =  rand::thread_rng().gen_range(0..255) as u8;
-    let b =  rand::thread_rng().gen_range(0..255) as u8;
+ 
+    let r =  rand::rng().random_range(0..255) as u8;  
+    let g =  rand::rng().random_range(0..255) as u8;  
+    let b =  rand::rng().random_range(0..255) as u8;  
 
     Point {
         x,
