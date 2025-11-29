@@ -9,6 +9,55 @@
   </head>
   <body>
 
+    <div id="panel-container">
+      
+      
+      
+      
+      <div id="left-panel" class="panel">
+
+
+        <div>Left</div>
+        <label for="shapesOption">Add a shape:</label>
+        <select id="shapesOption"></select>
+
+        <div id="selected-shapes-container">
+            <div>plane</div>
+            <div>block</div>
+        </div> 
+
+      </div>
+      
+      <div id="center-panel" class="panel">
+        <div>Center</div>
+        <canvas id="previewCanvas" width="100" height="100" style="border:1px solid #666;"></canvas> 
+        <div id="rendered-image-container">
+          <canvas id="renderedCanvas" style="border:1px solid #000000;"></canvas>   
+          <a id="downloadLink" download="result-image.png">Download Image</a>  
+        </div>
+      </div>
+
+
+      
+      <div id="right-panel" class="panel">
+        
+        <div>Right</div> 
+        <div class="shape-properties">
+            <div>Block</div>
+            <div>x: 10</div>  
+            <div>y: -10</div>  
+            <div>z: 0</div>  
+        </div> 
+
+      </div>
+    
+  
+
+
+    
+    </div>  
+
+
     <div>
       <label for="imageWidth">Image Width</label>  
       <input id="imageWidth" type="number">
@@ -16,13 +65,10 @@
       <input id="imageHeight" type="number">
       <input type="button" value="Generate" id="generateImage">
     </div>
-    <br>
+    <br> 
 
-    <label for="shapesOption">Choose a shape:</label>
-    <select id="shapesOption"></select>
     
-    <canvas id="myCanvas" style="border:1px solid #000000;"></canvas>   
-    <a id="downloadLink" download="result-image.png">Download Image</a>
+
 
     <script type="module" src="script.js"></script>
 

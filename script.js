@@ -1,9 +1,8 @@
 import init, {generate_pixel, get_image_dimensions, get_shapes_titles} from "./pkg/ray_tracer.js";
 
 //elements
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-const myCanvas = document.querySelector("#myCanvas");
+const renderedCanvas = document.querySelector("#renderedCanvas");
+const ctx = renderedCanvas.getContext('2d');
 const imageWidth = document.querySelector("#imageWidth"); 
 const imageHeight = document.querySelector("#imageHeight");
 const generateImageButton = document.querySelector("#generateImage");
@@ -37,15 +36,15 @@ function init_output_image_dimention_settinds(){
     outputImageHeight = height;
     imageWidth.value = outputImageWidth;
     imageHeight.value = outputImageHeight;
-    myCanvas.width = outputImageWidth;
-    myCanvas.height = outputImageHeight; 
+    renderedCanvas.width = outputImageWidth;
+    renderedCanvas.height = outputImageHeight; 
     imageWidth.addEventListener("change", (e) => {
         outputImageWidth = e.target.value;
-        myCanvas.width = outputImageWidth;
+        renderedCanvas.width = outputImageWidth;
     });
     imageHeight.addEventListener("change", (e) => {
         outputImageHeight = e.target.value;
-        myCanvas.height = outputImageHeight; 
+        renderedCanvas.height = outputImageHeight; 
     });
 }
 
@@ -104,7 +103,7 @@ function get_output_image_size(){
 }
 
 /*
-const canvas = document.getElementById('myCanvas');
+const canvas = document.getElementById('renderedCanvas');
 const ctx = canvas.getContext('2d');
 ctx.fillStyle = '#FF0000'; // Set color to red
 ctx.fillRect(0, 0, 50, 50); // Draw rectangle
