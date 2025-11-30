@@ -207,12 +207,12 @@ function get_px(x,y){
 }
 
 function get_pixel_color(x,y){
-    let point = generate_pixel(x,y);
-    let r = point.color.r.toString(16);
+    let color = generate_pixel(x,y);
+    let r = color.r.toString(16);
     r = r.length == 1 ? "0" + r : r;
-    let g = point.color.g.toString(16);
+    let g = color.g.toString(16);
     g = g.length == 1 ? "0" + g : g;
-    let b = point.color.b.toString(16);
+    let b = color.b.toString(16);
     b = b.length == 1 ? "0" + b : b;    
     return `#${r}${g}${b}`;
 }
