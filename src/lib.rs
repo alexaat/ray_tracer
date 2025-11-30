@@ -1,4 +1,3 @@
-
 use wasm_bindgen::prelude::*;
 use rand::Rng;
 use crate::constants::*;
@@ -15,8 +14,8 @@ pub fn generate_pixel(x: u32, y: u32) -> Point {
     Point {
         x,
         y,
-        color: Color { r, g, b },
-    }
+        color: Color { r, g, b }
+    }   
 }
 
 #[wasm_bindgen]

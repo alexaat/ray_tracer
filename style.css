@@ -26,13 +26,13 @@ body {
 .shape-element{
     margin-top: 4px;
     padding: 4px;
-    background-color: palevioletred;
+    background-color: brown;
 }
 .shape-element:hover{
     cursor: pointer;
 }
 .selected{
-    background-color: brown;
+    background-color: rgb(217, 110, 110);
 }
 #center-panel{
     background-color: green;
@@ -52,5 +52,5 @@ body {
 #shape-property{
    display: flex; 
    flex-direction: column;
-   background-color: aqua; 
+   background-color: rgb(148, 148, 255)
 }

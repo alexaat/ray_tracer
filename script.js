@@ -1,17 +1,22 @@
 import init, {generate_pixel, get_image_dimensions, get_shapes_titles} from "./pkg/ray_tracer.js";
 
 //elements
-const renderedCanvas = document.querySelector("#renderedCanvas");
+const renderedCanvas = document.querySelector("#rendered-canvas");
 const ctx = renderedCanvas.getContext('2d');
+
+const previewCanvas = document.querySelector("#preview-canvas");
+const previewContext = previewCanvas.getContext('2d');
 const imageWidth = document.querySelector("#imageWidth"); 
 const imageHeight = document.querySelector("#imageHeight");
 const generateImageButton = document.querySelector("#generateImage");
-const shapesOption = document.querySelector("#shapesOption");
+const shapesOption = document.querySelector("#shapes-option");
 const selectedShapesContainer = document.querySelector("#selected-shapes-container");
 const shapeProperty = document.querySelector("#shape-property");
 
 
 //state
+let previewScreenWidth = 120;
+let previewScreenHeight = 120;
 let outputImageWidth = 10;
 let outputImageHeight = 10;
 let shapes = [];
@@ -25,6 +30,9 @@ async function run(){
     //init shapes selector
     init_shapes_selector();
 
+    //init prevew screen
+    init_preview_screen();
+
     //init image size fields
     init_output_image_dimention_settinds();
 
@@ -37,7 +45,6 @@ async function run(){
 run();
 
 /////////////left panel///////////
-
 function init_shapes_selector(){
     //set initial title
     let opt = document.createElement('option');
@@ -66,9 +73,9 @@ function init_shapes_selector(){
         shapes.unshift(item);
         update_selected_shapes();
         e.target.selectedIndex = 0;
+        start_preview_request();
     });
 }
-
 function update_selected_shapes(){
     selectedShapesContainer.innerHTML = "";
     shapes.map(shape => {
@@ -119,9 +126,35 @@ function update_selected_shapes(){
         zDiv.innerHTML = `z: ${selected.properties.z}`;
         shapeProperty.appendChild(zDiv);
     }
+
+
+}
+/////////////end left panel/////////
+
+
+////////////center panel////////////
+
+function init_preview_screen(){
+    previewCanvas.width = previewScreenWidth;
+    previewCanvas.height = previewScreenHeight;
 }
 
-/////////////end left panel/////////
+
+////////end center panel///////////
+
+//request preview 
+function start_preview_request(){
+    previewContext.clearRect(0, 0, previewScreenWidth, previewScreenHeight);    
+    for (let i = 0; i < previewScreenWidth*previewScreenHeight; i++){
+        let x = getRandomInt(previewScreenWidth);
+        let y = getRandomInt(previewScreenHeight);
+        let color = get_pixel_color(x,y);
+        previewContext.fillStyle = color;
+        previewContext.fillRect(x, y, 1, 1);
+    } 
+}
+
+
 
 function init_output_image_dimention_settinds(){
     let {width, height} = get_output_image_size();
@@ -173,12 +206,31 @@ function get_px(x,y){
     ctx.fillRect(x, y, 1, 1)
 }
 
+function get_pixel_color(x,y){
+    let point = generate_pixel(x,y);
+    let r = point.color.r.toString(16);
+    r = r.length == 1 ? "0" + r : r;
+    let g = point.color.g.toString(16);
+    g = g.length == 1 ? "0" + g : g;
+    let b = point.color.b.toString(16);
+    b = b.length == 1 ? "0" + b : b;    
+    return `#${r}${g}${b}`;
+}
+
 function get_output_image_size(){
     let dimen = get_image_dimensions();
     let width = dimen.width;
     let height = dimen.height;
     return {width, height}
 }
+
+//util
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
+
 
 /*
 const canvas = document.getElementById('renderedCanvas');
