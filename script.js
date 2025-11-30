@@ -7,10 +7,14 @@ const imageWidth = document.querySelector("#imageWidth");
 const imageHeight = document.querySelector("#imageHeight");
 const generateImageButton = document.querySelector("#generateImage");
 const shapesOption = document.querySelector("#shapesOption");
+const selectedShapesContainer = document.querySelector("#selected-shapes-container");
+const shapeProperty = document.querySelector("#shape-property");
+
 
 //state
 let outputImageWidth = 10;
 let outputImageHeight = 10;
+let shapes = [];
 
 
 
@@ -18,17 +22,106 @@ async function run(){
 
     await init();
 
+    //init shapes selector
+    init_shapes_selector();
+
     //init image size fields
     init_output_image_dimention_settinds();
 
     //init generateImage button
     init_generate_image_button();
 
-    //init shapes selector
-    init_shapes_selector();
+
 }
 
 run();
+
+/////////////left panel///////////
+
+function init_shapes_selector(){
+    //set initial title
+    let opt = document.createElement('option');
+    opt.value = "add shape";
+    opt.innerHTML = "add shape";
+    shapesOption.appendChild(opt);
+    //add shapes titles
+    const shapes_titles = get_shapes_titles();
+    for (let title of shapes_titles){       
+        let opt = document.createElement('option');
+        opt.value = title;
+        opt.innerHTML = title;
+        shapesOption.appendChild(opt);
+    }
+
+    update_selected_shapes();
+
+    //add select listener
+    shapesOption.addEventListener("change", (e) => {
+        let title = e.target.value;
+        let item = {selected: true, title, properties: {x: 0.0, y: 0.0, z: 0.0}};
+        shapes.map((item) => {
+            item.selected = false;
+            return item;
+        });  
+        shapes.unshift(item);
+        update_selected_shapes();
+        e.target.selectedIndex = 0;
+    });
+}
+
+function update_selected_shapes(){
+    selectedShapesContainer.innerHTML = "";
+    shapes.map(shape => {
+        let div = document.createElement('div');
+        div.classList.add("shape-element")
+        div.innerHTML = shape.title;
+        if (shape.selected){
+           div.classList.add("selected");  
+        }
+        //change selected item
+        div.addEventListener("click", (e) => {
+            let child = e.target;
+            let parent = child.parentNode;
+            let index = Array.prototype.indexOf.call(parent.children, child);
+            shapes.map((item) => {
+                item.selected = false;
+                return item;
+            });  
+            shapes[index].selected = true;            
+            update_selected_shapes();
+        });
+        selectedShapesContainer.appendChild(div);
+    });
+
+    //update right panel
+    shapeProperty.innerHTML = "";
+    if (shapes.length == 0) {
+        let emptyDiv = document.createElement('div');
+        emptyDiv.innerHTML = "-empty-";
+        shapeProperty.appendChild(emptyDiv);
+    }
+    let selected = shapes.filter(item => item.selected)[0];
+    if (selected){
+        //title
+        let titleDiv = document.createElement('div');
+        titleDiv.innerHTML = selected.title;
+        shapeProperty.appendChild(titleDiv);
+        //x
+        let xDiv = document.createElement('div');
+        xDiv.innerHTML = `x: ${selected.properties.x}`;
+        shapeProperty.appendChild(xDiv);
+        //y
+        let yDiv = document.createElement('div');
+        yDiv.innerHTML = `y: ${selected.properties.y}`;
+        shapeProperty.appendChild(yDiv);
+        //z
+        let zDiv = document.createElement('div');
+        zDiv.innerHTML = `z: ${selected.properties.z}`;
+        shapeProperty.appendChild(zDiv);
+    }
+}
+
+/////////////end left panel/////////
 
 function init_output_image_dimention_settinds(){
     let {width, height} = get_output_image_size();
@@ -63,21 +156,6 @@ function init_generate_image_button(){
         downloadLink.href = imageData;
     });
 
-}
-
-function init_shapes_selector(){
-    const shapes_titles = get_shapes_titles();
-
-
-    for (let title of shapes_titles){
-        console.log(title);
-        let opt = document.createElement('option');
-        opt.value = title;
-        opt.innerHTML = title;
-        shapesOption.appendChild(opt);
-    }
-
-    console.log(shapes_titles);
 }
 
 function get_px(x,y){

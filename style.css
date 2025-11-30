@@ -22,10 +22,18 @@ body {
 #selected-shapes-container{
     display: flex;
     flex-direction: column;
+}
+.shape-element{
+    margin-top: 4px;
+    padding: 4px;
+    background-color: palevioletred;
+}
+.shape-element:hover{
+    cursor: pointer;
+}
+.selected{
     background-color: brown;
 }
-
-
 #center-panel{
     background-color: green;
 }
@@ -41,7 +49,7 @@ body {
     background-color: blue;
 }
 
-.shape-properties{
+#shape-property{
    display: flex; 
    flex-direction: column;
    background-color: aqua; 

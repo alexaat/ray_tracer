@@ -1,7 +1,7 @@
 
 use wasm_bindgen::prelude::*;
 use rand::Rng;
-use crate::constants::{IMAGE_HEIGHT, IMAGE_WIDTH};
+use crate::constants::*;
 mod constants;
 
 
@@ -26,7 +26,7 @@ pub fn get_image_dimensions() -> Dimen{
 
 #[wasm_bindgen]
 pub fn get_shapes_titles() -> Vec<String>{
-    vec!["block".to_string(), "plane".to_string()]
+    SHAPES.map(|item| {item.to_string()}).to_vec()   
 }
 
 #[derive(Debug)]
