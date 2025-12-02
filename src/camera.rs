@@ -1,6 +1,7 @@
 use wasm_bindgen::prelude::*;
 use crate::ColorRGB;
 use crate::constants::*;
+use std::sync::Mutex;
 
 #[derive(Debug, Clone, Copy)]
 #[wasm_bindgen]
@@ -10,26 +11,23 @@ pub struct Camera {
     pub background: ColorRGB   
 }
 
-pub static mut PREVIEW_CAMERA: Camera = Camera{
+pub static PREVIEW_CAMERA: Mutex<Camera> = Mutex::new(Camera{
     image_width: PREVIEW_IMAGE_WIDTH,
     image_height: PREVIEW_IMAGE_HEIGHT,
     background: BACKGROUND_COLOR
-};
+});
+
 
 #[wasm_bindgen]
-pub fn get_preview_camera() -> Camera{
-    unsafe  {
-        PREVIEW_CAMERA.clone()
-    }
- 
+pub fn get_preview_camera() -> Camera{   
+    *PREVIEW_CAMERA.lock().unwrap()
 }
 
 #[wasm_bindgen]
 pub fn set_preview_camera(width: usize, height: usize) -> Camera{
-    unsafe {
-        PREVIEW_CAMERA.image_width = width;
-        PREVIEW_CAMERA.image_height = height;
-        PREVIEW_CAMERA.clone()
-    }
+    let mut data = PREVIEW_CAMERA.lock().unwrap();
+    data.image_height = height;
+    data.image_width = width;
+    *data
 }
 
