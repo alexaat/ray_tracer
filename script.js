@@ -1,4 +1,12 @@
-import init, {generate_pixel, get_shapes_titles, get_preview_camera, set_preview_camera} from "./pkg/ray_tracer.js";
+import init,
+    {
+        generate_pixel,
+        get_shapes_titles,
+        get_preview_camera,
+        set_preview_camera,
+        add_shpere
+    
+    } from "./pkg/ray_tracer.js";
 
 //elements
 const renderedCanvas = document.querySelector("#rendered-canvas");
@@ -25,7 +33,6 @@ let previewScreenHeight = 120;
 //let outputImageWidth = 10;
 //let outputImageHeight = 10;
 let shapes = [];
-
 
 
 async function run(){
@@ -73,13 +80,17 @@ function init_shapes_selector(){
 
     //add select listener
     shapesOption.addEventListener("change", (e) => {
-        let title = e.target.value;
-        let item = {selected: true, title, properties: {x: 0.0, y: 0.0, z: 0.0}};
+        const title = e.target.value;
+        const id = uuid();       
+        const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
         shapes.map((item) => {
             item.selected = false;
             return item;
         });  
         shapes.unshift(item);
+        if (item.title == "sphere"){           
+            console.log(add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius));
+        }
         update_selected_shapes();
         e.target.selectedIndex = 0;
         start_preview_request();
@@ -257,6 +268,12 @@ function update_preview_camera_at_WASM(){
 //util
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
+}
+
+function uuid() {
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+  );
 }
 
 

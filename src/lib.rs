@@ -9,6 +9,8 @@ mod color;
 mod grapics;
 mod point;
 mod camera;
+mod shapes;
+
 
 #[wasm_bindgen]
 pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -58,12 +60,14 @@ impl ColorRGB{
 }
 
 
-#[derive(Debug, Clone, Copy)]
-#[wasm_bindgen]
-pub struct Dimen{
-    pub width: u32,
-    pub height: u32
-}
+// #[derive(Debug, Clone, Copy)]
+// #[wasm_bindgen]
+// pub struct Dimen{
+//     pub width: u32,
+//     pub height: u32
+// }
+
+
 
 
 pub fn add(x: i32, y: i32) -> i32{

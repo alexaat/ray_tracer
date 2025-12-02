@@ -1,16 +1,17 @@
 use crate::material::*;
 use crate::point::*;
-use std::rc::Rc;
 
 pub struct Sphere {
+    pub id: String,
     pub center: Point,
     pub radius: f64,
-    pub material: Rc<dyn Material>,
+    pub material: Material,
 }
 
 impl Sphere {
-    pub fn new(center: Point, radius: f64, material: Rc<dyn Material>) -> Self {
+    pub fn new(id: String, center: Point, radius: f64, material: Material) -> Self {
         Self {
+            id,
             center,
             radius,
             material,

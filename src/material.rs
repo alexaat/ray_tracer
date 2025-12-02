@@ -1,3 +1,3 @@
-pub trait Material {
+pub struct Material {
 
 }
