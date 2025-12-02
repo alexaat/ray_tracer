@@ -10,7 +10,7 @@ pub struct Camera {
     pub background: ColorRGB   
 }
 
-pub static PREVIEW_CAMERA: Camera = Camera{
+pub static mut PREVIEW_CAMERA: Camera = Camera{
     image_width: PREVIEW_IMAGE_WIDTH,
     image_height: PREVIEW_IMAGE_HEIGHT,
     background: BACKGROUND_COLOR
@@ -18,6 +18,18 @@ pub static PREVIEW_CAMERA: Camera = Camera{
 
 #[wasm_bindgen]
 pub fn get_preview_camera() -> Camera{
-    PREVIEW_CAMERA.clone()
+    unsafe  {
+        PREVIEW_CAMERA.clone()
+    }
+ 
+}
+
+#[wasm_bindgen]
+pub fn set_preview_camera(width: usize, height: usize) -> Camera{
+    unsafe {
+        PREVIEW_CAMERA.image_width = width;
+        PREVIEW_CAMERA.image_height = height;
+        PREVIEW_CAMERA.clone()
+    }
 }
 

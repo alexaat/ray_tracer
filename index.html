@@ -20,7 +20,11 @@
       
       <div id="center-panel" class="panel">
         <div>Center</div>
-        <canvas id="preview-canvas" style="border:1px solid #999;"></canvas> 
+        <canvas id="preview-canvas" style="border:1px solid #999;"></canvas>
+        <div id="preview-camera-settings">
+          <input type="number" id="preview-camera-input-width">
+          <input type="number" id="preview-camera-input-height">
+        </div> 
         <div id="rendered-image-container">
           <canvas id="rendered-canvas" style="border:1px solid #000000;"></canvas>   
           <a id="downloadLink" download="result-image.png">Download Image</a>  

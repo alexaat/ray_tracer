@@ -1,4 +1,4 @@
-import init, {generate_pixel, get_shapes_titles, get_preview_camera} from "./pkg/ray_tracer.js";
+import init, {generate_pixel, get_shapes_titles, get_preview_camera, set_preview_camera} from "./pkg/ray_tracer.js";
 
 //elements
 const renderedCanvas = document.querySelector("#rendered-canvas");
@@ -9,6 +9,9 @@ const selectedShapesContainer = document.querySelector("#selected-shapes-contain
 
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
+const previewCameraSettings = document.querySelector("#preview-camera-settings");
+const previewCameraInputWidth = document.querySelector("#preview-camera-input-width");
+const previewCameraInputHeight = document.querySelector("#preview-camera-input-height");
 //const imageWidth = document.querySelector("#imageWidth"); 
 //const imageHeight = document.querySelector("#imageHeight");
 //const generateImageButton = document.querySelector("#generateImage");
@@ -35,6 +38,9 @@ async function run(){
     //init prevew screen
     init_preview_screen();
 
+    //init preview camera settinds
+    init_preview_camera_settings();
+
     //init image size fields
     //init_output_image_dimention_settinds();
 
@@ -47,6 +53,7 @@ async function run(){
 run();
 
 /////////////left panel///////////
+//
 function init_shapes_selector(){
     //set initial title
     let opt = document.createElement('option');
@@ -131,11 +138,12 @@ function update_selected_shapes(){
 
 
 }
+//
 /////////////end left panel/////////
 
 
 ////////////center panel////////////
-
+//
 function init_preview_screen(){
     let previewCamera = get_preview_camera();
     previewScreenWidth = previewCamera.image_width;
@@ -143,11 +151,32 @@ function init_preview_screen(){
     previewCanvas.width = previewScreenWidth;
     previewCanvas.height = previewScreenHeight;
 }
-
+function init_preview_camera_settings(){
+    previewCameraInputWidth.value = previewScreenWidth;
+    previewCameraInputWidth.addEventListener("change", e => {
+        previewScreenWidth = e.target.value;
+        previewCanvas.width = previewScreenWidth;
+        previewCanvas.height = previewScreenHeight;
+        update_preview_camera_at_WASM();        
+        start_preview_request();        
+    });
+    previewCameraInputHeight.value = previewScreenHeight;
+    previewCameraInputHeight.addEventListener("change", e => {
+        previewScreenHeight = e.target.value;
+        previewCanvas.width = previewScreenWidth;
+        previewCanvas.height = previewScreenHeight;
+        update_preview_camera_at_WASM();   
+        start_preview_request();
+    });
+}
+//
 ////////end center panel///////////
 
 //request preview 
 function start_preview_request(){
+    if (shapes.length == 0) {
+        return;
+    }
     previewContext.clearRect(0, 0, previewScreenWidth, previewScreenHeight);    
     for (let i = 0; i < previewScreenWidth*previewScreenHeight; i++){
         let x = getRandomInt(previewScreenWidth);
@@ -218,6 +247,10 @@ function get_pixel_color(x,y){
     let b = color.b.toString(16);
     b = b.length == 1 ? "0" + b : b;    
     return `#${r}${g}${b}`;
+}
+
+function update_preview_camera_at_WASM(){
+    console.log(set_preview_camera(previewScreenWidth, previewScreenHeight))
 }
 
 
