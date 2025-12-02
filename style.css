@@ -54,9 +54,7 @@ body {
     display: none;
     flex-direction: column;
     justify-content: center;
-
 }
-
 
 #right-panel{
     background-color: rgb(57, 57, 249);
@@ -65,5 +63,24 @@ body {
 #shape-property{
    display: flex; 
    flex-direction: column;
-   background-color: rgb(148, 148, 255)
+   background-color: rgb(148, 148, 255);
+   min-height: 120px;
+   min-width: 90px;
+   margin: 8px;   
+}
+
+#property-title{
+    width: 100%;
+    text-align: center;
+}
+
+.property-field{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.property-input{
+    width: 45px;
 }

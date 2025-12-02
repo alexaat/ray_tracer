@@ -5,8 +5,15 @@ import init,
         get_preview_camera,
         set_preview_camera,
         add_shpere
-    
+
     } from "./pkg/ray_tracer.js";
+import {
+
+    emptyPropertyComponent,
+    spherePropertyComponent
+
+} from "./components.js";
+
 
 //elements
 const renderedCanvas = document.querySelector("#rendered-canvas");
@@ -123,31 +130,43 @@ function update_selected_shapes(){
     //update right panel
     shapeProperty.innerHTML = "";
     if (shapes.length == 0) {
-        let emptyDiv = document.createElement('div');
-        emptyDiv.innerHTML = "-empty-";
-        shapeProperty.appendChild(emptyDiv);
+        shapeProperty.appendChild(emptyPropertyComponent());
     }
-    let selected = shapes.filter(item => item.selected)[0];
+    let selected = shapes.filter(item => item.selected)[0];    
     if (selected){
-        //title
-        let titleDiv = document.createElement('div');
-        titleDiv.innerHTML = selected.title;
-        shapeProperty.appendChild(titleDiv);
-        //x
-        let xDiv = document.createElement('div');
-        xDiv.innerHTML = `x: ${selected.properties.x}`;
-        shapeProperty.appendChild(xDiv);
-        //y
-        let yDiv = document.createElement('div');
-        yDiv.innerHTML = `y: ${selected.properties.y}`;
-        shapeProperty.appendChild(yDiv);
-        //z
-        let zDiv = document.createElement('div');
-        zDiv.innerHTML = `z: ${selected.properties.z}`;
-        shapeProperty.appendChild(zDiv);
+        let index = shapes.indexOf(selected);
+        shapeProperty.appendChild(
+            spherePropertyComponent(
+                selected.title,
+                selected.properties.x,
+                selected.properties.y,
+                selected.properties.z,
+                selected.properties.radius,
+                (e) => {
+                    const val = e.target.value;
+                    switch (e.target.id) {
+                        case "property-input-x":
+                            shapes[index].properties.x = val;
+                        break;
+                        
+                        case "property-input-y":
+                            shapes[index].properties.y = val;
+                        break;
+                        
+                        case "property-input-z":
+                            shapes[index].properties.z = val;
+                        break;
+                        
+                        case "property-input-radius":
+                            shapes[index].properties.radius = val;
+                        break;
+                    } 
+
+
+                }
+            
+            ));
     }
-
-
 }
 //
 /////////////end left panel/////////
@@ -182,6 +201,14 @@ function init_preview_camera_settings(){
 }
 //
 ////////end center panel///////////
+
+///////////right panel/////////////
+//
+
+
+
+//
+//////end right panel//////////////
 
 //request preview 
 function start_preview_request(){
