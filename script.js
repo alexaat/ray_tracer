@@ -4,7 +4,8 @@ import init,
         get_shapes_titles,
         get_preview_camera,
         set_preview_camera,
-        add_shpere
+        add_shpere,
+        update_sphere
 
     } from "./pkg/ray_tracer.js";
 import {
@@ -161,7 +162,13 @@ function update_selected_shapes(){
                             shapes[index].properties.radius = val;
                         break;
                     } 
-
+                    const id = shapes[index].id;
+                    const x = shapes[index].properties.x;
+                    const y = shapes[index].properties.y;
+                    const z = shapes[index].properties.z;
+                    const radius = shapes[index].properties.radius;
+                    console.log("update: " + update_sphere(id, x, y, z, radius));
+                    start_preview_request();
 
                 }
             
