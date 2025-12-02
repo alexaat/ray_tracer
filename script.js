@@ -1,24 +1,26 @@
-import init, {generate_pixel, get_image_dimensions, get_shapes_titles} from "./pkg/ray_tracer.js";
+import init, {generate_pixel, get_shapes_titles, get_preview_camera} from "./pkg/ray_tracer.js";
 
 //elements
 const renderedCanvas = document.querySelector("#rendered-canvas");
 const ctx = renderedCanvas.getContext('2d');
 
-const previewCanvas = document.querySelector("#preview-canvas");
-const previewContext = previewCanvas.getContext('2d');
-const imageWidth = document.querySelector("#imageWidth"); 
-const imageHeight = document.querySelector("#imageHeight");
-const generateImageButton = document.querySelector("#generateImage");
 const shapesOption = document.querySelector("#shapes-option");
 const selectedShapesContainer = document.querySelector("#selected-shapes-container");
+
+const previewCanvas = document.querySelector("#preview-canvas");
+const previewContext = previewCanvas.getContext('2d');
+//const imageWidth = document.querySelector("#imageWidth"); 
+//const imageHeight = document.querySelector("#imageHeight");
+//const generateImageButton = document.querySelector("#generateImage");
+
 const shapeProperty = document.querySelector("#shape-property");
 
 
 //state
 let previewScreenWidth = 120;
 let previewScreenHeight = 120;
-let outputImageWidth = 10;
-let outputImageHeight = 10;
+//let outputImageWidth = 10;
+//let outputImageHeight = 10;
 let shapes = [];
 
 
@@ -34,10 +36,10 @@ async function run(){
     init_preview_screen();
 
     //init image size fields
-    init_output_image_dimention_settinds();
+    //init_output_image_dimention_settinds();
 
     //init generateImage button
-    init_generate_image_button();
+    //init_generate_image_button();
 
 
 }
@@ -135,10 +137,12 @@ function update_selected_shapes(){
 ////////////center panel////////////
 
 function init_preview_screen(){
+    let previewCamera = get_preview_camera();
+    previewScreenWidth = previewCamera.image_width;
+    previewScreenHeight = previewCamera.image_height;
     previewCanvas.width = previewScreenWidth;
     previewCanvas.height = previewScreenHeight;
 }
-
 
 ////////end center panel///////////
 
@@ -173,7 +177,6 @@ function init_output_image_dimention_settinds(){
         renderedCanvas.height = outputImageHeight; 
     });
 }
-
 function init_generate_image_button(){
  
     generateImageButton.addEventListener("click", () => {
@@ -217,12 +220,6 @@ function get_pixel_color(x,y){
     return `#${r}${g}${b}`;
 }
 
-function get_output_image_size(){
-    let dimen = get_image_dimensions();
-    let width = dimen.width;
-    let height = dimen.height;
-    return {width, height}
-}
 
 //util
 function getRandomInt(max) {

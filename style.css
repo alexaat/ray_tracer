@@ -36,6 +36,7 @@ body {
 }
 #center-panel{
     background-color: green;
+    padding: 8px;
 }
 #rendered-image-container{
     display: none;

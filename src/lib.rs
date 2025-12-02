@@ -8,8 +8,7 @@ mod vector3;
 mod color;
 mod grapics;
 mod point;
-use color::Color;
-
+mod camera;
 
 #[wasm_bindgen]
 pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -27,10 +26,10 @@ pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
     // }   
 }
 
-#[wasm_bindgen]
-pub fn get_image_dimensions() -> Dimen{
-    Dimen { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
-}
+// #[wasm_bindgen]
+// pub fn get_image_dimensions() -> Dimen{
+//     Dimen { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
+// }
 
 #[wasm_bindgen]
 pub fn get_shapes_titles() -> Vec<String>{
@@ -65,6 +64,7 @@ pub struct Dimen{
     pub width: u32,
     pub height: u32
 }
+
 
 pub fn add(x: i32, y: i32) -> i32{
     x + y
