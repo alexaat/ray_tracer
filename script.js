@@ -18,24 +18,7 @@ import {
 
 } from "./components.js";
 
-
-
-
-/* 
-        "pixel_samples" : 200,
-        "vfov" : 22,
-        "lookfrom" : [5, 6, 25],
-        "lookat" : [0, 0, 0],
-        "vup": [0, 1, 0],
-        "defocus_angle": 0.4,
-        "focus_dist": 19,
-        "aspect_ratio": 1.333333,
-        "image_width": 200,
-        "max_depth": 50,
-        "background": [173, 216, 230]
-*/
-
-
+import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 
 //elements
 const centerPanel = document.querySelector('#center-panel');
@@ -225,11 +208,120 @@ function init_preview_screen(){
 }
 
 function init_preview_camera_settings(){
-    centerPanel.appendChild(createPreviewCameraSetting(
-        previewScreenWidth,
-        previewScreenAspectRation,
+    // centerPanel.appendChild(createPreviewCameraSetting(
+    //     previewScreenWidth,
+    //     previewScreenAspectRation,
 
-    ));
+    // ));
+
+    //centerPanel.appendChild(createTitle("width"));
+
+    const width = {
+        title: "width",
+        value: 150,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const aspectRatio = {
+        title: "aspect ratio",
+        value: 1.33333,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const pixelSamples = {
+        title: "pixel samples",
+        value: 50,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const vfov = {
+        title: "field of view",
+        value: 22,
+        changeListener: (e) => console.log(e.target.value)
+    };
+    const lookfrom = {
+        title: "camera position",
+        x: {
+            title: "x",
+            value: 5.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        y: {
+            title: "y",
+            value: 6.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        z: {
+            title: "z",
+            value: 25.0,
+            changeListener: (e) => console.log(e.target.value)
+        }
+    };
+
+    const lookat = {
+        title: "camera direction",
+        x: {
+            title: "x",
+            value: 0.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        y: {
+            title: "y",
+            value: 0.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        z: {
+            title: "z",
+            value: 0.0,
+            changeListener: (e) => console.log(e.target.value)
+        }
+    };
+
+    const vup = {
+        title: "camera up direction",
+        x: {
+            title: "x",
+            value: 0.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        y: {
+            title: "y",
+            value: 1.0,
+            changeListener: (e) => console.log(e.target.value)
+        },
+        z: {
+            title: "z",
+            value: 0.0,
+            changeListener: (e) => console.log(e.target.value)
+        }
+    };
+
+    const defocusAngle = {
+        title: "variation angle of rays through each pixel",
+        value: 0.4,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const focusDist = {
+        title: "focus distance",
+        value: 19.0,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const maxDepth = {
+        title: "max depth",
+        value: 10.0,
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const background = {
+        color: "#aaaaaa",      
+        changeListener: (e) => console.log(e.target.value)
+    };
+
+    const cameraPreviewSettings = createPreviewCameraSettings(width, aspectRatio, pixelSamples, vfov, lookfrom, lookat, vup, defocusAngle, focusDist, maxDepth, background);
+    centerPanel.appendChild(cameraPreviewSettings);
+
 
 
 
