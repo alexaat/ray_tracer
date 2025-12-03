@@ -16,6 +16,21 @@ import {
 
 } from "./components.js";
 
+/* 
+        "pixel_samples" : 200,
+        "vfov" : 22,
+        "lookfrom" : [5, 6, 25],
+        "lookat" : [0, 0, 0],
+        "vup": [0, 1, 0],
+        "defocus_angle": 0.4,
+        "focus_dist": 19,
+        "aspect_ratio": 1.333333,
+        "image_width": 200,
+        "max_depth": 50,
+        "background": [173, 216, 230]
+*/
+
+
 
 //elements
 const renderedCanvas = document.querySelector("#rendered-canvas");
