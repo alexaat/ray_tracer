@@ -4,7 +4,7 @@ use std::fmt::{self, Debug};
 use std::ops::{Add, Div, Mul, Sub};
 use wasm_bindgen::prelude::*;
 
-#[derive(serde::Deserialize, Debug)]
+#[derive(serde::Deserialize, Debug, Copy)]
 #[wasm_bindgen]
 pub struct Vector3 {
     pub x: f64,
