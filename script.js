@@ -12,9 +12,14 @@ import init,
 import {
 
     emptyPropertyComponent,
-    spherePropertyComponent
+    spherePropertyComponent,
+    createPreviewCameraSetting
+
 
 } from "./components.js";
+
+
+
 
 /* 
         "pixel_samples" : 200,
@@ -33,6 +38,8 @@ import {
 
 
 //elements
+const centerPanel = document.querySelector('#center-panel');
+
 const renderedCanvas = document.querySelector("#rendered-canvas");
 const ctx = renderedCanvas.getContext('2d');
 
@@ -42,11 +49,13 @@ const selectedShapesContainer = document.querySelector("#selected-shapes-contain
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
 const previewCameraSettings = document.querySelector("#preview-camera-settings");
-const previewCameraInputWidth = document.querySelector("#preview-camera-input-width");
-const previewCameraInputHeight = document.querySelector("#preview-camera-input-height");
+//const previewCameraInputWidth = document.querySelector("#preview-camera-input-width");
+//const previewCameraInputHeight = document.querySelector("#preview-camera-input-height");
 //const imageWidth = document.querySelector("#imageWidth"); 
 //const imageHeight = document.querySelector("#imageHeight");
 //const generateImageButton = document.querySelector("#generateImage");
+
+
 
 const shapeProperty = document.querySelector("#shape-property");
 
@@ -57,11 +66,14 @@ showSceneButton.addEventListener("click", () => {
 });
 
 //state
-let previewScreenWidth = 120;
-let previewScreenHeight = 120;
+let previewScreenWidth = 150.0;
+let previewScreenAspectRation = 1.3333;
+//let previewScreenHeight = 120;
 //let outputImageWidth = 10;
 //let outputImageHeight = 10;
 let shapes = [];
+
+
 
 
 async function run(){
@@ -205,30 +217,41 @@ function update_selected_shapes(){
 ////////////center panel////////////
 //
 function init_preview_screen(){
-    let previewCamera = get_preview_camera();
-    previewScreenWidth = previewCamera.image_width;
-    previewScreenHeight = previewCamera.image_height;
+    //let previewCamera = get_preview_camera();
+    //previewScreenWidth = previewCamera.image_width;
+    //previewScreenHeight = previewCamera.image_height;
     previewCanvas.width = previewScreenWidth;
-    previewCanvas.height = previewScreenHeight;
+    previewCanvas.height = previewScreenWidth/previewScreenAspectRation;
 }
+
 function init_preview_camera_settings(){
-    previewCameraInputWidth.value = previewScreenWidth;
-    previewCameraInputWidth.addEventListener("change", e => {
-        previewScreenWidth = e.target.value;
-        previewCanvas.width = previewScreenWidth;
-        previewCanvas.height = previewScreenHeight;
-        update_preview_camera_at_WASM();        
-        start_preview_request();        
-    });
-    previewCameraInputHeight.value = previewScreenHeight;
-    previewCameraInputHeight.addEventListener("change", e => {
-        previewScreenHeight = e.target.value;
-        previewCanvas.width = previewScreenWidth;
-        previewCanvas.height = previewScreenHeight;
-        update_preview_camera_at_WASM();   
-        start_preview_request();
-    });
+    centerPanel.appendChild(createPreviewCameraSetting(
+        previewScreenWidth,
+        previewScreenAspectRation,
+
+    ));
+
+
+
+    // previewCameraInputWidth.value = previewScreenWidth;
+    // previewCameraInputWidth.addEventListener("change", e => {
+    //     previewScreenWidth = e.target.value;
+    //     previewCanvas.width = previewScreenWidth;
+    //     previewCanvas.height = previewScreenHeight;
+    //     update_preview_camera_at_WASM();        
+    //     start_preview_request();        
+    // });
+    // previewCameraInputHeight.value = previewScreenHeight;
+    // previewCameraInputHeight.addEventListener("change", e => {
+    //     previewScreenHeight = e.target.value;
+    //     previewCanvas.width = previewScreenWidth;
+    //     previewCanvas.height = previewScreenHeight;
+    //     update_preview_camera_at_WASM();   
+    //     start_preview_request();
+    // });
 }
+
+
 //
 ////////end center panel///////////
 

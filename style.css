@@ -41,13 +41,22 @@ body {
     background-color: rgb(84, 170, 84);
     padding: 8px;
 }
+
+#preview-camera-settings{
+    display: flex;
+    flex-direction: column;
+}
+
+#preview-camera-settings-title{
+    width: 100%;
+    text-align: center;
+}
+
 #preview-camera-input-width{
     margin-top: 8px;
-    margin-right: 4px;
 }
-#preview-camera-input-height{
+#preview-camera-input-aspect-ratio{
     margin-top: 8px;
-    margin-left: 4px;
 }
 
 #rendered-image-container{

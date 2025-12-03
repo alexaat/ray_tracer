@@ -23,6 +23,56 @@ export function spherePropertyComponent(title, x, y, z, radius, changeListener){
     return container;
 }
 
+/*
+
+    "pixel_samples" : 200,
+    "vfov" : 22,
+    "lookfrom" : [5, 6, 25],
+    "lookat" : [0, 0, 0],
+    "vup": [0, 1, 0],
+    "defocus_angle": 0.4,
+    "focus_dist": 19,
+    "aspect_ratio": 1.333333,
+    "image_width": 200,
+    "max_depth": 50,
+    "background": [173, 216, 230
+
+*/
+
+
+export function createPreviewCameraSetting(
+    previewScreenWidth,
+    previewScreenAspectRation,
+   
+){
+    const container = document.createElement('div');
+    container.setAttribute('id', 'preview-camera-settings');
+    //title
+    const title = document.createElement('div');
+    title.classList.add('preview-camera-settings-title');
+    title.innerHTML = "Preview Camera Settings";
+    container.appendChild(title);
+
+    //image width
+    const width = document.createElement('input');
+    width.setAttribute('type', 'number');
+    width.value = previewScreenWidth;
+    width.setAttribute('id', "preview-camera-input-width");
+    //width.addEventListener("change", previewCameraChangeListener);  
+    container.appendChild(width);
+   
+    //image aspect ratio
+    const aspect = document.createElement('input');
+    aspect.setAttribute('type', 'number');
+    aspect.value = previewScreenAspectRation;
+    aspect.setAttribute('id', "preview-camera-input-aspect-ratio");
+    //aspect.addEventListener("change", previewCameraChangeListener);  
+    container.appendChild(aspect);
+
+    return container;
+}
+
+
 function titleElement(title) {
     const container = document.createElement('div');
     container.setAttribute("id","property-title");
