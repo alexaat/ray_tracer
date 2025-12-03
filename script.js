@@ -5,7 +5,8 @@ import init,
         get_preview_camera,
         set_preview_camera,
         add_shpere,
-        update_sphere
+        update_sphere,
+        get_scene
 
     } from "./pkg/ray_tracer.js";
 import {
@@ -35,6 +36,11 @@ const previewCameraInputHeight = document.querySelector("#preview-camera-input-h
 const shapeProperty = document.querySelector("#shape-property");
 
 
+const showSceneButton = document.querySelector("#show-scene-button");
+showSceneButton.addEventListener("click", () => {
+    console.log(get_scene());
+});
+
 //state
 let previewScreenWidth = 120;
 let previewScreenHeight = 120;
@@ -55,6 +61,8 @@ async function run(){
 
     //init preview camera settinds
     init_preview_camera_settings();
+
+
 
     //init image size fields
     //init_output_image_dimention_settinds();

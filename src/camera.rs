@@ -11,6 +11,13 @@ pub struct Camera {
     pub background: ColorRGB   
 }
 
+// impl ToString for Camera{
+//     fn to_string(&self) -> std::string::String {
+//         format!("{{image_width: {}, image_height: {}, background: {} }}", self.image_width, self.image_height, self.background.to_string()) 
+        
+//     }
+// }
+
 pub static PREVIEW_CAMERA: Mutex<Camera> = Mutex::new(Camera{
     image_width: PREVIEW_IMAGE_WIDTH,
     image_height: PREVIEW_IMAGE_HEIGHT,

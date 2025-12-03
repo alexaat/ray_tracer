@@ -10,6 +10,9 @@ mod grapics;
 mod point;
 mod camera;
 mod shapes;
+use crate::color::*;
+use crate::shapes::*;
+use crate::camera::PREVIEW_CAMERA;
 
 
 #[wasm_bindgen]
@@ -28,15 +31,33 @@ pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
     // }   
 }
 
+#[wasm_bindgen]
+pub fn get_shapes_titles() -> Vec<String>{
+    SHAPE_TITLES.map(|item| {item.to_string()}).to_vec()   
+}
+
+#[wasm_bindgen]
+pub fn get_scene() -> String{
+
+    let shapes = match SHAPES.lock(){
+        Ok(shapes) => format!("{:?}", shapes),
+        Err(e) => format!("error: {:?}", e)  
+    };
+
+    let preview_camera = match  PREVIEW_CAMERA.lock(){
+        Ok(preview_camera) => format!("{:?}", preview_camera),
+        Err(e) => format!("error: {:?}", e)
+    };
+
+    format!("preview_camera: {:?}, shapes: {}", preview_camera, shapes)
+    
+}
 // #[wasm_bindgen]
 // pub fn get_image_dimensions() -> Dimen{
 //     Dimen { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
 // }
 
-#[wasm_bindgen]
-pub fn get_shapes_titles() -> Vec<String>{
-    SHAPES.map(|item| {item.to_string()}).to_vec()   
-}
+
 
 // #[derive(Debug)]
 // #[wasm_bindgen]
@@ -46,18 +67,7 @@ pub fn get_shapes_titles() -> Vec<String>{
 //     pub color: Color,
 // }
 
-#[derive(Debug, Clone, Copy)]
-#[wasm_bindgen]
-pub struct ColorRGB {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
-}
-impl ColorRGB{
-    fn new(r: u8, g: u8, b: u8) -> ColorRGB{
-        ColorRGB { r, g, b }
-    }
-}
+
 
 
 // #[derive(Debug, Clone, Copy)]
