@@ -48,9 +48,29 @@ showSceneButton.addEventListener("click", () => {
     console.log(get_scene());
 });
 
+
 //state
-let previewScreenWidth = 150.0;
-let previewScreenAspectRation = 1.3333;
+//preview camera
+let previewCameraWidth = 150.0;
+const maxPreviewCameraWidth = 450;
+let previewCameraAspectRation = 1.3333;
+const maxPreviewCameraAspectRation = 50;
+let previewCameraPixelSamples = 200;
+const maxPreviewCameraPixelSamples = 5000;
+let previewCameraVfov = 22;
+const maxPreviewCameraVfov = 180;
+let previewCameraDefocusAngle = 0.4;
+const maxPreviewCameraDefocusAngle = 100;
+let previewCamearFocusDist = 19;
+const maxPreviewCamearFocusDist = 1000000;
+let previewCameraMaxDepth = 50;
+const maxPreviewCameraMaxDepth = 5000;
+let previewCameraLookFrom = {x: 5, y: 6, z: 25};
+const maxVectorComponentValue = 1000000;
+let previewCameraLookAt = {x: 0, y: 0, z: 0};
+let previewCameraVup = {x: 0, y: 1, z: 0};
+let previewCameraBackground = {r: 190, g: 190, b: 190}
+
 //let previewScreenHeight = 120;
 //let outputImageWidth = 10;
 //let outputImageHeight = 10;
@@ -201,16 +221,16 @@ function update_selected_shapes(){
 //
 function init_preview_screen(){
     //let previewCamera = get_preview_camera();
-    //previewScreenWidth = previewCamera.image_width;
+    //previewCameraWidth = previewCamera.image_width;
     //previewScreenHeight = previewCamera.image_height;
-    previewCanvas.width = previewScreenWidth;
-    previewCanvas.height = previewScreenWidth/previewScreenAspectRation;
+    previewCanvas.width = previewCameraWidth;
+    previewCanvas.height = previewCameraWidth/previewCameraAspectRation;
 }
 
 function init_preview_camera_settings(){
     // centerPanel.appendChild(createPreviewCameraSetting(
-    //     previewScreenWidth,
-    //     previewScreenAspectRation,
+    //     previewCameraWidth,
+    //     previewCameraAspectRation,
 
     // ));
 
@@ -218,43 +238,82 @@ function init_preview_camera_settings(){
 
     const width = {
         title: "width",
-        value: 150,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraWidth,
+        changeListener: (e) => {
+            const w = e.target.value;
+            if (w > 0 && w < maxPreviewCameraWidth){
+                previewCameraWidth = w;
+                init_preview_screen();
+            }
+
+        }
     };
 
     const aspectRatio = {
         title: "aspect ratio",
-        value: 1.33333,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraAspectRation,
+        changeListener: (e) => {
+            const a = e.target.value;
+            if (a > 0.0 && a < maxPreviewCameraAspectRation){
+                previewCameraAspectRation = a;
+                init_preview_screen(); 
+            }           
+        }
     };
 
     const pixelSamples = {
         title: "pixel samples",
-        value: 50,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraPixelSamples,
+        changeListener: (e) => {
+            const ps = e.target.value;
+            if (ps > 0 && ps < maxPreviewCameraPixelSamples){
+                previewCameraPixelSamples = ps;
+            }           
+        }
     };
 
     const vfov = {
         title: "field of view",
-        value: 22,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraVfov,
+        changeListener: (e) => {
+            const fv = e.target.value;
+            if (fv > 0 && fv < maxPreviewCameraVfov){
+                previewCameraVfov = fv;
+            }
+        }
     };
+
     const lookfrom = {
         title: "camera position",
         x: {
             title: "x",
-            value: 5.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookFrom.x,
+            changeListener: (e) => {
+                let x = e.target.value;
+                if (Math.abs(x) < maxVectorComponentValue){
+                    previewCameraLookFrom.x = x;
+                }
+            }
         },
         y: {
             title: "y",
-            value: 6.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookFrom.y,
+             changeListener: (e) => {
+                let y = e.target.value;
+                if (Math.abs(y) < maxVectorComponentValue){
+                    previewCameraLookFrom.y = y;
+                }
+            }
         },
         z: {
             title: "z",
-            value: 25.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookFrom.z,
+            changeListener: (e) => {
+                let z = e.target.value;
+                if (Math.abs(z) < maxVectorComponentValue){
+                    previewCameraLookFrom.z = z;
+                }
+            }
         }
     };
 
@@ -262,18 +321,33 @@ function init_preview_camera_settings(){
         title: "camera direction",
         x: {
             title: "x",
-            value: 0.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookAt.x,
+            changeListener: (e) => {
+                let x = e.target.value;
+                if (Math.abs(x) < maxVectorComponentValue){
+                    previewCameraLookAt.x = x;
+                }
+            }
         },
         y: {
             title: "y",
-            value: 0.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookAt.y,
+            changeListener: (e) => {
+                let y = e.target.value;
+                if (Math.abs(y) < maxVectorComponentValue){
+                    previewCameraLookAt.y = y;
+                }
+            }
         },
         z: {
             title: "z",
-            value: 0.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraLookAt.z,
+            changeListener: (e) => {
+                let z = e.target.value;
+                if (Math.abs(z) < maxVectorComponentValue){
+                    previewCameraLookAt.z = z;
+                }
+            }
         }
     };
 
@@ -281,42 +355,79 @@ function init_preview_camera_settings(){
         title: "camera up direction",
         x: {
             title: "x",
-            value: 0.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraVup.x,
+            changeListener: (e) => {
+                let x = e.target.value;
+                if (Math.abs(x) < maxVectorComponentValue){
+                    previewCameraVup.x = x;
+                }
+            }
         },
         y: {
             title: "y",
-            value: 1.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraVup.y,
+            changeListener: (e) => {
+                let y = e.target.value;
+                if (Math.abs(y) < maxVectorComponentValue){
+                    previewCameraVup.y = y;
+                }
+            }
         },
         z: {
             title: "z",
-            value: 0.0,
-            changeListener: (e) => console.log(e.target.value)
+            value: previewCameraVup.z,
+            changeListener: (e) => {
+                let z = e.target.value;
+                if (Math.abs(z) < maxVectorComponentValue){
+                    previewCameraVup.z = z;
+                }
+            }
         }
     };
 
     const defocusAngle = {
         title: "variation angle of rays through each pixel",
-        value: 0.4,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraDefocusAngle,
+        changeListener: (e) => {
+            const pa = e.target.value;
+            if (pa > 0 && pa < maxPreviewCameraDefocusAngle){
+                previewCameraDefocusAngle = pa;
+            }
+        }
     };
 
     const focusDist = {
         title: "focus distance",
-        value: 19.0,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCamearFocusDist,
+        changeListener: (e) => {
+            const fd = e.target.value;
+            if (fd > 0 && fd < maxPreviewCamearFocusDist){
+                previewCamearFocusDist = fd;
+            }
+        }
     };
 
     const maxDepth = {
         title: "max depth",
-        value: 10.0,
-        changeListener: (e) => console.log(e.target.value)
+        value: previewCameraMaxDepth,
+        changeListener: (e) => {
+            const md = e.target.value;
+            if (md > 0 && md < maxPreviewCameraMaxDepth){
+                previewCameraMaxDepth = md;
+            }
+        }
     };
 
     const background = {
-        color: "#aaaaaa",      
-        changeListener: (e) => console.log(e.target.value)
+        color: `#${previewCameraBackground.r.toString(16)}${previewCameraBackground.g.toString(16)}${previewCameraBackground.b.toString(16)}`,      
+        changeListener: (e) => {
+            const colorHex = e.target.value.slice(1);
+            const rgb = colorHex.match(/.{1,2}/g);
+            const r = clamp(parseInt(rgb[0], 16), 0, 255);
+            const g = clamp(parseInt(rgb[1], 16), 0, 255);
+            const b = clamp(parseInt(rgb[2], 16), 0, 255);
+            previewCameraBackground = {r,g,b};      
+        }
     };
 
     const cameraPreviewSettings = createPreviewCameraSettings(width, aspectRatio, pixelSamples, vfov, lookfrom, lookat, vup, defocusAngle, focusDist, maxDepth, background);
@@ -325,10 +436,10 @@ function init_preview_camera_settings(){
 
 
 
-    // previewCameraInputWidth.value = previewScreenWidth;
+    // previewCameraInputWidth.value = previewCameraWidth;
     // previewCameraInputWidth.addEventListener("change", e => {
-    //     previewScreenWidth = e.target.value;
-    //     previewCanvas.width = previewScreenWidth;
+    //     previewCameraWidth = e.target.value;
+    //     previewCanvas.width = previewCameraWidth;
     //     previewCanvas.height = previewScreenHeight;
     //     update_preview_camera_at_WASM();        
     //     start_preview_request();        
@@ -336,7 +447,7 @@ function init_preview_camera_settings(){
     // previewCameraInputHeight.value = previewScreenHeight;
     // previewCameraInputHeight.addEventListener("change", e => {
     //     previewScreenHeight = e.target.value;
-    //     previewCanvas.width = previewScreenWidth;
+    //     previewCanvas.width = previewCameraWidth;
     //     previewCanvas.height = previewScreenHeight;
     //     update_preview_camera_at_WASM();   
     //     start_preview_request();
@@ -360,9 +471,9 @@ function start_preview_request(){
     if (shapes.length == 0) {
         return;
     }
-    previewContext.clearRect(0, 0, previewScreenWidth, previewScreenHeight);    
-    for (let i = 0; i < previewScreenWidth*previewScreenHeight; i++){
-        let x = getRandomInt(previewScreenWidth);
+    previewContext.clearRect(0, 0, previewCameraWidth, previewScreenHeight);    
+    for (let i = 0; i < previewCameraWidth*previewScreenHeight; i++){
+        let x = getRandomInt(previewCameraWidth);
         let y = getRandomInt(previewScreenHeight);
         let color = get_pixel_color(x,y);
         previewContext.fillStyle = color;
@@ -433,7 +544,7 @@ function get_pixel_color(x,y){
 }
 
 function update_preview_camera_at_WASM(){
-    console.log(set_preview_camera(previewScreenWidth, previewScreenHeight))
+    console.log(set_preview_camera(previewCameraWidth, previewScreenHeight))
 }
 
 
@@ -447,6 +558,8 @@ function uuid() {
     (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
   );
 }
+
+const clamp = (val, min, max) => Math.min(Math.max(val, min), max)
 
 
 
