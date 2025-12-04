@@ -16,6 +16,7 @@ export default function getShapeTile(id, title, isSelected, deleteListener){
     const deleteElement = document.createElement('div');
     deleteElement.style = "padding: 2px;"
     deleteElement.innerHTML = "🗑";
+    deleteElement.classList.add("shape-delete-button");
     deleteElement.addEventListener("click", () => {
         deleteListener(id);
     });

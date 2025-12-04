@@ -114,23 +114,10 @@ run();
 /////////////left panel///////////
 //
 function init_shapes_selector(){
-    //set initial title
-    // let opt = document.createElement('option');
-    // opt.value = "add shape";
-    // opt.innerHTML = "add shape";
-    // shapesOption.appendChild(opt);
-    //add shapes titles
-    const shapes_titles = get_shapes_titles();
-    // for (let title of shapes_titles){       
-    //     let opt = document.createElement('option');
-    //     opt.value = title;
-    //     opt.innerHTML = title;
-    //     shapesOption.appendChild(opt);
-    // }
-    
+
+    const shapes_titles = get_shapes_titles();   
    
     const shapeOptions = createShapeOptions(shapes_titles);
-
     
     update_selected_shapes();
 
@@ -156,27 +143,38 @@ function init_shapes_selector(){
 }
 
 function update_selected_shapes(){
-    selectedShapesContainer.innerHTML = "";
-    
+    selectedShapesContainer.innerHTML = "";    
     
     shapes.map(shape => {
         let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
+            const shapeToDelete = shapes.find(shape => shape.id == id);
             shapes = shapes.filter(shape => shape.id != id);
+            if (shapes.length > 0 && shapeToDelete.selected) {
+                shapes[0].selected = true;
+            }
             update_selected_shapes();
         });
 
-
         //change selected item
         shapeTile.addEventListener("click", (e) => {
-            let child = e.target;
+
+            if (e.target.classList.contains("shape-delete-button")){
+                return;
+            }
+
+            let child = e.currentTarget;
             let parent = child.parentNode;
-            let index = Array.prototype.indexOf.call(parent.children, child);
+
             shapes.map((item) => {
                 item.selected = false;
                 return item;
             });  
-            shapes[index].selected = true;            
+         
+            let index = Array.prototype.indexOf.call(parent.children, child);
+            shapes[index].selected = true;
+            
             update_selected_shapes();
+
         });
 
         selectedShapesContainer.appendChild(shapeTile);
