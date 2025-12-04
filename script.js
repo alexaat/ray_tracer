@@ -83,6 +83,8 @@ async function run(){
 
     await init();
 
+    update_preview_camera_at_WASM();
+
     //init shapes selector
     init_shapes_selector();
 
@@ -220,22 +222,11 @@ function update_selected_shapes(){
 ////////////center panel////////////
 //
 function init_preview_screen(){
-    //let previewCamera = get_preview_camera();
-    //previewCameraWidth = previewCamera.image_width;
-    //previewScreenHeight = previewCamera.image_height;
     previewCanvas.width = previewCameraWidth;
     previewCanvas.height = previewCameraWidth/previewCameraAspectRation;
 }
 
 function init_preview_camera_settings(){
-    // centerPanel.appendChild(createPreviewCameraSetting(
-    //     previewCameraWidth,
-    //     previewCameraAspectRation,
-
-    // ));
-
-    //centerPanel.appendChild(createTitle("width"));
-
     const width = {
         title: "width",
         value: previewCameraWidth,
@@ -244,6 +235,7 @@ function init_preview_camera_settings(){
             if (w > 0 && w < maxPreviewCameraWidth){
                 previewCameraWidth = w;
                 init_preview_screen();
+                update_preview_camera_at_WASM();
             }
 
         }
@@ -256,7 +248,8 @@ function init_preview_camera_settings(){
             const a = e.target.value;
             if (a > 0.0 && a < maxPreviewCameraAspectRation){
                 previewCameraAspectRation = a;
-                init_preview_screen(); 
+                init_preview_screen();
+                update_preview_camera_at_WASM(); 
             }           
         }
     };
@@ -268,6 +261,7 @@ function init_preview_camera_settings(){
             const ps = e.target.value;
             if (ps > 0 && ps < maxPreviewCameraPixelSamples){
                 previewCameraPixelSamples = ps;
+                update_preview_camera_at_WASM(); 
             }           
         }
     };
@@ -279,6 +273,7 @@ function init_preview_camera_settings(){
             const fv = e.target.value;
             if (fv > 0 && fv < maxPreviewCameraVfov){
                 previewCameraVfov = fv;
+                update_preview_camera_at_WASM(); 
             }
         }
     };
@@ -292,6 +287,7 @@ function init_preview_camera_settings(){
                 let x = e.target.value;
                 if (Math.abs(x) < maxVectorComponentValue){
                     previewCameraLookFrom.x = x;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -302,6 +298,7 @@ function init_preview_camera_settings(){
                 let y = e.target.value;
                 if (Math.abs(y) < maxVectorComponentValue){
                     previewCameraLookFrom.y = y;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -312,6 +309,7 @@ function init_preview_camera_settings(){
                 let z = e.target.value;
                 if (Math.abs(z) < maxVectorComponentValue){
                     previewCameraLookFrom.z = z;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         }
@@ -326,6 +324,7 @@ function init_preview_camera_settings(){
                 let x = e.target.value;
                 if (Math.abs(x) < maxVectorComponentValue){
                     previewCameraLookAt.x = x;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -336,6 +335,7 @@ function init_preview_camera_settings(){
                 let y = e.target.value;
                 if (Math.abs(y) < maxVectorComponentValue){
                     previewCameraLookAt.y = y;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -346,6 +346,7 @@ function init_preview_camera_settings(){
                 let z = e.target.value;
                 if (Math.abs(z) < maxVectorComponentValue){
                     previewCameraLookAt.z = z;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         }
@@ -360,6 +361,7 @@ function init_preview_camera_settings(){
                 let x = e.target.value;
                 if (Math.abs(x) < maxVectorComponentValue){
                     previewCameraVup.x = x;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -370,6 +372,7 @@ function init_preview_camera_settings(){
                 let y = e.target.value;
                 if (Math.abs(y) < maxVectorComponentValue){
                     previewCameraVup.y = y;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         },
@@ -380,6 +383,7 @@ function init_preview_camera_settings(){
                 let z = e.target.value;
                 if (Math.abs(z) < maxVectorComponentValue){
                     previewCameraVup.z = z;
+                    update_preview_camera_at_WASM(); 
                 }
             }
         }
@@ -392,6 +396,7 @@ function init_preview_camera_settings(){
             const pa = e.target.value;
             if (pa > 0 && pa < maxPreviewCameraDefocusAngle){
                 previewCameraDefocusAngle = pa;
+                update_preview_camera_at_WASM(); 
             }
         }
     };
@@ -403,6 +408,7 @@ function init_preview_camera_settings(){
             const fd = e.target.value;
             if (fd > 0 && fd < maxPreviewCamearFocusDist){
                 previewCamearFocusDist = fd;
+                update_preview_camera_at_WASM(); 
             }
         }
     };
@@ -414,6 +420,7 @@ function init_preview_camera_settings(){
             const md = e.target.value;
             if (md > 0 && md < maxPreviewCameraMaxDepth){
                 previewCameraMaxDepth = md;
+                update_preview_camera_at_WASM(); 
             }
         }
     };
@@ -426,32 +433,14 @@ function init_preview_camera_settings(){
             const r = clamp(parseInt(rgb[0], 16), 0, 255);
             const g = clamp(parseInt(rgb[1], 16), 0, 255);
             const b = clamp(parseInt(rgb[2], 16), 0, 255);
-            previewCameraBackground = {r,g,b};      
+            previewCameraBackground = {r,g,b}; 
+            update_preview_camera_at_WASM();      
         }
     };
 
     const cameraPreviewSettings = createPreviewCameraSettings(width, aspectRatio, pixelSamples, vfov, lookfrom, lookat, vup, defocusAngle, focusDist, maxDepth, background);
     centerPanel.appendChild(cameraPreviewSettings);
 
-
-
-
-    // previewCameraInputWidth.value = previewCameraWidth;
-    // previewCameraInputWidth.addEventListener("change", e => {
-    //     previewCameraWidth = e.target.value;
-    //     previewCanvas.width = previewCameraWidth;
-    //     previewCanvas.height = previewScreenHeight;
-    //     update_preview_camera_at_WASM();        
-    //     start_preview_request();        
-    // });
-    // previewCameraInputHeight.value = previewScreenHeight;
-    // previewCameraInputHeight.addEventListener("change", e => {
-    //     previewScreenHeight = e.target.value;
-    //     previewCanvas.width = previewCameraWidth;
-    //     previewCanvas.height = previewScreenHeight;
-    //     update_preview_camera_at_WASM();   
-    //     start_preview_request();
-    // });
 }
 
 
@@ -480,6 +469,8 @@ function start_preview_request(){
         previewContext.fillRect(x, y, 1, 1);
     } 
 }
+
+
 
 
 
@@ -543,8 +534,21 @@ function get_pixel_color(x,y){
     return `#${r}${g}${b}`;
 }
 
+
 function update_preview_camera_at_WASM(){
-    console.log(set_preview_camera(previewCameraWidth, previewScreenHeight))
+   set_preview_camera(
+        previewCameraPixelSamples,
+        previewCameraVfov,
+        extractVector(previewCameraLookFrom),
+        extractVector(previewCameraLookAt),
+        extractVector(previewCameraVup),
+        previewCameraDefocusAngle,
+        previewCamearFocusDist,
+        previewCameraAspectRation,
+        previewCameraWidth,
+        previewCameraMaxDepth,
+        previewCameraBackground
+    );        
 }
 
 
@@ -561,6 +565,9 @@ function uuid() {
 
 const clamp = (val, min, max) => Math.min(Math.max(val, min), max)
 
+function extractVector(val) {
+    return {x: val.x, y: val.y, z: val.z}
+}
 
 
 
@@ -579,7 +586,6 @@ const imageData = canvas.toDataURL('image/png');
 const downloadLink = document.getElementById('downloadLink');
 downloadLink.href = imageData;
 */
-
 
 
 

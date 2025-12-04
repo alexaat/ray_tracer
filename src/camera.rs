@@ -1,8 +1,10 @@
 use wasm_bindgen::prelude::*;
 use crate::ColorRGB;
-use crate::constants::*;
 use std::sync::Mutex;
 use crate::vector3::*;
+use serde_wasm_bindgen::from_value;
+
+
 
 #[derive(Debug, Clone)]
 #[wasm_bindgen]
@@ -18,18 +20,8 @@ pub struct Camera {
     pub defocus_disk_v: Vector3,
     pub defocus_angle: f64,
     pub pixel_samples: usize,
-    pub background: Vector3   
+    pub background: ColorRGB   
 }
-
-// impl ToString for Camera{
-//     fn to_string(&self) -> std::string::String {
-//         format!("{{image_width: {}, image_height: {}, background: {} }}", self.image_width, self.image_height, self.background.to_string()) 
-        
-//     }
-// }
-
-
-
 
 // pub static PREVIEW_CAMERA: Mutex<Camera> = Mutex::new(Camera{
 //     image_width: PREVIEW_IMAGE_WIDTH,
@@ -53,41 +45,29 @@ pub fn get_preview_camera() -> String{
     match PREVIEW_CAMERA.lock(){
         Ok(preview_camera) => format!("preview_camera: {{{:?}}}", preview_camera),         
         Err(e) => format!("preview_camera error: {:?}", e)
-    }
-    //*PREVIEW_CAMERA.lock().unwrap()
+    }   
 }
-
-
-/* 
-        "pixel_samples" : 200,
-        "vfov" : 22,
-        "lookfrom" : [5, 6, 25],
-        "lookat" : [0, 0, 0],
-        "vup": [0, 1, 0],
-        "defocus_angle": 0.4,
-        "focus_dist": 19,
-        "aspect_ratio": 1.333333,
-        "image_width": 200,
-        "max_depth": 50,
-        "background": [173, 216, 230]
-    */
-
 
 #[wasm_bindgen]
 pub fn set_preview_camera(
     pixel_samples: usize,
     vfov: f64,  // Vertical view angle (field of view)
-    lookfrom: Vector3, // Point camera is looking from
-    lookat: Vector3, // Point camera is looking at
-    vup: Vector3, // Camera-relative "up" direction
+    lookfrom: JsValue, // Point camera is looking from
+    lookat: JsValue, // Point camera is looking at
+    vup: JsValue, // Camera-relative "up" direction
     defocus_angle: f64, // Variation angle of rays through each pixel
     focus_dist: f64, // Distance from camera lookfrom point to plane of perfect focus
     aspect_ratio: f64,
     image_width: usize,
     max_depth: usize,
-    background: Vector3
+    background: JsValue
 
 ){
+        
+        let lookfrom: Vector3 = from_value(lookfrom).unwrap_or(Vector3::new(10.0, 10.0, 10.0));       
+        let lookat: Vector3 = from_value(lookat).unwrap_or(Vector3::new(0.0, 0.0, 0.0));       
+        let vup: Vector3 = from_value(vup).unwrap_or(Vector3::new(0.0, 1.0, 0.0));       
+        let background = from_value(background).unwrap_or(ColorRGB::new(190, 190, 190));
 
         let mut image_height: usize = (image_width as f64 / aspect_ratio) as usize;
         if image_height < 1 {
@@ -142,10 +122,6 @@ pub fn set_preview_camera(
                 }
             );
         }
-
- 
-
-
 
 }
 
