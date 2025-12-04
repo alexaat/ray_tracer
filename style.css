@@ -88,11 +88,17 @@ body {
     flex-direction: row;
     justify-content: space-between;
     margin-top: 4px;
-    
-     
+    min-width: 100px;   
+   
    
 }
 
+
+
 .property-input{
     width: 45px;
+}
+
+.pointer:hover{
+    cursor: pointer;
 }

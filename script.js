@@ -19,6 +19,7 @@ import {
 } from "./components.js";
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
+import createShapeTile from "./components/shape_tile.js";
 
 //elements
 const centerPanel = document.querySelector('#center-panel');
@@ -144,17 +145,19 @@ function init_shapes_selector(){
         start_preview_request();
     });
 }
+
 function update_selected_shapes(){
     selectedShapesContainer.innerHTML = "";
+    
     shapes.map(shape => {
-        let div = document.createElement('div');
-        div.classList.add("shape-element")
-        div.innerHTML = shape.title;
-        if (shape.selected){
-           div.classList.add("selected");  
-        }
+        let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
+            shapes.filter(shape => shape.id != id);
+            update_selected_shapes();
+        });
+
+
         //change selected item
-        div.addEventListener("click", (e) => {
+        shapeTile.addEventListener("click", (e) => {
             let child = e.target;
             let parent = child.parentNode;
             let index = Array.prototype.indexOf.call(parent.children, child);
@@ -165,7 +168,8 @@ function update_selected_shapes(){
             shapes[index].selected = true;            
             update_selected_shapes();
         });
-        selectedShapesContainer.appendChild(div);
+
+        selectedShapesContainer.appendChild(shapeTile);
     });
 
     //update right panel
@@ -460,10 +464,11 @@ function start_preview_request(){
     if (shapes.length == 0) {
         return;
     }
-    previewContext.clearRect(0, 0, previewCameraWidth, previewScreenHeight);    
-    for (let i = 0; i < previewCameraWidth*previewScreenHeight; i++){
+    const h = previewCameraWidth/previewCameraAspectRation;
+    previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
+    for (let i = 0; i < previewCameraWidth*h; i++){
         let x = getRandomInt(previewCameraWidth);
-        let y = getRandomInt(previewScreenHeight);
+        let y = getRandomInt(h);
         let color = get_pixel_color(x,y);
         previewContext.fillStyle = color;
         previewContext.fillRect(x, y, 1, 1);

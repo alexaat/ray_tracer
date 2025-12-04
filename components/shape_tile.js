@@ -1,0 +1,26 @@
+export default function getShapeTile(id, title, isSelected, deleteListener){
+    const container = document.createElement('div');
+
+    const background = isSelected ? 'yellow' : 'red'; 
+    
+    container.style = "min-width: 100px; border: 2px, solid, black; border-radius: 4px; padding: 2px; display: flex; flex-direction: row; justify-content: space-between;";
+    container.style.backgroundColor = background;
+    container.classList.add("pointer");
+
+    const titleElement = document.createElement('div');
+    if(title){
+        titleElement.innerHTML = title;
+    }
+    container.appendChild(titleElement);
+    
+    const deleteElement = document.createElement('div');
+    deleteElement.style = "padding: 2px;"
+    deleteElement.innerHTML = "🗑";
+    deleteElement.addEventListener("click", () => {
+        deleteListener(id);
+    });
+
+    container.appendChild(deleteElement);
+    
+    return container;
+}
