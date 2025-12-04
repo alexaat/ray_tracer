@@ -20,14 +20,17 @@ import {
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
+import createShapeOptions from "./components/shape_options.js";
 
 //elements
+const leftPanel = document.querySelector('#left-panel');
 const centerPanel = document.querySelector('#center-panel');
 
 const renderedCanvas = document.querySelector("#rendered-canvas");
 const ctx = renderedCanvas.getContext('2d');
 
 const shapesOption = document.querySelector("#shapes-option");
+const shapeOptionsContainer = document.querySelector("#shape-options-container");
 const selectedShapesContainer = document.querySelector("#selected-shapes-container");
 
 const previewCanvas = document.querySelector("#preview-canvas");
@@ -112,23 +115,27 @@ run();
 //
 function init_shapes_selector(){
     //set initial title
-    let opt = document.createElement('option');
-    opt.value = "add shape";
-    opt.innerHTML = "add shape";
-    shapesOption.appendChild(opt);
+    // let opt = document.createElement('option');
+    // opt.value = "add shape";
+    // opt.innerHTML = "add shape";
+    // shapesOption.appendChild(opt);
     //add shapes titles
     const shapes_titles = get_shapes_titles();
-    for (let title of shapes_titles){       
-        let opt = document.createElement('option');
-        opt.value = title;
-        opt.innerHTML = title;
-        shapesOption.appendChild(opt);
-    }
+    // for (let title of shapes_titles){       
+    //     let opt = document.createElement('option');
+    //     opt.value = title;
+    //     opt.innerHTML = title;
+    //     shapesOption.appendChild(opt);
+    // }
+    
+   
+    const shapeOptions = createShapeOptions(shapes_titles);
 
+    
     update_selected_shapes();
 
     //add select listener
-    shapesOption.addEventListener("change", (e) => {
+    shapeOptions.addEventListener("change", (e) => {
         const title = e.target.value;
         const id = uuid();       
         const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
@@ -144,14 +151,17 @@ function init_shapes_selector(){
         e.target.selectedIndex = 0;
         start_preview_request();
     });
+
+    shapeOptionsContainer.appendChild(shapeOptions);
 }
 
 function update_selected_shapes(){
     selectedShapesContainer.innerHTML = "";
     
+    
     shapes.map(shape => {
         let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
-            shapes.filter(shape => shape.id != id);
+            shapes = shapes.filter(shape => shape.id != id);
             update_selected_shapes();
         });
 
