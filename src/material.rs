@@ -1,4 +1,6 @@
+use wasm_bindgen::prelude::*;
 use crate::color::*;
+use crate::constants::MATERIALS;
 use crate::hittable::*;
 use crate::ray::*;
 use crate::vector3::*;
@@ -25,4 +27,9 @@ impl Material {
     //     let scattered = Ray::new(hit_record.p.clone(), direction);
     //     return Some(scattered);
     // }
+}
+
+#[wasm_bindgen]
+pub fn get_material_titles() -> Vec<String>{
+    MATERIALS.map(|item| {item.to_string()}).to_vec()   
 }

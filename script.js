@@ -7,7 +7,8 @@ import init,
         add_shpere,
         update_sphere,
         get_scene,
-        delete_sphere
+        delete_sphere,
+        get_material_titles
 
     } from "./pkg/ray_tracer.js";
 import {
@@ -218,7 +219,7 @@ function update_selected_shapes(){
                         update_selected_shapes();
                     }
 
-                }));   
+                }, get_material_titles()));   
             }           
         }
     }

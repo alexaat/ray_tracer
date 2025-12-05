@@ -1,8 +1,9 @@
+import createMaterialOptions from "./material_options.js";
 import createPropertiesNumberInput from "./properties_number_input.js";
 
-export default function createSphereProperties(sphere, changeListener){
+export default function createSphereProperties(sphere, changeListener, materials){
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: column; min-width: 100px; padding: 2px; box-sizing: border-box; border: 2px, solid, black; border-radius: 4px"
+    container.style = "display: flex; flex-direction: column; min-width: 100px; padding: 2px; box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; gap: 4px;"
     
     const titleElement = document.createElement('div');
     titleElement.style = "width: 100%; text-align: center; margin-bottom: 4px";
@@ -45,6 +46,8 @@ export default function createSphereProperties(sphere, changeListener){
         }
         changeListener(properties);
     }));
+    container.appendChild(createMaterialOptions(materials, (e) => console.log(e.target.value)));
+
 
     return container;
 }
