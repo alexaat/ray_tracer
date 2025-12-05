@@ -21,10 +21,12 @@ import {
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
 import createShapeOptions from "./components/shape_options.js";
+import createSphereProperties from "./components/sphere_properties.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
 const centerPanel = document.querySelector('#center-panel');
+const rightPanel = document.querySelector('#right-panel');
 
 const renderedCanvas = document.querySelector("#rendered-canvas");
 const ctx = renderedCanvas.getContext('2d');
@@ -106,6 +108,8 @@ async function run(){
     //init generateImage button
     //init_generate_image_button();
 
+    //rightPanel.appendChild(createSphereProperties({selected: true, id: 1.0, title: "sphere", properties: {x: 2.0, y: -1.0, z: 3.0, radius: 1.0}}, (e) => {console.log(e.target.value)}));
+
 
 }
 
@@ -172,7 +176,7 @@ function update_selected_shapes(){
          
             let index = Array.prototype.indexOf.call(parent.children, child);
             shapes[index].selected = true;
-            
+
             update_selected_shapes();
 
         });
@@ -181,6 +185,17 @@ function update_selected_shapes(){
     });
 
     //update right panel
+    rightPanel.innerHTML = "";
+    if (shapes.length > 0) {
+        let selected = shapes.filter(item => item.selected)[0];    
+        if(selected){            
+            rightPanel.appendChild(createSphereProperties(selected, (e) => console.log(e.target.value)));
+        }
+    }
+    
+    
+    /*
+    
     shapeProperty.innerHTML = "";
     if (shapes.length == 0) {
         shapeProperty.appendChild(emptyPropertyComponent());
@@ -218,14 +233,15 @@ function update_selected_shapes(){
                     const x = shapes[index].properties.x;
                     const y = shapes[index].properties.y;
                     const z = shapes[index].properties.z;
-                    const radius = shapes[index].properties.radius;
-                    console.log("update: " + update_sphere(id, x, y, z, radius));
+                    const radius = shapes[index].properties.radius;                   
                     start_preview_request();
 
                 }
             
             ));
     }
+
+    */
 }
 //
 /////////////end left panel/////////
@@ -461,6 +477,7 @@ function init_preview_camera_settings(){
 
 ///////////right panel/////////////
 //
+
 
 
 
