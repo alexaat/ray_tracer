@@ -119,7 +119,7 @@ function init_shapes_selector(){
     const shapeOptions = createOptions("add shape", shapes_titles, (e) => {
         const title = e.target.value;
         const id = uuid();       
-        const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
+        const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}, material: {title: "Lambertian", color: {r: 128, g: 0, b: 128}, fuzz: 0.8}};
         shapes.map((item) => {
             item.selected = false;
             return item;
@@ -134,24 +134,6 @@ function init_shapes_selector(){
     });
     
     update_selected_shapes();
-
-    //add select listener
-    // shapeOptions.addEventListener("change", (e) => {
-    //     const title = e.target.value;
-    //     const id = uuid();       
-    //     const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
-    //     shapes.map((item) => {
-    //         item.selected = false;
-    //         return item;
-    //     });  
-    //     shapes.unshift(item);
-    //     if (item.title == "sphere"){           
-    //         add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius);
-    //     }
-    //     update_selected_shapes();
-    //     e.target.selectedIndex = 0;
-    //     start_preview_request();
-    // });
 
     shapeOptionsContainer.appendChild(shapeOptions);
 }
