@@ -77,6 +77,7 @@ let previewCameraLookAt = {x: 0, y: 0, z: 0};
 let previewCameraVup = {x: 0, y: 1, z: 0};
 let previewCameraBackground = {r: 190, g: 190, b: 190}
 
+const maxRadius = 1000000;
 //let previewScreenHeight = 120;
 //let outputImageWidth = 10;
 //let outputImageHeight = 10;
@@ -188,8 +189,26 @@ function update_selected_shapes(){
     rightPanel.innerHTML = "";
     if (shapes.length > 0) {
         let selected = shapes.filter(item => item.selected)[0];    
-        if(selected){            
-            rightPanel.appendChild(createSphereProperties(selected, (e) => console.log(e.target.value)));
+        if(selected){
+            if (selected.title == "sphere"){
+                rightPanel.appendChild(createSphereProperties(selected, (properties) => {
+                    //validate
+                    const x = properties.x;
+                    const y = properties.y;
+                    const z = properties.z;
+                    const radius = properties.radius;
+                    if  (coordinateIsValid(x) && coordinateIsValid(y) &&  coordinateIsValid(z) &&  radiusIsValid(radius)){
+                        const index = shapes.indexOf(selected);
+                        shapes[index].properties.x = x;
+                        shapes[index].properties.y = y;
+                        shapes[index].properties.z = z;
+                        shapes[index].properties.radius = radius;
+                        start_preview_request();
+                        update_selected_shapes();
+                    }
+
+                }));   
+            }           
         }
     }
     
@@ -597,6 +616,13 @@ const clamp = (val, min, max) => Math.min(Math.max(val, min), max)
 
 function extractVector(val) {
     return {x: val.x, y: val.y, z: val.z}
+}
+
+function coordinateIsValid(coord){
+    return Math.abs(coord) < maxVectorComponentValue;
+}
+function radiusIsValid(radius){
+    return radius > 0 && radius < maxRadius;
 }
 
 

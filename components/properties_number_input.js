@@ -14,7 +14,9 @@ export default function createPropertiesNumberInput(title, value, changeListener
         input.value = value;
     }
     if (changeListener) {
-        input.addEventListener("change", changeListener);
+        input.addEventListener("change", (e) => {
+            changeListener(e.target.value);
+        });
     }
     input.style = "width: 36px; margin-left: 4px";
 
