@@ -1,9 +1,9 @@
-export default function createShapeOptions(list){
+export default function createOptions(prompt, list, changeListener){
     const select = document.createElement('select');
     select.style = "min-width: 100px; border: 2px, solid, black; border-radius: 4px; box-sizing: border-box;";
     const option = document.createElement('option');
-    option.value = "add shape";
-    option.innerHTML = "add shape";
+    option.value = prompt;
+    option.innerHTML = prompt;
     select.appendChild(option);
 
     for (let s of list){       
@@ -12,6 +12,8 @@ export default function createShapeOptions(list){
         option.innerHTML = s;
         select.appendChild(option);
     }
+
+    select.addEventListener("change", changeListener);
 
     return select;
 }

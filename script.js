@@ -21,7 +21,7 @@ import {
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
-import createShapeOptions from "./components/shape_options.js";
+import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
 
 //elements
@@ -115,12 +115,7 @@ function init_shapes_selector(){
 
     const shapes_titles = get_shapes_titles();   
    
-    const shapeOptions = createShapeOptions(shapes_titles);
-    
-    update_selected_shapes();
-
-    //add select listener
-    shapeOptions.addEventListener("change", (e) => {
+    const shapeOptions = createOptions("add shape", shapes_titles, (e) => {
         const title = e.target.value;
         const id = uuid();       
         const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
@@ -136,6 +131,26 @@ function init_shapes_selector(){
         e.target.selectedIndex = 0;
         start_preview_request();
     });
+    
+    update_selected_shapes();
+
+    //add select listener
+    // shapeOptions.addEventListener("change", (e) => {
+    //     const title = e.target.value;
+    //     const id = uuid();       
+    //     const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}};
+    //     shapes.map((item) => {
+    //         item.selected = false;
+    //         return item;
+    //     });  
+    //     shapes.unshift(item);
+    //     if (item.title == "sphere"){           
+    //         add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius);
+    //     }
+    //     update_selected_shapes();
+    //     e.target.selectedIndex = 0;
+    //     start_preview_request();
+    // });
 
     shapeOptionsContainer.appendChild(shapeOptions);
 }
