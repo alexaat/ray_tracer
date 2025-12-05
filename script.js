@@ -6,7 +6,8 @@ import init,
         set_preview_camera,
         add_shpere,
         update_sphere,
-        get_scene
+        get_scene,
+        delete_sphere
 
     } from "./pkg/ray_tracer.js";
 import {
@@ -46,9 +47,6 @@ const previewCameraSettings = document.querySelector("#preview-camera-settings")
 
 
 
-const shapeProperty = document.querySelector("#shape-property");
-
-
 const showSceneButton = document.querySelector("#show-scene-button");
 showSceneButton.addEventListener("click", () => {
     console.log(get_scene());
@@ -78,9 +76,7 @@ let previewCameraVup = {x: 0, y: 1, z: 0};
 let previewCameraBackground = {r: 190, g: 190, b: 190}
 
 const maxRadius = 1000000;
-//let previewScreenHeight = 120;
-//let outputImageWidth = 10;
-//let outputImageHeight = 10;
+
 let shapes = [];
 
 
@@ -109,9 +105,6 @@ async function run(){
     //init generateImage button
     //init_generate_image_button();
 
-    //rightPanel.appendChild(createSphereProperties({selected: true, id: 1.0, title: "sphere", properties: {x: 2.0, y: -1.0, z: 3.0, radius: 1.0}}, (e) => {console.log(e.target.value)}));
-
-
 }
 
 run();
@@ -137,7 +130,7 @@ function init_shapes_selector(){
         });  
         shapes.unshift(item);
         if (item.title == "sphere"){           
-            console.log(add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius));
+            add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius);
         }
         update_selected_shapes();
         e.target.selectedIndex = 0;
@@ -157,6 +150,7 @@ function update_selected_shapes(){
             if (shapes.length > 0 && shapeToDelete.selected) {
                 shapes[0].selected = true;
             }
+            delete_sphere(shapeToDelete.id);
             update_selected_shapes();
         });
 
@@ -203,6 +197,7 @@ function update_selected_shapes(){
                         shapes[index].properties.y = y;
                         shapes[index].properties.z = z;
                         shapes[index].properties.radius = radius;
+                        update_sphere(selected.id, selected.properties.x, selected.properties.y, selected.properties.z, selected.properties.radius);
                         start_preview_request();
                         update_selected_shapes();
                     }
@@ -211,56 +206,6 @@ function update_selected_shapes(){
             }           
         }
     }
-    
-    
-    /*
-    
-    shapeProperty.innerHTML = "";
-    if (shapes.length == 0) {
-        shapeProperty.appendChild(emptyPropertyComponent());
-    }
-    let selected = shapes.filter(item => item.selected)[0];    
-    if (selected){
-        let index = shapes.indexOf(selected);
-        shapeProperty.appendChild(
-            spherePropertyComponent(
-                selected.title,
-                selected.properties.x,
-                selected.properties.y,
-                selected.properties.z,
-                selected.properties.radius,
-                (e) => {
-                    const val = e.target.value;
-                    switch (e.target.id) {
-                        case "property-input-x":
-                            shapes[index].properties.x = val;
-                        break;
-                        
-                        case "property-input-y":
-                            shapes[index].properties.y = val;
-                        break;
-                        
-                        case "property-input-z":
-                            shapes[index].properties.z = val;
-                        break;
-                        
-                        case "property-input-radius":
-                            shapes[index].properties.radius = val;
-                        break;
-                    } 
-                    const id = shapes[index].id;
-                    const x = shapes[index].properties.x;
-                    const y = shapes[index].properties.y;
-                    const z = shapes[index].properties.z;
-                    const radius = shapes[index].properties.radius;                   
-                    start_preview_request();
-
-                }
-            
-            ));
-    }
-
-    */
 }
 //
 /////////////end left panel/////////

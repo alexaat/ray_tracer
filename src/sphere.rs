@@ -1,7 +1,7 @@
 use crate::material::*;
 use crate::point::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Sphere {
     pub id: String,
     pub center: Point,

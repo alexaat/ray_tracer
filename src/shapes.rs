@@ -31,3 +31,20 @@ pub fn update_sphere(id: String, x: f64, y: f64, z: f64, r: f64) -> String{
     }
     String::from("error")
 }
+
+#[wasm_bindgen]
+pub fn delete_sphere(id: String) -> String{
+    if let Ok(mut data) = SHAPES.lock(){
+        // for sphere in data.iter_mut() {
+        //     if sphere.id == id {
+        //         sphere.radius = r;
+        //         sphere.center = Vector3::new(x, y, z);
+        //         let message = format!("sphere{{id: {}, x: {}, y: {}, z: {}, radius: {}}}", sphere.id, sphere.center.x, sphere.center.y, sphere.center.z, sphere.radius);
+        //         return message;
+        //     }
+        // }
+        *data = data.iter().filter(|item| item.id != id).cloned().collect::<Vec<Sphere>>();
+    }
+    String::from("error")
+}
+
