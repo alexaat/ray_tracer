@@ -10,7 +10,21 @@ export function colorToVector(color) {
     return [parseInt(colors[0], 16), parseInt(colors[1], 16), parseInt(colors[2], 16)];
 }
 
+export function uuid() {
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+  );
+}
+
 export function formatToWASM(camera, shapes){
-    const obj = {camera, shapes}
+    let materials = new Map();  
+
+    for (let shape of shapes){
+        const material = shape.material;       
+        const id = uuid();       
+        materials.set(id, material);
+    }
+    const obj = {camera, materials: Object.fromEntries(materials), shapes}
+
     return JSON.stringify(obj);    
 }

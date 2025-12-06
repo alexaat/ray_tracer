@@ -29,38 +29,13 @@ body {
     flex-direction: column;
     gap: 4px;
 }
-.shape-element{
-    margin-top: 4px;
-    padding: 4px;
-    background-color: brown;
-}
-.shape-element:hover{
-    cursor: pointer;
-}
-.selected{
-    background-color: rgb(217, 110, 110);
-}
+
+
 #center-panel{
     background-color: rgb(84, 170, 84);
     padding: 8px;
 }
 
-#preview-camera-settings{
-    display: flex;
-    flex-direction: column;
-}
-
-#preview-camera-settings-title{
-    width: 100%;
-    text-align: center;
-}
-
-#preview-camera-input-width{
-    margin-top: 8px;
-}
-#preview-camera-input-aspect-ratio{
-    margin-top: 8px;
-}
 
 #rendered-image-container{
     display: none;
@@ -70,36 +45,6 @@ body {
 
 #right-panel{
     background-color: rgb(57, 57, 249);
-}
-
-#shape-property{
-   display: flex; 
-   flex-direction: column;
-   background-color: rgb(148, 148, 255);
-   min-height: 120px;
-   min-width: 90px;
-   margin: 8px;   
-}
-
-#property-title{
-    width: 100%;
-    text-align: center;
-}
-
-.property-field{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 4px;
-    min-width: 100px;   
-   
-   
-}
-
-
-
-.property-input{
-    width: 45px;
 }
 
 .pointer:hover{
