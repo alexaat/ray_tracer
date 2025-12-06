@@ -1,7 +1,8 @@
 import createMaterialOptions from "./material_options.js";
 import createPropertiesNumberInput from "./properties_number_input.js";
 
-export default function createSphereProperties(sphere, changeListener, materials){
+export default function createSphereProperties(sphere, materials, changeListener){
+    console.log(sphere);
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; min-width: 100px; padding: 2px; box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; gap: 4px;"
     
@@ -10,43 +11,50 @@ export default function createSphereProperties(sphere, changeListener, materials
     titleElement.innerHTML = sphere.title;
     container.appendChild(titleElement);
 
-    container.appendChild(createPropertiesNumberInput("x", sphere.properties.x, (value) => {
-        const properties = {
-            x: value,
-            y: sphere.properties.y,
-            z: sphere.properties.z,
-            radius: sphere.properties.radius
-        }
-        changeListener(properties);
-    }));
-    container.appendChild(createPropertiesNumberInput("y", sphere.properties.y, (value) => {
-        const properties = {
-            x: sphere.properties.x,
-            y: value,
-            z: sphere.properties.z,
-            radius: sphere.properties.radius
-        }
-        changeListener(properties);
-    }));
-    container.appendChild(createPropertiesNumberInput("z", sphere.properties.z, (value) => {
-        const properties = {
-            x: sphere.properties.x,
-            y: sphere.properties.y,
-            z: value,
-            radius: sphere.properties.radius
-        }
-        changeListener(properties);
-    }));
-    container.appendChild(createPropertiesNumberInput("r", sphere.properties.radius, (value) => {
-        const properties = {
-            x: sphere.properties.x,
-            y: sphere.properties.y,
-            z: sphere.properties.z,
-            radius: value
-        }
-        changeListener(properties);
-    }));
-    container.appendChild(createMaterialOptions(materials, (e) => console.log(e.target.value)));
+
+    container.appendChild(createPropertiesNumberInput("x", sphere.properties.center[0], (val) => changeListener({properties: {center: [Number(val), sphere.properties.center[1], sphere.properties.center[2]]}})));
+    container.appendChild(createPropertiesNumberInput("y", sphere.properties.center[1], (val) => changeListener({properties: {center: [sphere.properties.center[0], Number(val), sphere.properties.center[2]]}})));
+    container.appendChild(createPropertiesNumberInput("z", sphere.properties.center[2], (val) => changeListener({properties: {center: [sphere.properties.center[0], sphere.properties.center[1], Number(val)]}})));
+    container.appendChild(createPropertiesNumberInput("r", sphere.properties.radius, (val) => changeListener({properties: {radius: Number(val)}})));
+
+
+    // container.appendChild(createPropertiesNumberInput("x", sphere.properties.x, (value) => {
+    //     const properties = {
+    //         x: value,
+    //         y: sphere.properties.y,
+    //         z: sphere.properties.z,
+    //         radius: sphere.properties.radius
+    //     }
+    //     changeListener(properties);
+    // }));
+    // container.appendChild(createPropertiesNumberInput("y", sphere.properties.y, (value) => {
+    //     const properties = {
+    //         x: sphere.properties.x,
+    //         y: value,
+    //         z: sphere.properties.z,
+    //         radius: sphere.properties.radius
+    //     }
+    //     changeListener(properties);
+    // }));
+    // container.appendChild(createPropertiesNumberInput("z", sphere.properties.z, (value) => {
+    //     const properties = {
+    //         x: sphere.properties.x,
+    //         y: sphere.properties.y,
+    //         z: value,
+    //         radius: sphere.properties.radius
+    //     }
+    //     changeListener(properties);
+    // }));
+    // container.appendChild(createPropertiesNumberInput("r", sphere.properties.radius, (value) => {
+    //     const properties = {
+    //         x: sphere.properties.x,
+    //         y: sphere.properties.y,
+    //         z: sphere.properties.z,
+    //         radius: value
+    //     }
+    //     changeListener(properties);
+    // }));
+    // container.appendChild(createMaterialOptions(materials, (e) => console.log(e.target.value)));
 
 
     return container;

@@ -20,10 +20,13 @@ import {
 
 } from "./components.js";
 
+import {formatToWASM} from './util.js';
+
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
 import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
+import createPropertiesPlaceholder from "./components/properties_placeholder.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
@@ -51,6 +54,7 @@ const previewCameraSettings = document.querySelector("#preview-camera-settings")
 const showSceneButton = document.querySelector("#show-scene-button");
 showSceneButton.addEventListener("click", () => {
     console.log(get_scene());
+     console.log(formatToWASM(previewCamera, shapes));
 });
 
 
@@ -80,6 +84,20 @@ const maxRadius = 1000000;
 
 let shapes = [];
 
+let previewCamera = {
+    image_width: 150.0,    
+    aspect_ratio: 1.3333,
+    pixel_samples: 200,
+    vfov: 22,
+    defocus_angle: 0.4,
+    focus_dist: 19,
+    max_depth: 50,
+    lookfrom: [5, 6, 25],
+    lookat: [0, 0, 0],
+    vup: [0, 1, 0],
+    background: [190, 190, 190]
+}
+
 
 
 
@@ -87,7 +105,7 @@ async function run(){
 
     await init();
 
-    update_preview_camera_at_WASM();
+    //update_preview_camera_at_WASM();
 
     //init shapes selector
     init_shapes_selector();
@@ -99,6 +117,7 @@ async function run(){
     init_preview_camera_settings();
 
 
+    start_preview_request();
 
     //init image size fields
     //init_output_image_dimention_settinds();
@@ -114,96 +133,217 @@ run();
 //
 function init_shapes_selector(){
 
-    const shapes_titles = get_shapes_titles();   
+    // const shapes_titles = get_shapes_titles();   
    
-    const shapeOptions = createOptions("add shape", shapes_titles, (e) => {
+    // const shapeOptions = createOptions("add shape", shapes_titles, (e) => {
+    //     const title = e.target.value;
+    //     const id = uuid();       
+    //     const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}, material: {title: "Lambertian", color: {r: 128, g: 0, b: 128}, fuzz: 0.8}};
+    //     shapes.map((item) => {
+    //         item.selected = false;
+    //         return item;
+    //     });  
+    //     shapes.unshift(item);
+    //     if (item.title == "sphere"){           
+    //         add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius);
+    //     }
+    //     update_selected_shapes();
+    //     e.target.selectedIndex = 0;
+    //     start_preview_request();
+    // });
+    
+    // update_selected_shapes();
+
+    // shapeOptionsContainer.appendChild(shapeOptions);
+
+    const shapes_titles = get_shapes_titles();   
+    const shapeOptions = createOptions("add shape", shapes_titles, e => {
         const title = e.target.value;
-        const id = uuid();       
-        const item = {selected: true, id, title, properties: {x: 0.0, y: 0.0, z: 0.0, radius: 1.0}, material: {title: "Lambertian", color: {r: 128, g: 0, b: 128}, fuzz: 0.8}};
+        const id = uuid();  
+        let shape = {selected: true, id, title};
+        let properties = {};
+        let material = {};
+        switch(title){
+            case "sphere": 
+                properties = {"center": [0, 1, 0], "radius": 1,};
+                material = {"type": "lambertian", "color": [249, 0, 0], "fuzz": 0.9};
+                break;
+            case "plane":
+                properties = {"center": [0, 0, 0], "normal": [0, 1, 0]};
+                material = {"type": "lambertian", "color": [152, 152, 152],"fuzz": 0.5};
+                break;
+            case "block":
+                properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
+                material = {"type": "metal","color": [255, 255, 255],"fuzz": 0.1};
+                break;
+            case "cylinder": 
+                properties = {"top": [4, 3, 0], "bottom": [4, 0, 0], "radius": 2};
+                material = {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6}; 
+                break;           
+        }
+        //body is used to send its content to WASM
+        shape = {...shape, properties, material};
+
+        //clear shape is selected flag
+        shapes.map((item) => {
+            item.selected = false;
+            return item;
+        });
+        
+        shapes.unshift(shape);
+        update_selected_shapes();
+        e.target.selectedIndex = 0;
+        start_preview_request();        
+    });
+    update_selected_shapes();
+    shapeOptionsContainer.appendChild(shapeOptions);  
+
+}
+
+function update_selected_shapes(){
+    // selectedShapesContainer.innerHTML = "";    
+    
+    // shapes.map(shape => {
+    //     let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
+    //         const shapeToDelete = shapes.find(shape => shape.id == id);
+    //         shapes = shapes.filter(shape => shape.id != id);
+    //         if (shapes.length > 0 && shapeToDelete.selected) {
+    //             shapes[0].selected = true;
+    //         }
+    //         delete_sphere(shapeToDelete.id);
+    //         update_selected_shapes();
+    //         start_preview_request();
+    //     });
+
+    //     //change selected item
+    //     shapeTile.addEventListener("click", (e) => {
+
+    //         if (e.target.classList.contains("shape-delete-button")){
+    //             return;
+    //         }
+
+    //         let child = e.currentTarget;
+    //         let parent = child.parentNode;
+
+    //         shapes.map((item) => {
+    //             item.selected = false;
+    //             return item;
+    //         });  
+         
+    //         let index = Array.prototype.indexOf.call(parent.children, child);
+    //         shapes[index].selected = true;
+
+    //         update_selected_shapes();
+
+    //     });
+
+    //     selectedShapesContainer.appendChild(shapeTile);
+    // });
+
+    // //update right panel
+    // rightPanel.innerHTML = "";
+    // if (shapes.length > 0) {
+    //     let selected = shapes.filter(item => item.selected)[0];    
+    //     if(selected){
+    //         if (selected.title == "sphere"){
+    //             rightPanel.appendChild(createSphereProperties(selected, (properties) => {
+    //                 //validate
+    //                 const x = properties.x;
+    //                 const y = properties.y;
+    //                 const z = properties.z;
+    //                 const radius = properties.radius;
+    //                 if  (coordinateIsValid(x) && coordinateIsValid(y) &&  coordinateIsValid(z) &&  radiusIsValid(radius)){
+    //                     const index = shapes.indexOf(selected);
+    //                     shapes[index].properties.x = x;
+    //                     shapes[index].properties.y = y;
+    //                     shapes[index].properties.z = z;
+    //                     shapes[index].properties.radius = radius;
+    //                     update_sphere(selected.id, selected.properties.x, selected.properties.y, selected.properties.z, selected.properties.radius);
+    //                     start_preview_request();
+    //                     update_selected_shapes();
+    //                 }
+
+    //             }, get_material_titles()));   
+    //         }           
+    //     }
+    // }
+
+    selectedShapesContainer.innerHTML = "";   
+
+    shapes.map(shape => {
+        //create shape tile for left panel
+        let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
+            //tile delete click listener
+            const shapeToDelete = shapes.find(shape => shape.id == id);
+            shapes = shapes.filter(shape => shape.id != id);
+            //select top tile if selected tile is deleted
+            if (shapes.length > 0 && shapeToDelete.selected) {
+                shapes[0].selected = true;
+            }
+            update_selected_shapes();
+            start_preview_request();      
+        });
+
+
+        //change selected item on click
+        shapeTile.addEventListener("click", (e) => {
+
+        if (e.target.classList.contains("shape-delete-button")){
+            return;
+        }
+
+        let child = e.currentTarget;
+        let parent = child.parentNode;
+
         shapes.map((item) => {
             item.selected = false;
             return item;
         });  
-        shapes.unshift(item);
-        if (item.title == "sphere"){           
-            add_shpere(id, item.properties.x, item.properties.y, item.properties.z, item.properties.radius);
-        }
+        
+        let index = Array.prototype.indexOf.call(parent.children, child);
+        shapes[index].selected = true;
+
         update_selected_shapes();
-        e.target.selectedIndex = 0;
-        start_preview_request();
-    });
-    
-    update_selected_shapes();
-
-    shapeOptionsContainer.appendChild(shapeOptions);
-}
-
-function update_selected_shapes(){
-    selectedShapesContainer.innerHTML = "";    
-    
-    shapes.map(shape => {
-        let shapeTile = createShapeTile(shape.id, shape.title, shape.selected, (id) => {
-            const shapeToDelete = shapes.find(shape => shape.id == id);
-            shapes = shapes.filter(shape => shape.id != id);
-            if (shapes.length > 0 && shapeToDelete.selected) {
-                shapes[0].selected = true;
-            }
-            delete_sphere(shapeToDelete.id);
-            update_selected_shapes();
-            start_preview_request();
-        });
-
-        //change selected item
-        shapeTile.addEventListener("click", (e) => {
-
-            if (e.target.classList.contains("shape-delete-button")){
-                return;
-            }
-
-            let child = e.currentTarget;
-            let parent = child.parentNode;
-
-            shapes.map((item) => {
-                item.selected = false;
-                return item;
-            });  
-         
-            let index = Array.prototype.indexOf.call(parent.children, child);
-            shapes[index].selected = true;
-
-            update_selected_shapes();
 
         });
 
         selectedShapesContainer.appendChild(shapeTile);
+
     });
 
     //update right panel
     rightPanel.innerHTML = "";
     if (shapes.length > 0) {
-        let selected = shapes.filter(item => item.selected)[0];    
-        if(selected){
-            if (selected.title == "sphere"){
-                rightPanel.appendChild(createSphereProperties(selected, (properties) => {
-                    //validate
-                    const x = properties.x;
-                    const y = properties.y;
-                    const z = properties.z;
-                    const radius = properties.radius;
-                    if  (coordinateIsValid(x) && coordinateIsValid(y) &&  coordinateIsValid(z) &&  radiusIsValid(radius)){
+        let selected = shapes.find(item => item.selected);
+        if (selected){
+            switch (selected.title){
+                case "sphere":
+                    rightPanel.appendChild(createSphereProperties(selected, get_material_titles(), (params) => {
                         const index = shapes.indexOf(selected);
-                        shapes[index].properties.x = x;
-                        shapes[index].properties.y = y;
-                        shapes[index].properties.z = z;
-                        shapes[index].properties.radius = radius;
-                        update_sphere(selected.id, selected.properties.x, selected.properties.y, selected.properties.z, selected.properties.radius);
-                        start_preview_request();
-                        update_selected_shapes();
-                    }
-
-                }, get_material_titles()));   
-            }           
+                        const properties = params.properties;
+                        const material = params.material;
+                        if(properties){
+                            shapes[index].properties = {...shapes[index].properties, ...properties};                            
+                        }
+                        if(material){
+                            shapes[index].material = {...shapes[index].material, ...material};     
+                        }
+                        if (properties || material) {
+                            start_preview_request();  
+                        }
+                    })); 
+                    break;
+                case "plane":
+                    break;
+                case "block":
+                    break;
+                case "cylinder":
+                    break;
+            }
         }
+
+    } else {
+        rightPanel.appendChild(createPropertiesPlaceholder());
     }
 }
 //
@@ -213,11 +353,16 @@ function update_selected_shapes(){
 ////////////center panel////////////
 //
 function init_preview_screen(){
-    previewCanvas.width = previewCameraWidth;
-    previewCanvas.height = previewCameraWidth/previewCameraAspectRation;
+    // previewCanvas.width = previewCameraWidth;
+    // previewCanvas.height = previewCameraWidth/previewCameraAspectRation;
+    previewCanvas.width = previewCamera.image_width;
+    previewCanvas.height = previewCamera.image_width/previewCamera.aspect_ratio;
 }
 
 function init_preview_camera_settings(){
+    
+
+    /*
     const width = {
         title: "width",
         value: previewCameraWidth,
@@ -445,9 +590,15 @@ function init_preview_camera_settings(){
             start_preview_request();  
         }
     };
+    */
 
-    const cameraPreviewSettings = createPreviewCameraSettings(width, aspectRatio, pixelSamples, vfov, lookfrom, lookat, vup, defocusAngle, focusDist, maxDepth, background);
-    centerPanel.appendChild(cameraPreviewSettings);
+    //const cameraPreviewSettings = createPreviewCameraSettings(width, aspectRatio, pixelSamples, vfov, lookfrom, lookat, vup, defocusAngle, focusDist, maxDepth, background);
+    //centerPanel.appendChild(cameraPreviewSettings);
+    centerPanel.appendChild(createPreviewCameraSettings(previewCamera, (val) => {
+        previewCamera = {...previewCamera, ...val}; 
+        init_preview_screen();
+        start_preview_request();          
+    }));    
 
 }
 
@@ -466,9 +617,9 @@ function init_preview_camera_settings(){
 
 //request preview 
 function start_preview_request(){
-    if (shapes.length == 0) {
-        return;
-    }
+    const inputWASM = formatToWASM(previewCamera, shapes);
+    console.log("inputWASM: " + inputWASM);
+
     const h = previewCameraWidth/previewCameraAspectRation;
     previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
     for (let i = 0; i < previewCameraWidth*h; i++){

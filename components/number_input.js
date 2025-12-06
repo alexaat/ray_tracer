@@ -14,7 +14,7 @@ export default function createNumberInput(title, value, changeListener){
         input.value = value;
     }
     if (changeListener) {
-        input.addEventListener("change", changeListener);
+        input.addEventListener("change", (e) => changeListener(e.target.value));
     }
     input.style = "width: 60px";
 
