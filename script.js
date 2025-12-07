@@ -1,11 +1,8 @@
 import init,
-    {
-        generate_pixel,
-        get_shapes_titles,
-        set_preview_camera,
+    {       
+        get_shapes_titles,       
         get_scene,
         get_material_titles,
-        set_scene,
         render_pixel
 
     } from "./pkg/ray_tracer.js";
@@ -71,12 +68,12 @@ let shapes = [];
 
 let previewCamera = {
     image_width: 150.0,    
-    aspect_ratio: 1.3333,
-    pixel_samples: 200,
+    aspect_ratio: 1.3,
+    pixel_samples: 15,
     vfov: 22,
     defocus_angle: 0.4,
     focus_dist: 19,
-    max_depth: 50,
+    max_depth: 6,
     lookfrom: [5, 6, 25],
     lookat: [0, 0, 0],
     vup: [0, 1, 0],
@@ -120,11 +117,12 @@ function init_shapes_selector(){
         switch(title){
             case "sphere": 
                 properties = {"center": [0, 1, 0], "radius": 1,};
-                material = {"type": "lambertian", "color": [235, 0, 0], "fuzz": 0.9};
+                material = {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0};
+                //  material = {"type": "metal","color": [255, 255, 255],"fuzz": 0.1};
                 break;
             case "plane":
-                properties = {"center": [0, 0, 0], "normal": [0, 1, 0]};
-                material = {"type": "lambertian", "color": [152, 152, 152],"fuzz": 0.5};
+                properties = {"center": [0, -1.0, 0], "normal": [0, 1, 0]};
+                material = {"type": "lambertian", "color": [15, 15, 255],"fuzz": 0.8};
                 break;
             case "block":
                 properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
@@ -275,19 +273,22 @@ async function start_preview_request(){
     }
 
     const inputWASM = formatToWASM(previewCamera, shapes);
-    console.log(set_scene(inputWASM));
+
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
     const randomXs = random_array(0, w);
     const randomYs = random_array(0, h);
     
+    console.log(inputWASM);
     for (let y = 0; y < randomYs.length; y++){
         for (let x = 0; x < randomXs.length; x++){
             let _y = randomYs[y];
             let _x = randomXs[x];
+            //console.log("x: "+ _x + ", y: "+ _y);
             timers.push(setTimeout(() => {
-                const color = render_pixel(inputWASM, _x, _y);            
+                const color = render_pixel(inputWASM, _x, _y); 
+                console.log("color: " + color);                          
                 previewContext.fillStyle = color;
                 previewContext.fillRect(_x, _y, 1, 1);  
             }, 0.0));   

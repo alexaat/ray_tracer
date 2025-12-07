@@ -1,7 +1,5 @@
 use crate::point::*;
 use crate::vector3::*;
-use crate::ColorRGB;
-use serde_wasm_bindgen::from_value;
 use std::sync::Mutex;
 use wasm_bindgen::prelude::*;
 use crate::hittable::*;
@@ -36,6 +34,7 @@ pub fn get_preview_camera() -> String {
     }
 }
 
+/*
 #[wasm_bindgen]
 pub fn set_preview_camera(
     pixel_samples: usize,
@@ -106,6 +105,7 @@ pub fn set_preview_camera(
         });
     }
 }
+*/
 
 ///////////////////////////////////////////////////
 

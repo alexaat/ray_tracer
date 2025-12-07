@@ -17,9 +17,7 @@ use crate::color::*;
 use crate::constants::*;
 use crate::hittable::HittableList;
 use crate::io::*;
-use crate::source_model::SourceModel;
 use crate::vector3::*;
-use rand::Rng;
 use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -29,13 +27,13 @@ use crate::plane::*;
 use crate::camera::*;
 
 
-#[wasm_bindgen]
-pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
-    let r = rand::rng().random_range(0..255) as u8;
-    let g = rand::rng().random_range(0..255) as u8;
-    let b = rand::rng().random_range(0..255) as u8;
-    ColorRGB::new(r, g, b)
-}
+// #[wasm_bindgen]
+// pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
+//     let r = rand::rng().random_range(0..255) as u8;
+//     let g = rand::rng().random_range(0..255) as u8;
+//     let b = rand::rng().random_range(0..255) as u8;
+//     ColorRGB::new(r, g, b)
+// }
 
 #[wasm_bindgen]
 pub fn get_shapes_titles() -> Vec<String> {
@@ -65,6 +63,7 @@ pub fn add(x: i32, y: i32) -> i32 {
 
 /////////////////////////////////////////////////////////
 
+/*
 #[wasm_bindgen]
 pub fn set_scene(scene: String) -> String {
     match read_data_from_string(scene) {
@@ -184,6 +183,7 @@ fn setup_world(data: SourceModel) {
 
 
 }
+*/
 
 #[wasm_bindgen]
 pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
@@ -293,15 +293,20 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
     let camera = Camera::new(cam_setup);
 
     let color = camera.render(&world, x, y);
-
-    let r = format!("{:x}", color.0);
-    let g = format!("{:x}", color.1);
-    let b = format!("{:x}", color.2);
+    
+    let mut r = format!("{:x}", color.0);
+    if r.len() == 1 {
+        r = format!("0{}", r);
+    }    
+    let mut g = format!("{:x}", color.1);
+        if g.len() == 1 {
+        g = format!("0{}", g);
+    } 
+    let mut b = format!("{:x}", color.2);
+        if b.len() == 1 {
+        b = format!("0{}", b);
+    } 
 
     format!("#{}{}{}",r,g,b)
-
-    // let a = CAMERA.lock().unwrap();
-    // let b = a.as_ref();
-    // let c = b.unwrap();
-    // c.render(x, y)   
+ 
 }
