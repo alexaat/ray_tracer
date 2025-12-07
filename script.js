@@ -81,9 +81,6 @@ let previewCamera = {
     background: [190, 190, 190]
 }
 
-
-
-
 async function run(){
 
     await init();

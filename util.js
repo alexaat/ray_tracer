@@ -18,13 +18,18 @@ export function uuid() {
 
 export function formatToWASM(camera, shapes){
     let materials = new Map();  
+    let _shapes = [];    
 
     for (let shape of shapes){
         const material = shape.material;       
         const id = uuid();       
         materials.set(id, material);
+        const shapeAsMap = new Map();
+        shapeAsMap.set(shape.title, {...shape.properties, material: id})
+        _shapes.push(Object.fromEntries(shapeAsMap));
     }
-    const obj = {camera, materials: Object.fromEntries(materials), shapes}
+    
+    const obj = {camera, materials: Object.fromEntries(materials), shapes: _shapes};
 
     return JSON.stringify(obj);    
 }
