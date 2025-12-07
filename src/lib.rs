@@ -21,14 +21,7 @@ pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
     let r = rand::rng().random_range(0..255) as u8;
     let g = rand::rng().random_range(0..255) as u8;
     let b = rand::rng().random_range(0..255) as u8;
-
     ColorRGB::new(r, g, b)
-
-    // Point {
-    //     x,
-    //     y,
-    //     color: Color { r, g, b }
-    // }
 }
 
 #[wasm_bindgen]
@@ -56,6 +49,11 @@ pub fn add(x: i32, y: i32) -> i32 {
 }
 
 #[wasm_bindgen]
-pub fn render_preview(input: String) -> String {
-    format!("start render: {}", input)
+pub fn set_scene(scene: String) -> String {
+    format!("OK {}", scene)
+}
+
+#[wasm_bindgen]
+pub fn render_pixel(x: u32, y: u32) -> String {
+    format!("#ff0000")
 }

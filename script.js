@@ -5,7 +5,8 @@ import init,
         set_preview_camera,
         get_scene,
         get_material_titles,
-        render_preview
+        set_scene,
+        render_pixel
 
     } from "./pkg/ray_tracer.js";
 
@@ -267,22 +268,30 @@ function init_preview_camera_settings(){
 //////end right panel//////////////
 
 //request preview 
-function start_preview_request(){
+async function start_preview_request(){
     const inputWASM = formatToWASM(previewCamera, shapes);
-    //console.log("inputWASM: " + inputWASM);
+    console.log(set_scene(inputWASM));
+    const h = Math.trunc(previewCamera.image_width/previewCamera.aspect_ratio);
+    previewContext.clearRect(0, 0, previewCamera.image_width, h);   
+    for (let y = 0; y < h; y++){
+        for (let x = 0; x < previewCamera.image_width; x++){
+            setTimeout(() => {
+                const color = render_pixel(x, y);
+                previewContext.fillStyle = color;
+                previewContext.fillRect(x, y, 1, 1);
+            }, 0.01);
+        }
+    }
 
-    console.log(render_preview(inputWASM));
-
-
-    const h = previewCameraWidth/previewCameraAspectRation;
-    previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
-    for (let i = 0; i < previewCameraWidth*h; i++){
-        let x = getRandomInt(previewCameraWidth);
-        let y = getRandomInt(h);
-        let color = get_pixel_color(x,y);
-        previewContext.fillStyle = color;
-        previewContext.fillRect(x, y, 1, 1);
-    } 
+    // const h = previewCameraWidth/previewCameraAspectRation;
+    // previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
+    // for (let i = 0; i < previewCameraWidth*h; i++){
+    //     let x = getRandomInt(previewCameraWidth);
+    //     let y = getRandomInt(h);
+    //     let color = get_pixel_color(x,y);
+    //     previewContext.fillStyle = color;
+    //     previewContext.fillRect(x, y, 1, 1);
+    // } 
 }
 
 function get_pixel_color(x,y){
