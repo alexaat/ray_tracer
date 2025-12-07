@@ -1,3 +1,4 @@
+use crate::point::*;
 use crate::vector3::*;
 use crate::ColorRGB;
 use serde_wasm_bindgen::from_value;
@@ -20,21 +21,6 @@ pub struct Camera {
     pub pixel_samples: usize,
     pub background: ColorRGB,
 }
-
-// pub static PREVIEW_CAMERA: Mutex<Camera> = Mutex::new(Camera{
-//     image_width: PREVIEW_IMAGE_WIDTH,
-//     image_height: PREVIEW_IMAGE_WIDTH*PREVIEW_ASPECT_RATIO as usize,
-//     pixel00_loc: Vector3,
-//     pixel_delta_u: Vector3,
-//     pixel_delta_v: Vector3,
-//     camera_center: PREVIEW_CAMERA_CENTER,
-//     max_depth: PREVIEW_MAX_DEPTH,
-//     defocus_disk_u: Vector3,
-//     defocus_disk_v: Vector3,
-//     defocus_angle: PREVIEW_DEFOCUS_ANGLE,
-//     pixel_samples: PREVIEW_PIXEL_SAMPLES,
-//     background: BACKGROUND_COLOR
-// });
 
 pub static PREVIEW_CAMERA: Mutex<Option<Camera>> = Mutex::new(None);
 
@@ -117,10 +103,19 @@ pub fn set_preview_camera(
     }
 }
 
-// #[wasm_bindgen]
-// pub fn set_preview_camera(width: usize, height: usize) -> Camera{
-//     let mut data = PREVIEW_CAMERA.lock().unwrap();
-//     data.image_height = height;
-//     data.image_width = width;
-//     *data
-// }
+///////////////////////////////////////////////////
+
+#[derive(serde::Deserialize, Debug)]
+pub struct CameraSetup {
+    pub pixel_samples: usize,
+    pub vfov: f64,
+    pub lookfrom: Point,
+    pub lookat: Point,
+    pub vup: Vector3,
+    pub defocus_angle: f64,
+    pub focus_dist: f64,
+    pub aspect_ratio: f64,
+    pub image_width: usize,
+    pub max_depth: usize,
+    pub background: Vector3,
+}
