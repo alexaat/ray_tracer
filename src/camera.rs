@@ -106,6 +106,8 @@ pub fn set_preview_camera(
 
 ///////////////////////////////////////////////////
 
+pub static CAMERA: Mutex<Option<Camera>> = Mutex::new(None);
+
 #[derive(serde::Deserialize, Debug)]
 pub struct CameraSetup {
     pub pixel_samples: usize,
@@ -187,7 +189,7 @@ impl Camera {
         }
     }
 
-    pub fn render(&self, world: &HittableList, x: usize, y: usize) -> String {
+    pub fn render(&self, x: usize, y: usize) -> String {
         String::from("#00ff00")
     }
 

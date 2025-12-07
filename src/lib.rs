@@ -65,17 +65,18 @@ pub fn add(x: i32, y: i32) -> i32 {
 
 /////////////////////////////////////////////////////////
 
+
+
 #[wasm_bindgen]
 pub fn set_scene(scene: String) -> String {
     match read_data_from_string(scene) {
-        Ok(source_model) => format!("sorce_model: {:?}", source_model),
+        Ok(source_model) =>{
+            let message = format!("sorce_model: {:?}", source_model);
+            setup_world(source_model);            
+            message            
+        },
         Err(e) => format!("sorce_model: {:?}", e),
     }
-}
-
-#[wasm_bindgen]
-pub fn render_pixel(x: u32, y: u32) -> String {
-    camera.render(&world, x, y)
 }
 
 fn setup_world(data: SourceModel) {
@@ -180,6 +181,14 @@ fn setup_world(data: SourceModel) {
         }
     }   
 
-    let camera = Camera::new(cam_setup);
+    *CAMERA.lock().unwrap() = Some(Camera::new(cam_setup));
 
+}
+
+#[wasm_bindgen]
+pub fn render_pixel(x: usize, y: usize) -> String {
+    let a = CAMERA.lock().unwrap();
+    let b = a.as_ref();
+    let c = b.unwrap();
+    c.render(x, y)
 }
