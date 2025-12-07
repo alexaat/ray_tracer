@@ -11,7 +11,7 @@ import init,
     } from "./pkg/ray_tracer.js";
 
 
-import {formatToWASM, uuid} from './util.js';
+import {formatToWASM, uuid, random_array} from './util.js';
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
@@ -120,7 +120,7 @@ function init_shapes_selector(){
         switch(title){
             case "sphere": 
                 properties = {"center": [0, 1, 0], "radius": 1,};
-                material = {"type": "lambertian", "color": [249, 0, 0], "fuzz": 0.9};
+                material = {"type": "lambertian", "color": [235, 0, 0], "fuzz": 0.9};
                 break;
             case "plane":
                 properties = {"center": [0, 0, 0], "normal": [0, 1, 0]};
@@ -268,21 +268,55 @@ function init_preview_camera_settings(){
 //////end right panel//////////////
 
 //request preview 
+let timers = [];
 async function start_preview_request(){
+    for (let timer of timers){
+        clearTimeout(timer);
+    }
+
     const inputWASM = formatToWASM(previewCamera, shapes);
     console.log(set_scene(inputWASM));
-    const h = Math.trunc(previewCamera.image_width/previewCamera.aspect_ratio);
-    previewContext.clearRect(0, 0, previewCamera.image_width, h);   
-    for (let y = 0; y < h; y++){
-        for (let x = 0; x < previewCamera.image_width; x++){
-            setTimeout(() => {
-                const color = render_pixel(inputWASM, x, y);            
+    const w = previewCamera.image_width;
+    const h = Math.trunc(w/previewCamera.aspect_ratio);
+    previewContext.clearRect(0, 0, w, h);   
+    const randomXs = random_array(0, w);
+    const randomYs = random_array(0, h);
+    
+    for (let y = 0; y < randomYs.length; y++){
+        for (let x = 0; x < randomXs.length; x++){
+            let _y = randomYs[y];
+            let _x = randomXs[x];
+            timers.push(setTimeout(() => {
+                const color = render_pixel(inputWASM, _x, _y);            
                 previewContext.fillStyle = color;
-                previewContext.fillRect(x, y, 1, 1);  
-            }, 0.0);           
-          
+                previewContext.fillRect(_x, _y, 1, 1);  
+            }, 0.0));   
+
         }
     }
+    
+    /*
+    const worker = new Worker('worker.js'); 
+    worker.postMessage(1000000000); // send data to worker
+    worker.onmessage = function (event) {
+    console.log("Result from worker:", event.data);
+    };
+    */
+
+
+
+
+    // previewContext.clearRect(0, 0, w, h);   
+    // for (let y = 0; y < h; y++){
+    //     for (let x = 0; x < w; x++){
+    //         setTimeout(() => {
+    //             const color = render_pixel(inputWASM, x, y);            
+    //             previewContext.fillStyle = color;
+    //             previewContext.fillRect(x, y, 1, 1);  
+    //         }, 0.0);           
+          
+    //     }
+    // }
 
     // const h = previewCameraWidth/previewCameraAspectRation;
     // previewContext.clearRect(0, 0, previewCameraWidth, h) ;    

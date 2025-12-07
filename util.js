@@ -33,3 +33,19 @@ export function formatToWASM(camera, shapes){
 
     return JSON.stringify(obj);    
 }
+
+export function random_array(min, max){
+    let arr = [];  
+    for(let i = min; i <=max; i++){
+      arr.push(i);
+    }
+    return shuffle(arr);
+}
+
+export function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
