@@ -3,6 +3,7 @@ use crate::point::*;
 use crate::ray::*;
 use crate::vector3::*;
 use std::rc::Rc;
+
 pub struct HitRecord {
     pub p: Point,
     pub normal: Vector3,
@@ -71,3 +72,6 @@ impl Hittable for HittableList {
         hit_record_option
     }
 }
+
+//pub static CAMERA: Mutex<Option<Camera>> = Mutex::new(None);
+//pub static WORLD: Lazy<Option<HittableList>> = Lazy::new(|| None);

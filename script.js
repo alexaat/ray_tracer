@@ -276,10 +276,11 @@ async function start_preview_request(){
     for (let y = 0; y < h; y++){
         for (let x = 0; x < previewCamera.image_width; x++){
             setTimeout(() => {
-                const color = render_pixel(x, y);
+                const color = render_pixel(inputWASM, x, y);            
                 previewContext.fillStyle = color;
-                previewContext.fillRect(x, y, 1, 1);
-            }, 0.01);
+                previewContext.fillRect(x, y, 1, 1);  
+            }, 0.0);           
+          
         }
     }
 

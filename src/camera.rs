@@ -5,6 +5,9 @@ use serde_wasm_bindgen::from_value;
 use std::sync::Mutex;
 use wasm_bindgen::prelude::*;
 use crate::hittable::*;
+use crate::color::Color;
+use crate::ray::Ray;
+use crate::grapics::color_to_rgb;
 
 #[derive(Debug, Clone)]
 #[wasm_bindgen]
@@ -189,8 +192,63 @@ impl Camera {
         }
     }
 
-    pub fn render(&self, x: usize, y: usize) -> String {
-        String::from("#00ff00")
+    pub fn render(&self,  world: &HittableList, x: usize, y: usize) -> (u8,u8,u8) {            
+        let pixel_center = &self.pixel00_loc + x * &self.pixel_delta_u + y * &self.pixel_delta_v;
+        let color = self.calculate_avarage_color(&pixel_center, world);
+        let rgb = color_to_rgb(color);   
+        (rgb.0, rgb.1, rgb.2)  
+    }
+
+    fn get_color_from_world(&self, ray: &Ray, world: &HittableList, depth: usize) -> Color {
+        let hit_record_option = world.hit(ray, 0.001, f64::INFINITY);
+        if let Some(hit_record) = hit_record_option {
+            if depth == 0 {
+                return Vector3::new(0.0, 0.0, 0.0);
+            }
+            let mut shape_color = Color::new(1.0, 1.0, 1.0);
+            let scattered_option = hit_record
+                .material
+                .scatter(ray, &hit_record, &mut shape_color);
+            if let Some(scattered) = scattered_option {
+                return shape_color * self.get_color_from_world(&scattered, world, depth - 1);
+            }
+            return Color::new(0.0, 0.0, 0.0);
+        }
+        self.background.clone()
+    }
+
+    fn calculate_avarage_color(&self, pixel_center: &Vector3, world: &HittableList) -> Color {
+        let mut colors = vec![];
+        for _ in 0..self.pixel_samples {
+            let delta_x = rand::random_range(0.0..0.5) * self.pixel_delta_u.len();
+            let delta_y = rand::random_range(0.0..0.5) * self.pixel_delta_v.len();
+            let delta_v = Vector3::new(delta_x, delta_y, 0.0);
+            let v = pixel_center + delta_v;
+            // add defocus
+            let p = Vector3::generate_random_unit_vector_on_disk();
+            let defocus_disk_sample =
+                &self.camera_center + (p.x * &self.defocus_disk_u) + (p.y * &self.defocus_disk_v);
+            let mut ray_origin = &defocus_disk_sample;
+            if self.defocus_angle <= 0.0 {
+                ray_origin = &self.camera_center;
+            }
+            let ray_direction = v - ray_origin;           
+            let ray = Ray::new(ray_origin.clone(), ray_direction);          
+            let color = self.get_color_from_world(&ray, world, self.max_depth);
+            colors.push(color);
+        }
+        if colors.len() == 0 {
+            return Color::new(0.0, 0.0, 0.0);
+        }
+        let mut color = Color::new(0.0, 0.0, 0.0);
+        //calculate avarage color
+        for c in &colors {
+            color = color + c;
+        }
+        color = color / (colors.len() as f64);
+        Color::clamp_color(&mut color);
+        Color::color_linear_to_gamma(&mut color);
+        color
     }
 
 }
