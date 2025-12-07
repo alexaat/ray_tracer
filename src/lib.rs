@@ -11,17 +11,23 @@ mod shapes;
 mod source_model;
 mod sphere;
 mod vector3;
+mod plane;
 use crate::camera::CameraSetup;
-use crate::camera::PREVIEW_CAMERA;
 use crate::color::*;
 use crate::constants::*;
 use crate::hittable::HittableList;
 use crate::io::*;
-use crate::shapes::*;
 use crate::source_model::SourceModel;
 use crate::vector3::*;
 use rand::Rng;
 use wasm_bindgen::prelude::*;
+use std::collections::HashMap;
+use std::rc::Rc;
+use crate::material::*;
+use crate::sphere::*;
+use crate::plane::*;
+use crate::camera::*;
+
 
 #[wasm_bindgen]
 pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -69,7 +75,7 @@ pub fn set_scene(scene: String) -> String {
 
 #[wasm_bindgen]
 pub fn render_pixel(x: u32, y: u32) -> String {
-    format!("#ff0000")
+    camera.render(&world, x, y)
 }
 
 fn setup_world(data: SourceModel) {
@@ -135,4 +141,45 @@ fn setup_world(data: SourceModel) {
             _ => {}
         }
     }
+
+    //3. get shapes
+    for shape in data.shapes{
+        for (key, value) in & shape {
+            let title = key as &str;
+            match title  {
+                "sphere" => {
+                    let center_option = &value.center;
+                    let radius_option = value.radius;
+                    let material_option = &value.material;
+                    
+                    if let Some(center) = center_option {
+                        if let Some(radius) = radius_option{
+                            if let Some(material_title) = material_option{
+                                if let Some(material) = materials.get(material_title){
+                                    let sphere = Sphere::new(center.clone(), radius, material.clone());
+                                    world.add(sphere);
+                                }
+                            }
+                        }
+                    }                
+                },
+                "plane" => {
+                    if let Some(center) = &value.center{
+                        if let Some(normal) = &value.normal{
+                            if let Some(material_title) = &value.material{
+                                if let Some(material) = materials.get(material_title){
+                                    let plane = Plane::new(center.clone(), normal.clone(), material.clone());
+                                    world.add(plane);
+                                }
+                            }
+                        }
+                    }
+                },
+                _ => {}
+            }
+        }
+    }   
+
+    let camera = Camera::new(cam_setup);
+
 }

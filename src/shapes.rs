@@ -1,3 +1,5 @@
+
+/*
 use wasm_bindgen::prelude::*;
 use crate::sphere::*;
 use crate::vector3::*;
@@ -40,4 +42,4 @@ pub fn delete_sphere(id: String) -> String{
     }
     String::from("error")
 }
-
+*/

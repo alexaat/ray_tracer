@@ -4,22 +4,23 @@ use crate::ColorRGB;
 use serde_wasm_bindgen::from_value;
 use std::sync::Mutex;
 use wasm_bindgen::prelude::*;
+use crate::hittable::*;
 
 #[derive(Debug, Clone)]
 #[wasm_bindgen]
 pub struct Camera {
-    pub image_width: usize,
-    pub image_height: usize,
-    pub pixel00_loc: Vector3,
-    pub pixel_delta_u: Vector3,
-    pub pixel_delta_v: Vector3,
-    pub camera_center: Vector3,
-    pub max_depth: usize,
-    pub defocus_disk_u: Vector3,
-    pub defocus_disk_v: Vector3,
-    pub defocus_angle: f64,
-    pub pixel_samples: usize,
-    pub background: ColorRGB,
+    image_width: usize,
+    image_height: usize,
+    pixel00_loc: Vector3,
+    pixel_delta_u: Vector3,
+    pixel_delta_v: Vector3,
+    camera_center: Vector3,
+    max_depth: usize,
+    defocus_disk_u: Vector3,
+    defocus_disk_v: Vector3,
+    defocus_angle: f64,
+    pixel_samples: usize,
+    background: Vector3  
 }
 
 pub static PREVIEW_CAMERA: Mutex<Option<Camera>> = Mutex::new(None);
@@ -98,7 +99,7 @@ pub fn set_preview_camera(
             defocus_disk_v,
             defocus_angle,
             pixel_samples,
-            background,
+            background: Vector3::new((background.r as f64)/255.0, (background.g as f64)/255.0, (background.b as f64)/255.0),
         });
     }
 }
@@ -118,4 +119,76 @@ pub struct CameraSetup {
     pub image_width: usize,
     pub max_depth: usize,
     pub background: Vector3,
+}
+
+impl Camera {
+    pub fn new(setup: CameraSetup) -> Self {
+                
+        let pixel_samples: usize = setup.pixel_samples;
+        //camera position and vertical field of view
+        let vfov: f64 = setup.vfov; // Vertical view angle (field of view)
+        let lookfrom = setup.lookfrom; // Point camera is looking from
+        let lookat = setup.lookat; // Point camera is looking at
+        let vup = setup.vup; // Camera-relative "up" direction
+        //defocus
+        let defocus_angle: f64 = setup.defocus_angle; // Variation angle of rays through each pixel
+        let focus_dist: f64 = setup.focus_dist; // Distance from camera lookfrom point to plane of perfect focus
+        //aspect ratio
+        let aspect_ratio = setup.aspect_ratio;
+        //calculate canvas size
+        let image_width: usize = setup.image_width;
+        let mut image_height: usize = (image_width as f64 / aspect_ratio) as usize;
+        if image_height < 1 {
+            image_height = 1;
+        }
+        //calculate viewport size
+        let theta = vfov.to_radians();
+        let h = (theta / 2.0).tan();
+        let viewport_height = 2.0 * h * focus_dist;
+        let viewport_width = viewport_height * (image_width as f64 / image_height as f64);
+        // Calculate the u,v,w unit basis vectors for the camera coordinate frame.
+        let w = (&lookfrom - lookat).normalize();
+        let u = (vup.cross(&w)).normalize();
+        let v = w.cross(&u);
+        //set up scene
+        let camera_center = lookfrom;
+        // Calculate the vectors across the horizontal and down the vertical viewport edges.
+        // Vector across viewport horizontal edge
+        let viewport_u = viewport_width * &u;
+        // Vector down viewport vertical edge
+        let viewport_v = viewport_height * -1.0 * &v;
+        //delta vectors in pixels
+        let pixel_delta_u = &viewport_u / (image_width as f64);
+        let pixel_delta_v = &viewport_v / (image_height as f64);
+
+        // Calculate the location of the upper left pixel.
+        let viewport_upper_left =
+            &camera_center - (focus_dist * w) - &viewport_u / 2.0 - &viewport_v / 2.0;
+        let pixel00_loc = &viewport_upper_left + 0.5 * (&pixel_delta_u + &pixel_delta_v);
+
+        // Calculate the camera defocus disk basis vectors.
+        let defocus_radius = focus_dist * ((defocus_angle / 2.0).to_radians()).tan();
+        let defocus_disk_u = u * defocus_radius;
+        let defocus_disk_v = v * defocus_radius;
+       
+        Self {
+            image_width,
+            image_height,
+            pixel00_loc,
+            pixel_delta_u,
+            pixel_delta_v,
+            camera_center,
+            max_depth: setup.max_depth,
+            defocus_disk_u,
+            defocus_disk_v,
+            defocus_angle,
+            pixel_samples,
+            background: setup.background           
+        }
+    }
+
+    pub fn render(&self, world: &HittableList, x: usize, y: usize) -> String {
+        String::from("#00ff00")
+    }
+
 }

@@ -1,6 +1,6 @@
 use crate::{ColorRGB, vector3::Vector3};
 
-pub const SHAPE_TITLES: [&str; 4] = ["sphere", "plane", "block", "cylinder"];
+pub const SHAPE_TITLES: [&str; 2] = ["sphere", "plane"];
 pub const MATERIALS: [&str; 3] = ["lambertian", "metal", "dielectric"];
 
 //pub const IMAGE_WIDTH: u32 = 350;
