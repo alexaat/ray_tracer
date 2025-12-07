@@ -1,5 +1,6 @@
-use wasm_bindgen::prelude::*;
 use crate::vector3::*;
+use wasm_bindgen::prelude::*;
+
 pub type Color = Vector3;
 
 #[derive(serde::Deserialize, Debug, Clone, Copy)]
@@ -9,8 +10,8 @@ pub struct ColorRGB {
     pub g: u8,
     pub b: u8,
 }
-impl ColorRGB{
-    pub fn new(r: u8, g: u8, b: u8) -> ColorRGB{
+impl ColorRGB {
+    pub fn new(r: u8, g: u8, b: u8) -> ColorRGB {
         ColorRGB { r, g, b }
     }
 }

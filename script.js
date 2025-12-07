@@ -4,7 +4,8 @@ import init,
         get_shapes_titles,
         set_preview_camera,
         get_scene,
-        get_material_titles
+        get_material_titles,
+        render_preview
 
     } from "./pkg/ray_tracer.js";
 
@@ -268,7 +269,10 @@ function init_preview_camera_settings(){
 //request preview 
 function start_preview_request(){
     const inputWASM = formatToWASM(previewCamera, shapes);
-    console.log("inputWASM: " + inputWASM);
+    //console.log("inputWASM: " + inputWASM);
+
+    console.log(render_preview(inputWASM));
+
 
     const h = previewCameraWidth/previewCameraAspectRation;
     previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
