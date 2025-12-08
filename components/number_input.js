@@ -1,7 +1,21 @@
-export default function createNumberInput(title, value, changeListener){
+export default function createNumberInput(title, value, changeListener, options){
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: row; justify-content: space-between; width: 100%; border: 2px, solid, black; padding: 2px; border-radius: 4px; box-sizing: border-box;"
+    container.style = "display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding: 2px; gap: 4px"
     
+    if(options){
+        if (options.border){
+            container.style.setProperty(   
+                "border", "2px, solid, black"
+            );
+            container.style.setProperty(                 
+                "border-radius", "4px"                
+            );
+            container.style.setProperty(  
+                "box-sizing", "border-box"
+            );
+        }
+    }
+
     const titleElement = document.createElement('div');
     if (title){
         titleElement.innerHTML = title;

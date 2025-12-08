@@ -15,6 +15,7 @@ import createShapeTile from "./components/shape_tile.js";
 import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
 import createPropertiesPlaceholder from "./components/properties_placeholder.js";
+import createMaterialProperties from "./components/material_properties.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
@@ -94,7 +95,6 @@ async function run(){
 
     //init preview camera settinds
     init_preview_camera_settings();
-
 
     start_preview_request();
 
@@ -275,16 +275,17 @@ function init_preview_camera_settings(){
 //request preview 
 let timers = [];
 async function start_preview_request(){
+
     for (let timer of timers){
         clearTimeout(timer);
     }
-
-    const inputWASM = formatToWASM(previewCamera, shapes);
-    console.log(inputWASM);
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
 
+
+    const inputWASM = formatToWASM(previewCamera, shapes);
+    console.log(inputWASM);
 
     let sortedArr = [];
     for (let y = 0; y < h; y++){
@@ -358,6 +359,14 @@ async function start_preview_request(){
     //     previewContext.fillRect(x, y, 1, 1);
     // } 
 }
+
+//test;
+leftPanel.appendChild(createMaterialProperties([
+                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+                ], (val) => console.log(val)));
+
 
 function get_pixel_color(x,y){
     let color = generate_pixel(x,y);

@@ -2,7 +2,6 @@ import createMaterialOptions from "./material_options.js";
 import createPropertiesNumberInput from "./properties_number_input.js";
 
 export default function createSphereProperties(sphere, materials, changeListener){
-    console.log(sphere);
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; min-width: 100px; padding: 2px; box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; gap: 4px;"
     
