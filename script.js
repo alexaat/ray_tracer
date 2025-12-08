@@ -113,28 +113,35 @@ function init_shapes_selector(){
         const id = uuid();  
         let shape = {selected: true, id, title};
         let properties = {};
-        let material = {};
+        let materials = [];
         switch(title){
             case "sphere": 
                 properties = {"center": [0, 1, 0], "radius": 1,};
-                material = {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0};
-                //  material = {"type": "metal","color": [255, 255, 255],"fuzz": 0.1};
+                materials = [
+                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+                ];                
                 break;
             case "plane":
                 properties = {"center": [0, -1.0, 0], "normal": [0, 1, 0]};
-                material = {"type": "lambertian", "color": [15, 15, 255],"fuzz": 0.8};
+                materials = [
+                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: false},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: true},
+                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+                ];              
                 break;
-            case "block":
-                properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
-                material = {"type": "metal","color": [255, 255, 255],"fuzz": 0.1};
-                break;
-            case "cylinder": 
-                properties = {"top": [4, 3, 0], "bottom": [4, 0, 0], "radius": 2};
-                material = {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6}; 
-                break;           
+            // case "block":
+            //     properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
+            //     materials = [{"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: true}];
+            //     break;
+            // case "cylinder": 
+            //     properties = {"top": [4, 3, 0], "bottom": [4, 0, 0], "radius": 2};
+            //     materials = [{"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: true}]; 
+            //     break;           
         }
         //body is used to send its content to WASM
-        shape = {...shape, properties, material};
+        shape = {...shape, properties, materials};
 
         //clear shape is selected flag
         shapes.map((item) => {
@@ -363,7 +370,6 @@ function get_pixel_color(x,y){
     return `#${r}${g}${b}`;
 }
 
-
 function update_preview_camera_at_WASM(){
    set_preview_camera(
         previewCameraPixelSamples,
@@ -380,20 +386,14 @@ function update_preview_camera_at_WASM(){
     );        
 }
 
-
 //util
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-
-
 function extractVector(val) {
     return {x: val.x, y: val.y, z: val.z}
 }
-
-
-
 
 /*
 const canvas = document.getElementById('renderedCanvas');

@@ -21,7 +21,8 @@ export function formatToWASM(camera, shapes){
     let _shapes = [];    
 
     for (let shape of shapes){
-        const material = shape.material;       
+        //const material = shape.material;   
+        const material = shape.materials.find(material => material.selected);     
         const id = uuid();       
         materials.set(id, material);
         const shapeAsMap = new Map();
