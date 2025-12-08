@@ -126,8 +126,8 @@ function init_shapes_selector(){
             case "plane":
                 properties = {"center": [0, -1.0, 0], "normal": [0, 1, 0]};
                 materials = [
-                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: false},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: true},
+                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
                     {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
                 ];              
                 break;
@@ -211,17 +211,17 @@ function update_selected_shapes(){
         if (selected){
             switch (selected.title){
                 case "sphere":
-                    rightPanel.appendChild(createSphereProperties(selected, get_material_titles(), (params) => {
+                    rightPanel.appendChild(createSphereProperties(selected, (params) => {
                         const index = shapes.indexOf(selected);
                         const properties = params.properties;
-                        const material = params.material;
+                        const materials = params.materials;
                         if(properties){
                             shapes[index].properties = {...shapes[index].properties, ...properties};                            
                         }
-                        if(material){
-                            shapes[index].material = {...shapes[index].material, ...material};     
+                        if(materials){
+                            shapes[index].materials = materials;     
                         }
-                        if (properties || material) {
+                        if (properties || materials) {                           
                             start_preview_request();  
                         }
                     })); 
@@ -285,7 +285,7 @@ async function start_preview_request(){
 
 
     const inputWASM = formatToWASM(previewCamera, shapes);
-    console.log(inputWASM);
+   
 
     let sortedArr = [];
     for (let y = 0; y < h; y++){
@@ -361,11 +361,11 @@ async function start_preview_request(){
 }
 
 //test;
-leftPanel.appendChild(createMaterialProperties([
-                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ], (val) => console.log(val)));
+// leftPanel.appendChild(createMaterialProperties([
+//                     {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
+//                     {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+//                     {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+//                 ], (val) => console.log(val)));
 
 
 function get_pixel_color(x,y){

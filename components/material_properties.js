@@ -12,24 +12,48 @@ export default function createMaterialProperties(materials, changeListener){
     titleElement.innerHTML = "material";
     container.appendChild(titleElement);
 
+    const updateListener = val => {
+       
+        materials = materials.map(material => {
+            if (material.type == val.type){
+                return {...material, ...val};
+            } else {
+                return material;
+            }
+        });
+        changeListener(materials);
+    }
+
+
     //options
     const list = materials.map(material => material.type);
     const options = createMaterialOptions(list, selectedMaterial.type, (val) => {
         selectedMaterial = materials.find(material => material.type == val);        
-        let el = document.querySelector('.properties-container');
+        let el = document.querySelector('#properties-container');
         if (el) {
-            el.innerHTML = "";
+            el.remove();
         }
+        container.appendChild(createProperties(selectedMaterial, updateListener));
+        
+        //update state: set selected
+        console.log(val)
+        materials = materials.map((material) => {
+            if (material.type == val) {
+                return {...material, selected: true};
+            } else {
+                 return {...material, selected: false};
+            }
+        });      
+        changeListener(materials); 
 
-        container.appendChild(createProperties(selectedMaterial, changeListener));  
     });
     container.appendChild(options);
     
-    let el = document.querySelector('.properties-container');
+    let el = document.querySelector('#properties-container');
     if (el) {
-        el.innerHTML = "";
+        el.remove();
     } 
-    container.appendChild(createProperties(selectedMaterial, changeListener));    
+    container.appendChild(createProperties(selectedMaterial, updateListener));    
     
     return container;
 }
@@ -37,41 +61,46 @@ export default function createMaterialProperties(materials, changeListener){
 function createProperties(selectedMaterial, changeListener){
    
     let container = document.createElement('div');
-    container.classList.add("properties-container"); 
+
+    container.setAttribute('id', 'properties-container');
  
     switch (selectedMaterial.type){
         case "lambertian": 
-            return container.appendChild(createProperiesForLambertian(selectedMaterial, changeListener)); 
+            container.appendChild(createProperiesForLambertian(selectedMaterial, val => changeListener(val))); 
+            break;
         case "metal": 
-            return container.appendChild(createProperiesForMetal(selectedMaterial, changeListener)); 
+            container.appendChild(createProperiesForMetal(selectedMaterial, val => changeListener(val))); 
+            break;
         case "dielectric": 
-            return container.appendChild(createProperiesForDielectric(selectedMaterial, changeListener)); 
+            container.appendChild(createProperiesForDielectric(selectedMaterial, val => changeListener(val))); 
+            break;
     }
     
     return container;
+   
 }
 
-function createProperiesForLambertian(selectedMaterial, changeListener){
+function createProperiesForLambertian(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => changeListener({type: selectedMaterial.type, "fuzz": val})));
-    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => changeListener({type: selectedMaterial.type, "color": val})));
+    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)})));
+    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
     
 }
-function createProperiesForMetal(selectedMaterial){
+function createProperiesForMetal(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => changeListener({type: selectedMaterial.type, "fuzz": val})));
-    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => changeListener({type: selectedMaterial.type, "color": val})));
+    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)})));
+    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
 
 }
-function createProperiesForDielectric(selectedMaterial){
+function createProperiesForDielectric(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("refraction_index", selectedMaterial.fuzz, (val) => changeListener({type: selectedMaterial.type, "refraction_index": val})));
-    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => changeListener({type: selectedMaterial.type, "color": val})));
+    container.appendChild(createNumberInput("r/i", selectedMaterial.refraction_index, (val) => updateListener({type: selectedMaterial.type, "refraction_index": Number(val)})));
+    container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
 }
 

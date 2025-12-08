@@ -1,6 +1,18 @@
 export function vectorToColor(vector) {
     // [190, 190, 150] -> #2f2f99
-    return `#${vector[0].toString(16)}${vector[1].toString(16)}${vector[2].toString(16)}`;
+    let r = vector[0].toString(16);
+    if (r.length == 1) {
+      r = `0${r}`;
+    }
+    let g = vector[1].toString(16);
+    if (g.length == 1) {
+      g = `0${g}`;
+    }
+    let b = vector[2].toString(16);
+    if (b.length == 1) {
+      b = `0${b}`;
+    }
+    return `#${r}${g}${b}`;
 }
 
 export function colorToVector(color) {

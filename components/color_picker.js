@@ -23,7 +23,7 @@ export default function createColorPicker(title, vector, changeListener, options
 
 
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: row; justify-content: flex-start;  width: 100%;  padding: 2px; align-items: center;"
+    container.style = "display: flex; flex-direction: row; justify-content: flex-start; gap: 8px; width: 100%; align-items: center;"
     if (options){
         if(options.border){
             container.style.setProperty(   
@@ -37,6 +37,12 @@ export default function createColorPicker(title, vector, changeListener, options
             );
         }
     }
+
+    const label = document.createElement('label');
+    label.setAttribute("for", "background_color");
+    label.innerHTML = title;
+    label.style = "margin-right: 8px;"
+    container.appendChild(label);
     
     const input = document.createElement('input');
     input.setAttribute('type', 'color');
@@ -45,11 +51,7 @@ export default function createColorPicker(title, vector, changeListener, options
     input.addEventListener("change", (e) => changeListener(colorToVector(e.target.value)));
     container.appendChild(input);
 
-    const label = document.createElement('label');
-    label.setAttribute("for", "background_color");
-    label.innerHTML = title;
-    label.style = "margin-left: 8px;"
-    container.appendChild(label);
+   
 
     return container;
 }
