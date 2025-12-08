@@ -8,7 +8,7 @@ import init,
     } from "./pkg/ray_tracer.js";
 
 
-import {formatToWASM, uuid, random_array} from './util.js';
+import {formatToWASM, uuid, random_array, shuffle} from './util.js';
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
@@ -273,28 +273,50 @@ async function start_preview_request(){
     }
 
     const inputWASM = formatToWASM(previewCamera, shapes);
-
+    console.log(inputWASM);
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
+
+
+    let sortedArr = [];
+    for (let y = 0; y < h; y++){
+        for (let x = 0; x < w; x++){
+            sortedArr.push([x,y]);
+        }
+    }   
+
+    let shuffledArr = shuffle(sortedArr);
+
+    for (let p of shuffledArr){      
+        timers.push(setTimeout(() => {
+            const x = p[0];
+            const y = p[1];
+            const color = render_pixel(inputWASM, x, y);
+            previewContext.fillStyle = color;
+            previewContext.fillRect(x, y, 1, 1);  
+        }, 0.0));
+    }
+
+    
+    /*
     const randomXs = random_array(0, w);
     const randomYs = random_array(0, h);
-    
-    console.log(inputWASM);
     for (let y = 0; y < randomYs.length; y++){
         for (let x = 0; x < randomXs.length; x++){
             let _y = randomYs[y];
             let _x = randomXs[x];
             //console.log("x: "+ _x + ", y: "+ _y);
             timers.push(setTimeout(() => {
-                const color = render_pixel(inputWASM, _x, _y); 
-                console.log("color: " + color);                          
+                const color = render_pixel(inputWASM, _x, _y);                            
                 previewContext.fillStyle = color;
                 previewContext.fillRect(_x, _y, 1, 1);  
             }, 0.0));   
 
         }
     }
+        */
+    
     
     /*
     const worker = new Worker('worker.js'); 
