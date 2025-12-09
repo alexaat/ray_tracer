@@ -18,7 +18,8 @@ import createPlaneProperties from "./components/plane_properties.js";
 import createQuadProperties from "./components/quad_properties.js";
 import createDiskProperties from "./components/disk_properties.js";
 import createTubeProperties from "./components/tube_properties.js";
-import createCylinderProperties from "./components/cylinder_properties.js"
+import createCylinderProperties from "./components/cylinder_properties.js";
+import createBlockProperties from "./components/block_properties.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
@@ -337,6 +338,9 @@ function update_selected_shapes(){
                 case "quad":
                     rightPanel.appendChild(createQuadProperties(selected, (params) => propertiesUpdateListener(selected, params)));
                     break;
+                case "block":
+                    rightPanel.appendChild(createBlockProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
                 case "disk":
                     rightPanel.appendChild(createDiskProperties(selected, (params) => propertiesUpdateListener(selected, params)));
                     break;
@@ -483,14 +487,6 @@ function propertiesUpdateListener(selected, params){
         start_preview_request();  
     }                
 }
-
-//test;
-// leftPanel.appendChild(createMaterialProperties([
-//                     {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
-//                     {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-//                     {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-//                 ], (val) => console.log(val)));
-
 
 function get_pixel_color(x,y){
     let color = generate_pixel(x,y);
