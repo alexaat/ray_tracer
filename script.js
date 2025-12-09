@@ -2,20 +2,18 @@ import init,
     {       
         get_shapes_titles,       
         get_scene,
-        //get_material_titles,
         render_pixel
 
     } from "./pkg/ray_tracer.js";
 
 
-import {formatToWASM, uuid, random_array, shuffle} from './util.js';
+import {formatToWASM, uuid, shuffle} from './util.js';
 
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
 import createShapeTile from "./components/shape_tile.js";
 import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
 import createPropertiesPlaceholder from "./components/properties_placeholder.js";
-//import createMaterialProperties from "./components/material_properties.js";
 import createPlaneProperties from "./components/plane_properties.js";
 import createQuadProperties from "./components/quad_properties.js";
 import createDiskProperties from "./components/disk_properties.js";
@@ -37,8 +35,6 @@ const selectedShapesContainer = document.querySelector("#selected-shapes-contain
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
 
-
-
 const showSceneButton = document.querySelector("#show-scene-button");
 showSceneButton.addEventListener("click", () => {
     console.log("Scene:");
@@ -47,6 +43,12 @@ showSceneButton.addEventListener("click", () => {
     console.log(formatToWASM(previewCamera, shapes));
 });
 
+
+const default_materials = [
+    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
+    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+];
 
 //state
 //preview camera
@@ -77,12 +79,12 @@ let shapes = [];
 let previewCamera = {
     image_width: 150.0,    
     aspect_ratio: 1.3,
-    pixel_samples: 10,
+    pixel_samples: 20,
     vfov: 22,
     defocus_angle: 0.4,
     focus_dist: 19,
-    max_depth: 1,
-    lookfrom: [5, 6, 25],
+    max_depth: 20,
+    lookfrom: [5, 5, 25],
     lookat: [0, 0, 0],
     vup: [0, 1, 0],
     background: [190, 190, 190]
@@ -124,62 +126,34 @@ function init_shapes_selector(){
         switch(title){
             case "sphere": 
                 properties = {"center": [0, 1, 0], "radius": 1,};
-                materials = [
-                    {"type": "lambertian", "color": [235, 0, 0], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];                
+                materials = default_materials;            
                 break;
             case "plane":
                 properties = {"center": [0, -1.0, 0], "normal": [0, 1, 0]};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];              
+                materials = default_materials;
                 break;
             case "block":
                 properties = {"a": [-2, -   2, -2],"b": [2, 2, 2], "rotate": [0, 10, 0]};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];
+                materials = default_materials;
                 break;
             case "quad":
-                properties = {"q": [0, 0, 0],"u": [3, 0, 0], "v": [0, 4, 0]};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];
+                properties = {"q": [0, 0, 0],"u": [3, 0, 0], "v": [0, 3, 0]};
+                materials = default_materials;
                 break;
             case "disk":
                 properties = {"center": [0, 0, 0],"normal": [0, 1, 0], "radius": 1};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];
+                materials = default_materials;
                 break;
             case "tube":
-                properties = {"top": [0, 0, 0],"bottom": [0, 1, 0], "radius": 1};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];
+                properties = {"top": [0, 0, 0],"bottom": [0, 2, 0], "radius": 1};
+                materials = default_materials;
                 break;
             case "cylinder":
-                properties = {"top": [0, 0, 0],"bottom": [0, 1, 0], "radius": 1};
-                materials = [
-                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
-                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
-                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
-                ];
+                properties = {"top": [0, 0, 0],"bottom": [0, 2, 0], "radius": 1};
+                materials = default_materials;
                 break;         
         }
-        //body is used to send its content to WASM
+
         shape = {...shape, properties, materials};
 
         //clear shape is selected flag
@@ -248,6 +222,8 @@ function update_selected_shapes(){
     if (shapes.length > 0) {
         let selected = shapes.find(item => item.selected);
         if (selected){
+            ////////
+            /*
             switch (selected.title){
                 case "sphere":
                     rightPanel.appendChild(createSphereProperties(selected, (params) => {
@@ -266,8 +242,7 @@ function update_selected_shapes(){
                     })); 
                     break;
                 case "plane":
-                    rightPanel.appendChild(createPlaneProperties(selected, (params) => {
-                        //console.log(params);
+                    rightPanel.appendChild(createPlaneProperties(selected, (params) => {                       
                         const index = shapes.indexOf(selected);
                         const properties = params.properties;
                         const materials = params.materials;
@@ -349,8 +324,30 @@ function update_selected_shapes(){
                     }));
                     break;
             }
-        }
+            */
+            //////////
 
+             switch (selected.title){
+                case "sphere":
+                    rightPanel.appendChild(createSphereProperties(selected, (params) => propertiesUpdateListener(selected, params))); 
+                    break;
+                case "plane":
+                    rightPanel.appendChild(createPlaneProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
+                case "quad":
+                    rightPanel.appendChild(createQuadProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
+                case "disk":
+                    rightPanel.appendChild(createDiskProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
+                case "tube":
+                    rightPanel.appendChild(createTubeProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
+                case "cylinder":
+                    rightPanel.appendChild(createCylinderProperties(selected, (params) => propertiesUpdateListener(selected, params)));
+                    break;
+            }
+        }
     } else {
         rightPanel.appendChild(createPropertiesPlaceholder());
     }
@@ -474,6 +471,21 @@ async function start_preview_request(){
     //     previewContext.fillStyle = color;
     //     previewContext.fillRect(x, y, 1, 1);
     // } 
+}
+
+function propertiesUpdateListener(selected, params){
+    const index = shapes.indexOf(selected);
+    const properties = params.properties;
+    const materials = params.materials;
+    if(properties){
+        shapes[index].properties = {...shapes[index].properties, ...properties};                            
+    }
+    if(materials){
+        shapes[index].materials = materials;     
+    }
+    if (properties || materials) {                           
+        start_preview_request();  
+    }                
 }
 
 //test;
