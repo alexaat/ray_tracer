@@ -2,7 +2,7 @@ import init,
     {       
         get_shapes_titles,       
         get_scene,
-        get_material_titles,
+        //get_material_titles,
         render_pixel
 
     } from "./pkg/ray_tracer.js";
@@ -15,8 +15,9 @@ import createShapeTile from "./components/shape_tile.js";
 import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
 import createPropertiesPlaceholder from "./components/properties_placeholder.js";
-import createMaterialProperties from "./components/material_properties.js";
+//import createMaterialProperties from "./components/material_properties.js";
 import createPlaneProperties from "./components/plane_properties.js";
+import createQuadProperties from "./components/quad_properties.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
@@ -37,8 +38,10 @@ const previewContext = previewCanvas.getContext('2d');
 
 const showSceneButton = document.querySelector("#show-scene-button");
 showSceneButton.addEventListener("click", () => {
+    console.log("Scene:");
     console.log(get_scene());
-     console.log(formatToWASM(previewCamera, shapes));
+    console.log("WASM Input");
+    console.log(formatToWASM(previewCamera, shapes));
 });
 
 
@@ -69,7 +72,7 @@ const maxRadius = 1000000;
 let shapes = [];
 
 let previewCamera = {
-    image_width: 50.0,    
+    image_width: 150.0,    
     aspect_ratio: 1.3,
     pixel_samples: 10,
     vfov: 22,
@@ -133,7 +136,7 @@ function init_shapes_selector(){
                 ];              
                 break;
             case "block":
-                properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
+                properties = {"a": [-2, -   2, -2],"b": [2, 2, 2], "rotate": [0, 10, 0]};
                 materials = [
                     {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
                     {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
@@ -141,7 +144,7 @@ function init_shapes_selector(){
                 ];
                 break;
             case "quad":
-                properties = {"q": [-4, 0, -2],"u": [0, 4, 2], "v": [0, 10, 0]};
+                properties = {"q": [0, 0, 0],"u": [3, 0, 0], "v": [0, 4, 0]};
                 materials = [
                     {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
                     {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
@@ -258,7 +261,21 @@ function update_selected_shapes(){
 
                     }));
                     break;
-                case "block":
+                case "quad":
+                    rightPanel.appendChild(createQuadProperties(selected, (params) => {                        
+                        const index = shapes.indexOf(selected);
+                        const properties = params.properties;
+                        const materials = params.materials;
+                        if(properties){
+                            shapes[index].properties = {...shapes[index].properties, ...properties};                            
+                        }
+                        if(materials){
+                            shapes[index].materials = materials;     
+                        }
+                        if (properties || materials) {                           
+                            start_preview_request();  
+                        }
+                    }));
                     break;
                 case "cylinder":
                     break;
@@ -315,7 +332,7 @@ async function start_preview_request(){
 
 
     const inputWASM = formatToWASM(previewCamera, shapes);
-   
+   console.log(inputWASM);
 
     let sortedArr = [];
     for (let y = 0; y < h; y++){

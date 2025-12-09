@@ -29,6 +29,7 @@ use crate::vector3::*;
 use std::collections::HashMap;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
+use std::sync::Mutex;
 
 // #[wasm_bindgen]
 // pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -43,26 +44,23 @@ pub fn get_shapes_titles() -> Vec<String> {
     SHAPE_TITLES.map(|item| item.to_string()).to_vec()
 }
 
-#[wasm_bindgen]
-pub fn get_scene() -> String {
-    // let shapes = match SHAPES.lock() {
-    //     Ok(shapes) => format!("{:?}", shapes),
-    //     Err(e) => format!("error: {:?}", e),
-    // };
+// #[wasm_bindgen]
+// pub fn get_scene() -> String {
+//     // let shapes = match SHAPES.lock() {
+//     //     Ok(shapes) => format!("{:?}", shapes),
+//     //     Err(e) => format!("error: {:?}", e),
+//     // };
 
-    // let preview_camera = match PREVIEW_CAMERA.lock() {
-    //     Ok(preview_camera) => format!("{:?}", preview_camera),
-    //     Err(e) => format!("error: {:?}", e),
-    // };
+//     // let preview_camera = match PREVIEW_CAMERA.lock() {
+//     //     Ok(preview_camera) => format!("{:?}", preview_camera),
+//     //     Err(e) => format!("error: {:?}", e),
+//     // };
 
-    // format!("preview_camera: {:?}, shapes: {}", preview_camera, shapes)
+//     // format!("preview_camera: {:?}, shapes: {}", preview_camera, shapes)
 
-    String::from("scene")
-}
+//     String::from("scene")
+// }
 
-pub fn add(x: i32, y: i32) -> i32 {
-    x + y
-}
 
 /////////////////////////////////////////////////////////
 
@@ -188,9 +186,13 @@ fn setup_world(data: SourceModel) {
 }
 */
 
+
+
 #[wasm_bindgen]
 pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
     let data = read_data_from_string(scene).unwrap();
+
+    *SCENE.lock().unwrap() = Some(format!("scene: {:?}", data));
 
     let mut world = HittableList::new();
 
@@ -276,7 +278,7 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
                             }
                         }
                     }
-                }
+                },
                 "plane" => {
                     if let Some(center) = &value.center {
                         if let Some(normal) = &value.normal {
@@ -292,11 +294,11 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
                             }
                         }
                     }
-                }
+                },
                 "quad" => {
-                    if let Some(q) = &value.center {
-                        if let Some(u) = &value.a {
-                            if let Some(v) = &value.b {
+                    if let Some(q) = &value.q {
+                        if let Some(u) = &value.u {
+                            if let Some(v) = &value.v {
                                 if let Some(material_title) = &value.material {
                                     if let Some(material) = materials.get(material_title) {
                                         let quad = Quad::new(
@@ -311,7 +313,7 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
                             }
                         }
                     }
-                }
+                },
                 "block" => {
                     if let Some(a) = &value.a {
                         if let Some(b) = &value.b {
@@ -327,11 +329,14 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
                             }
                         }
                     }
-                }
+                },
                 _ => {}
             }
         }
     }
+
+   
+
 
     let camera = Camera::new(cam_setup);
 
@@ -351,4 +356,11 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
     }
 
     format!("#{}{}{}", r, g, b)
+}
+
+
+pub static SCENE: Mutex<Option<String>> = Mutex::new(None);
+#[wasm_bindgen]
+pub fn get_scene() -> String{
+    SCENE.lock().unwrap().as_ref().unwrap().clone()
 }
