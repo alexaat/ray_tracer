@@ -1,6 +1,6 @@
 use crate::vector3::Vector3;
 
-pub const SHAPE_TITLES: [&str; 6] = ["sphere", "plane", "quad", "block", "disk", "tube"];
+pub const SHAPE_TITLES: [&str; 7] = ["sphere", "plane", "quad", "block", "disk", "tube", "cylinder"];
 pub const MATERIALS: [&str; 3] = ["lambertian", "metal", "dielectric"];
 
 //pub const IMAGE_WIDTH: u32 = 350;
