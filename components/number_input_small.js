@@ -16,7 +16,7 @@ export default function createNumberInputSmall(title, value, changeListener){
     if (changeListener) {
         input.addEventListener("change", (e) => changeListener(e.target.value));
     }
-    input.style = "width: 36px; margin-left: 4px";
+    input.style = "width: 36px; margin-left: 8px";
 
     container.appendChild(input);
 

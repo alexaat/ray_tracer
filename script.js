@@ -16,6 +16,7 @@ import createOptions from "./components/options.js";
 import createSphereProperties from "./components/sphere_properties.js";
 import createPropertiesPlaceholder from "./components/properties_placeholder.js";
 import createMaterialProperties from "./components/material_properties.js";
+import createPlaneProperties from "./components/plane_properties.js";
 
 //elements
 const leftPanel = document.querySelector('#left-panel');
@@ -68,13 +69,13 @@ const maxRadius = 1000000;
 let shapes = [];
 
 let previewCamera = {
-    image_width: 150.0,    
+    image_width: 50.0,    
     aspect_ratio: 1.3,
-    pixel_samples: 15,
+    pixel_samples: 10,
     vfov: 22,
     defocus_angle: 0.4,
     focus_dist: 19,
-    max_depth: 6,
+    max_depth: 1,
     lookfrom: [5, 6, 25],
     lookat: [0, 0, 0],
     vup: [0, 1, 0],
@@ -227,6 +228,22 @@ function update_selected_shapes(){
                     })); 
                     break;
                 case "plane":
+                    rightPanel.appendChild(createPlaneProperties(selected, (params) => {
+                        //console.log(params);
+                        const index = shapes.indexOf(selected);
+                        const properties = params.properties;
+                        const materials = params.materials;
+                        if(properties){
+                            shapes[index].properties = {...shapes[index].properties, ...properties};                            
+                        }
+                        if(materials){
+                            shapes[index].materials = materials;     
+                        }
+                        if (properties || materials) {                           
+                            start_preview_request();  
+                        }
+
+                    }));
                     break;
                 case "block":
                     break;
