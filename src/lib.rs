@@ -15,6 +15,7 @@ mod source_model;
 mod sphere;
 mod vector3;
 mod disk;
+mod tube;
 use crate::block::Block;
 use crate::camera::CameraSetup;
 use crate::camera::*;
@@ -32,6 +33,7 @@ use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use std::sync::Mutex;
 use crate::disk::Disk;
+use crate::tube::Tube;
 
 // #[wasm_bindgen]
 // pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -341,6 +343,20 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
                                         let disk = Disk::new(center.clone(), normal.clone(), radius, material.clone());
                                         world.add(disk);
                                     }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tube" => {
+                    if let Some(top) = &value.top {
+                        if let Some(bottom) =  &value.bottom{
+                            if let Some(radius) = value.radius{
+                                if let Some(material_title) = &value.material{
+                                    if let Some(material) = materials.get(material_title){
+                                        let tube = Tube::new(top.clone(), bottom.clone(), radius, material.clone());
+                                        world.add(tube);
+                                    } 
                                 }
                             }
                         }
