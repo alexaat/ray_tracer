@@ -1,3 +1,4 @@
+mod block;
 mod camera;
 mod color;
 mod constants;
@@ -5,27 +6,29 @@ mod grapics;
 mod hittable;
 mod io;
 mod material;
+mod plane;
 mod point;
+mod quad;
 mod ray;
 mod shapes;
 mod source_model;
 mod sphere;
 mod vector3;
-mod plane;
+use crate::block::Block;
 use crate::camera::CameraSetup;
+use crate::camera::*;
 use crate::color::*;
 use crate::constants::*;
 use crate::hittable::HittableList;
 use crate::io::*;
+use crate::material::*;
+use crate::plane::*;
+use crate::quad::Quad;
+use crate::sphere::*;
 use crate::vector3::*;
-use wasm_bindgen::prelude::*;
 use std::collections::HashMap;
 use std::rc::Rc;
-use crate::material::*;
-use crate::sphere::*;
-use crate::plane::*;
-use crate::camera::*;
-
+use wasm_bindgen::prelude::*;
 
 // #[wasm_bindgen]
 // pub fn generate_pixel(x: u32, y: u32) -> ColorRGB {
@@ -69,15 +72,15 @@ pub fn set_scene(scene: String) -> String {
     match read_data_from_string(scene) {
         Ok(source_model) =>{
             let message = format!("sorce_model: {:?}", source_model);
-            setup_world(source_model);            
-            message            
+            setup_world(source_model);
+            message
         },
         Err(e) => format!("sorce_model: {:?}", e),
     }
 }
 
 fn setup_world(data: SourceModel) {
-    
+
     let mut world = HittableList::new();
 
     //1. get camera
@@ -150,7 +153,7 @@ fn setup_world(data: SourceModel) {
                     let center_option = &value.center;
                     let radius_option = value.radius;
                     let material_option = &value.material;
-                    
+
                     if let Some(center) = center_option {
                         if let Some(radius) = radius_option{
                             if let Some(material_title) = material_option{
@@ -160,7 +163,7 @@ fn setup_world(data: SourceModel) {
                                 }
                             }
                         }
-                    }                
+                    }
                 },
                 "plane" => {
                     if let Some(center) = &value.center{
@@ -177,7 +180,7 @@ fn setup_world(data: SourceModel) {
                 _ => {}
             }
         }
-    }   
+    }
 
     *CAMERA.lock().unwrap() = Some(Camera::new(cam_setup));
 
@@ -187,8 +190,8 @@ fn setup_world(data: SourceModel) {
 
 #[wasm_bindgen]
 pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
-    let data = read_data_from_string(scene).unwrap();  
-    
+    let data = read_data_from_string(scene).unwrap();
+
     let mut world = HittableList::new();
 
     //1. get camera
@@ -253,60 +256,99 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
     }
 
     //3. get shapes
-    for shape in data.shapes{
-        for (key, value) in & shape {
+    for shape in data.shapes {
+        for (key, value) in &shape {
             let title = key as &str;
-            match title  {
+            match title {
                 "sphere" => {
                     let center_option = &value.center;
                     let radius_option = value.radius;
                     let material_option = &value.material;
-                    
+
                     if let Some(center) = center_option {
-                        if let Some(radius) = radius_option{
-                            if let Some(material_title) = material_option{
-                                if let Some(material) = materials.get(material_title){
-                                    let sphere = Sphere::new(center.clone(), radius, material.clone());
+                        if let Some(radius) = radius_option {
+                            if let Some(material_title) = material_option {
+                                if let Some(material) = materials.get(material_title) {
+                                    let sphere =
+                                        Sphere::new(center.clone(), radius, material.clone());
                                     world.add(sphere);
                                 }
                             }
                         }
-                    }                
-                },
+                    }
+                }
                 "plane" => {
-                    if let Some(center) = &value.center{
-                        if let Some(normal) = &value.normal{
-                            if let Some(material_title) = &value.material{
-                                if let Some(material) = materials.get(material_title){
-                                    let plane = Plane::new(center.clone(), normal.clone(), material.clone());
+                    if let Some(center) = &value.center {
+                        if let Some(normal) = &value.normal {
+                            if let Some(material_title) = &value.material {
+                                if let Some(material) = materials.get(material_title) {
+                                    let plane = Plane::new(
+                                        center.clone(),
+                                        normal.clone(),
+                                        material.clone(),
+                                    );
                                     world.add(plane);
                                 }
                             }
                         }
                     }
-                },
+                }
+                "quad" => {
+                    if let Some(q) = &value.center {
+                        if let Some(u) = &value.a {
+                            if let Some(v) = &value.b {
+                                if let Some(material_title) = &value.material {
+                                    if let Some(material) = materials.get(material_title) {
+                                        let quad = Quad::new(
+                                            q.clone(),
+                                            u.clone(),
+                                            v.clone(),
+                                            material.clone(),
+                                        );
+                                        world.add(quad);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                "block" => {
+                    if let Some(a) = &value.a {
+                        if let Some(b) = &value.b {
+                            if let Some(material_title) = &value.material {
+                                if let Some(material) = materials.get(material_title) {
+                                    let mut block =
+                                        Block::new(a.clone(), b.clone(), material.clone());
+                                    if let Some(rotate) = &value.rotate {
+                                        block.rotate = rotate.clone();
+                                    }
+                                    world.add(block.get_hittable_list());
+                                }
+                            }
+                        }
+                    }
+                }
                 _ => {}
             }
         }
-    }   
+    }
 
     let camera = Camera::new(cam_setup);
 
     let color = camera.render(&world, x, y);
-    
+
     let mut r = format!("{:x}", color.0);
     if r.len() == 1 {
         r = format!("0{}", r);
-    }    
+    }
     let mut g = format!("{:x}", color.1);
-        if g.len() == 1 {
+    if g.len() == 1 {
         g = format!("0{}", g);
-    } 
+    }
     let mut b = format!("{:x}", color.2);
-        if b.len() == 1 {
+    if b.len() == 1 {
         b = format!("0{}", b);
-    } 
+    }
 
-    format!("#{}{}{}",r,g,b)
- 
+    format!("#{}{}{}", r, g, b)
 }

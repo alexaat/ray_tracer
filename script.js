@@ -132,10 +132,23 @@ function init_shapes_selector(){
                     {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
                 ];              
                 break;
-            // case "block":
-            //     properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
-            //     materials = [{"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: true}];
-            //     break;
+            case "block":
+                properties = {"a": [-4, 0, -2],"b": [0, 4, 2], "rotate": [0, 10, 0]};
+                materials = [
+                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+                ];
+                break;
+            case "quad":
+                properties = {"q": [-4, 0, -2],"u": [0, 4, 2], "v": [0, 10, 0]};
+                materials = [
+                    {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
+                    {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
+                    {"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: false}
+                ];
+                break;
+
             // case "cylinder": 
             //     properties = {"top": [4, 3, 0], "bottom": [4, 0, 0], "radius": 2};
             //     materials = [{"type": "dielectric", "color": [255, 255, 255], "refraction_index": 1.6, selected: true}]; 
