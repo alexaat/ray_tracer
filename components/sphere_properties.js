@@ -1,5 +1,6 @@
 import createPropertiesNumberInput from "./properties_number_input.js";
 import createMaterialProperties from "./material_properties.js";
+import createVectorInput from "./vector_input.js";
 
 export default function createSphereProperties(sphere, changeListener){
     const container = document.createElement('div');
@@ -10,10 +11,13 @@ export default function createSphereProperties(sphere, changeListener){
     titleElement.innerHTML = sphere.title;
     container.appendChild(titleElement);
     
-    container.appendChild(createPropertiesNumberInput("x", sphere.properties.center[0], (val) => changeListener({properties: {center: [Number(val), sphere.properties.center[1], sphere.properties.center[2]]}})));
-    container.appendChild(createPropertiesNumberInput("y", sphere.properties.center[1], (val) => changeListener({properties: {center: [sphere.properties.center[0], Number(val), sphere.properties.center[2]]}})));
-    container.appendChild(createPropertiesNumberInput("z", sphere.properties.center[2], (val) => changeListener({properties: {center: [sphere.properties.center[0], sphere.properties.center[1], Number(val)]}})));
-    container.appendChild(createPropertiesNumberInput("r", sphere.properties.radius, (val) => changeListener({properties: {radius: Number(val)}})));
+    container.appendChild(createVectorInput("center", sphere.properties.center, (val) => changeListener({properties: {center: val}})));
+   
+    const div = document.createElement('div');
+    div.style = "box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; padding: 2px;";    
+    div.appendChild(createPropertiesNumberInput("radius", sphere.properties.radius, (val) => changeListener({properties: {radius: Number(val)}})));
+    container.appendChild(div);
+
     container.appendChild(createMaterialProperties(sphere.materials, (val) => changeListener({materials: val})));
 
     return container;

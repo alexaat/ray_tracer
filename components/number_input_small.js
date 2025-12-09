@@ -1,6 +1,6 @@
 export default function createNumberInputSmall(title, value, changeListener){
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: row; justify-content: flex-start;  width: 100%;  padding: 2px;"
+    container.style = "display: flex; flex-direction: row; justify-content: space-between;  width: 100%;  padding: 2px;  box-sizing: border-box;"
     
     const titleElement = document.createElement('div');
     if (title){
