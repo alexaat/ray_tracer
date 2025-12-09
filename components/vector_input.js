@@ -9,9 +9,18 @@ export default function createVectorInput(title, vector, changeListener){
     const vectorElement = document.createElement('div');
     vectorElement.style = "display: flex; justify-content: space-between; flex-direction: column;"
 
-    vectorElement.appendChild(createNumberInputSmall("x", vector[0], (val) => changeListener([Number(val), vector[1], vector[2]])));
-    vectorElement.appendChild(createNumberInputSmall("y", vector[1], (val) => changeListener([vector[0], Number(val), vector[2]])));
-    vectorElement.appendChild(createNumberInputSmall("z", vector[2], (val) => changeListener([vector[0], vector[1], Number(val)])));
+    vectorElement.appendChild(createNumberInputSmall("x", vector[0], (val) => {
+        vector = [Number(val), vector[1], vector[2]];
+        changeListener(vector);
+    }));
+    vectorElement.appendChild(createNumberInputSmall("y", vector[1], (val) => {
+        vector = [vector[0], Number(val), vector[2]];
+        changeListener(vector);
+    }));
+    vectorElement.appendChild(createNumberInputSmall("z", vector[2], (val) => {
+        vector = [vector[0], vector[1], Number(val)];
+        changeListener(vector);
+    }));
     container.appendChild(vectorElement);
 
     return container;

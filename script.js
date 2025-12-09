@@ -364,13 +364,11 @@ function init_preview_screen(){
 }
 
 function init_preview_camera_settings(){
-
     centerPanel.appendChild(createPreviewCameraSettings(previewCamera, (val) => {
-        previewCamera = {...previewCamera, ...val}; 
+        previewCamera = val; 
         init_preview_screen();
         start_preview_request();          
-    }));    
-
+    }));
 }
 
 //
@@ -396,10 +394,8 @@ async function start_preview_request(){
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
 
-
     const inputWASM = formatToWASM(previewCamera, shapes);
-   console.log(inputWASM);
-
+  
     let sortedArr = [];
     for (let y = 0; y < h; y++){
         for (let x = 0; x < w; x++){
