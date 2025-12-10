@@ -31,10 +31,11 @@ export default function createMaterialProperties(materials, changeListener){
         show = val;
 
         const el = document.querySelector(".material-options");
-        console.log(el);
         if (el){
             el.remove();
         }
+        
+
         
         const list = materials.map(material => material.type);
             const options = createMaterialOptions(list, selectedMaterial.type, show, showListener, (val) => {
@@ -55,11 +56,8 @@ export default function createMaterialProperties(materials, changeListener){
             });      
             changeListener(materials);
         });
-        container.appendChild(options);
-
+        titleElement.after(options);      
     };
-
-
     
     const list = materials.map(material => material.type);
     const options = createMaterialOptions(list, selectedMaterial.type, show, showListener, (val) => {
@@ -81,13 +79,8 @@ export default function createMaterialProperties(materials, changeListener){
         changeListener(materials); 
 
     });
-    container.appendChild(options);
 
-
-
-
-
-
+    titleElement.after(options);
 
     
     let el = document.querySelector('#properties-container');
@@ -144,4 +137,3 @@ function createProperiesForDielectric(selectedMaterial, updateListener){
     container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
 }
-
