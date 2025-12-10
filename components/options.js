@@ -21,20 +21,17 @@
 export default function createOptions(prompt, list, show, showListener, menuClickListener){
 
     const container = document.createElement('div');        
-    container.style = "min-width: 100px; border: 2px, solid, black; border-radius: 4px; box-sizing: border-box; padding: 2px;";
+    container.style = "min-width: 100px; border: 2px, solid, black; border-radius: 4px; box-sizing: border-box; padding-left: 2px; padding-right: 2px; padding-top: 2px;";
     
     const promptElement = document.createElement('div');
     promptElement.style = "width: 100%; display: flex; flex-direction: row; justify-content: space-between";
     const promptElementValueOne = document.createElement('div');
     promptElementValueOne.innerHTML = prompt;
     const promptElementValueTwo = document.createElement('div');
-    promptElementValueTwo.style = "position: relative; top: -10px; z-index: 1;"
     if(show) {
-        promptElementValueTwo.innerHTML = "︿";
-        promptElementValueTwo.style = "position: relative; top: -6px; z-index: 1;"
+        promptElementValueTwo.style = 'background-image: url("./assets/images/up.png"); height: 20px; width: 15px; background-size: cover; background-position: center; background-repeat: no-repeat;';
     }else {
-        promptElementValueTwo.innerHTML = "﹀";
-        promptElementValueTwo.style = "position: relative; top: 6px; z-index: 1;"
+        promptElementValueTwo.style = 'background-image: url("./assets/images/down.png"); height: 20px; width: 15px; background-size: cover; background-position: center; background-repeat: no-repeat;';
     }
     promptElement.appendChild(promptElementValueOne);
     promptElement.appendChild(promptElementValueTwo);

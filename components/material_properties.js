@@ -26,8 +26,43 @@ export default function createMaterialProperties(materials, changeListener){
 
 
     //options
+    let show = false;
+    const showListener = (val) => {
+        show = val;
+
+        const el = document.querySelector(".material-options");
+        console.log(el);
+        if (el){
+            el.remove();
+        }
+        
+        const list = materials.map(material => material.type);
+            const options = createMaterialOptions(list, selectedMaterial.type, show, showListener, (val) => {
+            selectedMaterial = materials.find(material => material.type == val);        
+            let el = document.querySelector('#properties-container');
+            if (el) {
+                el.remove();
+            }
+            container.appendChild(createProperties(selectedMaterial, updateListener));
+
+            //update state: set selected
+            materials = materials.map((material) => {
+                if (material.type == val) {
+                    return {...material, selected: true};
+                } else {
+                    return {...material, selected: false};
+                }
+            });      
+            changeListener(materials);
+        });
+        container.appendChild(options);
+
+    };
+
+
+    
     const list = materials.map(material => material.type);
-    const options = createMaterialOptions(list, selectedMaterial.type, (val) => {
+    const options = createMaterialOptions(list, selectedMaterial.type, show, showListener, (val) => {
         selectedMaterial = materials.find(material => material.type == val);        
         let el = document.querySelector('#properties-container');
         if (el) {
@@ -47,6 +82,13 @@ export default function createMaterialProperties(materials, changeListener){
 
     });
     container.appendChild(options);
+
+
+
+
+
+
+
     
     let el = document.querySelector('#properties-container');
     if (el) {
