@@ -20,7 +20,7 @@ export default function createNumberInputSmall(title, value, changeListener, opt
     input.style = 'width: 36px; margin-left: 8px;';  
 
     if(options){      
-        if(options.min) {
+        if(options.min || options.min == 0) {
             input.setAttribute('min', options.min);           
         }
         if(options.max) {

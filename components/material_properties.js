@@ -117,7 +117,7 @@ function createProperties(selectedMaterial, changeListener){
 function createProperiesForLambertian(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)})));
+    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)}), {min: 0, max: 1000, step: 0.1}));
     container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
     
@@ -125,7 +125,7 @@ function createProperiesForLambertian(selectedMaterial, updateListener){
 function createProperiesForMetal(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)})));
+    container.appendChild(createNumberInput("fuzz", selectedMaterial.fuzz, (val) => updateListener({type: selectedMaterial.type, "fuzz": Number(val)}),{min: 0, max: 1000, step: 0.1}));
     container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
 
@@ -133,7 +133,7 @@ function createProperiesForMetal(selectedMaterial, updateListener){
 function createProperiesForDielectric(selectedMaterial, updateListener){
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; width: 100%; gap: 8px;"
-    container.appendChild(createNumberInput("r/i", selectedMaterial.refraction_index, (val) => updateListener({type: selectedMaterial.type, "refraction_index": Number(val)})));
+    container.appendChild(createNumberInput("r/i", selectedMaterial.refraction_index, (val) => updateListener({type: selectedMaterial.type, "refraction_index": Number(val)}),{min: 0, max: 1000, step: 0.1}));
     container.appendChild(createColorPicker("color", selectedMaterial.color, (val) => updateListener({type: selectedMaterial.type, "color": val})));
     return container;
 }
