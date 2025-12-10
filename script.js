@@ -95,8 +95,6 @@ async function run(){
 
     await init();
 
-    //update_preview_camera_at_WASM();
-
     //init shapes selector
     init_shapes_selector();
 
@@ -107,19 +105,27 @@ async function run(){
     init_preview_camera_settings();
 
     start_preview_request();
-
-
+    
 }
 
 run();
 
 /////////////left panel///////////
 //
+
+let show = false;
+const showListener = (val) => {
+    show = val;
+    shapeOptionsContainer.innerHTML = "";
+    init_shapes_selector();
+}
+
 function init_shapes_selector(){
 
-    const shapes_titles = get_shapes_titles();   
-    const shapeOptions = createOptions("add shape", shapes_titles, e => {
-        const title = e.target.value;
+    const shapes_titles = get_shapes_titles();
+
+    const shapeOptions = createOptions("add shape", shapes_titles, show, showListener, title => { 
+        //const title = e.target.value;
         const id = uuid();  
         let shape = {selected: true, id, title};
         let properties = {};
@@ -165,9 +171,10 @@ function init_shapes_selector(){
         
         shapes.unshift(shape);
         update_selected_shapes();
-        e.target.selectedIndex = 0;
+        //e.target.selectedIndex = 0;
         start_preview_request();        
     });
+   
     update_selected_shapes();
     shapeOptionsContainer.appendChild(shapeOptions);  
 
@@ -193,7 +200,7 @@ function update_selected_shapes(){
 
 
         //change selected item on click
-        shapeTile.addEventListener("click", (e) => {
+        shapeTile.addEventListener("click", (e) => {       
 
         if (e.target.classList.contains("shape-delete-button")){
             return;
@@ -380,26 +387,25 @@ function init_preview_camera_settings(){
 
 ///////////right panel/////////////
 //
-
-
-
-
+//
 //
 //////end right panel//////////////
 
 //request preview 
 let timers = [];
-async function start_preview_request(){
+function start_preview_request(){
 
     for (let timer of timers){
         clearTimeout(timer);
-    }
+    }   
+
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
 
     const inputWASM = formatToWASM(previewCamera, shapes);
   
+   
     let sortedArr = [];
     for (let y = 0; y < h; y++){
         for (let x = 0; x < w; x++){
@@ -417,27 +423,7 @@ async function start_preview_request(){
             previewContext.fillStyle = color;
             previewContext.fillRect(x, y, 1, 1);  
         }, 0.0));
-    }
-
-    
-    /*
-    const randomXs = random_array(0, w);
-    const randomYs = random_array(0, h);
-    for (let y = 0; y < randomYs.length; y++){
-        for (let x = 0; x < randomXs.length; x++){
-            let _y = randomYs[y];
-            let _x = randomXs[x];
-            //console.log("x: "+ _x + ", y: "+ _y);
-            timers.push(setTimeout(() => {
-                const color = render_pixel(inputWASM, _x, _y);                            
-                previewContext.fillStyle = color;
-                previewContext.fillRect(_x, _y, 1, 1);  
-            }, 0.0));   
-
-        }
-    }
-        */
-    
+    }   
     
     /*
     const worker = new Worker('worker.js'); 
@@ -447,30 +433,6 @@ async function start_preview_request(){
     };
     */
 
-
-
-
-    // previewContext.clearRect(0, 0, w, h);   
-    // for (let y = 0; y < h; y++){
-    //     for (let x = 0; x < w; x++){
-    //         setTimeout(() => {
-    //             const color = render_pixel(inputWASM, x, y);            
-    //             previewContext.fillStyle = color;
-    //             previewContext.fillRect(x, y, 1, 1);  
-    //         }, 0.0);           
-          
-    //     }
-    // }
-
-    // const h = previewCameraWidth/previewCameraAspectRation;
-    // previewContext.clearRect(0, 0, previewCameraWidth, h) ;    
-    // for (let i = 0; i < previewCameraWidth*h; i++){
-    //     let x = getRandomInt(previewCameraWidth);
-    //     let y = getRandomInt(h);
-    //     let color = get_pixel_color(x,y);
-    //     previewContext.fillStyle = color;
-    //     previewContext.fillRect(x, y, 1, 1);
-    // } 
 }
 
 function propertiesUpdateListener(selected, params){
@@ -539,9 +501,3 @@ const imageData = canvas.toDataURL('image/png');
 const downloadLink = document.getElementById('downloadLink');
 downloadLink.href = imageData;
 */
-
-
-
-
-
-

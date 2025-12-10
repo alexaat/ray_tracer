@@ -36,7 +36,6 @@ export default function createMaterialProperties(materials, changeListener){
         container.appendChild(createProperties(selectedMaterial, updateListener));
         
         //update state: set selected
-        console.log(val)
         materials = materials.map((material) => {
             if (material.type == val) {
                 return {...material, selected: true};
