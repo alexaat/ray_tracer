@@ -26,15 +26,22 @@ const leftPanel = document.querySelector('#left-panel');
 const centerPanel = document.querySelector('#center-panel');
 const rightPanel = document.querySelector('#right-panel');
 
-const renderedCanvas = document.querySelector("#rendered-canvas");
-const ctx = renderedCanvas.getContext('2d');
-
+//const renderedCanvas = document.querySelector("#rendered-canvas");
+//const ctx = renderedCanvas.getContext('2d');
 
 const shapeOptionsContainer = document.querySelector("#shape-options-container");
 const selectedShapesContainer = document.querySelector("#selected-shapes-container");
 
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
+
+
+previewCanvas.addEventListener("click", () => {
+    const imageData = previewCanvas.toDataURL('image/png');
+    const downloadLink = document.getElementById('downloadLink');
+    downloadLink.href = imageData;
+    downloadLink.click();
+});
 
 const showSceneButton = document.querySelector("#show-scene-button");
 showSceneButton.addEventListener("click", () => {
@@ -44,7 +51,6 @@ showSceneButton.addEventListener("click", () => {
     console.log(formatToWASM(previewCamera, shapes));
 });
 
-
 const default_materials = [
     {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
     {"type": "metal","color": [255, 255, 255],"fuzz": 0.1, selected: false},
@@ -53,6 +59,7 @@ const default_materials = [
 
 //state
 //preview camera
+/*
 let previewCameraWidth = 150.0;
 const maxPreviewCameraWidth = 450;
 let previewCameraAspectRation = 1.3333;
@@ -74,11 +81,12 @@ let previewCameraVup = {x: 0, y: 1, z: 0};
 let previewCameraBackground = {r: 190, g: 190, b: 190}
 
 const maxRadius = 1000000;
+*/
 
 let shapes = [];
 
 let previewCamera = {
-    image_width: 20.0,    
+    image_width: 150,    
     aspect_ratio: 1.3,
     pixel_samples: 20,
     vfov: 22,
@@ -421,7 +429,7 @@ function start_preview_request(){
             const y = p[1];
             const color = render_pixel(inputWASM, x, y);
             previewContext.fillStyle = color;
-            previewContext.fillRect(x, y, 1, 1);  
+            previewContext.fillRect(x, y, 1, 1);
         }, 0.0));
     }   
     
@@ -501,3 +509,4 @@ const imageData = canvas.toDataURL('image/png');
 const downloadLink = document.getElementById('downloadLink');
 downloadLink.href = imageData;
 */
+
