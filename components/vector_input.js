@@ -12,15 +12,15 @@ export default function createVectorInput(title, vector, changeListener){
     vectorElement.appendChild(createNumberInputSmall("x", vector[0], (val) => {
         vector = [Number(val), vector[1], vector[2]];
         changeListener(vector);
-    }));
+    }, {min: -1000000, max: 1000000, step: 0.5}));
     vectorElement.appendChild(createNumberInputSmall("y", vector[1], (val) => {
         vector = [vector[0], Number(val), vector[2]];
         changeListener(vector);
-    }));
+    }, {min: -1000000, max: 1000000, step: 0.5}));
     vectorElement.appendChild(createNumberInputSmall("z", vector[2], (val) => {
         vector = [vector[0], vector[1], Number(val)];
         changeListener(vector);
-    }));
+    }, {min: -1000000, max: 1000000, step: 0.5}));
     container.appendChild(vectorElement);
 
     return container;

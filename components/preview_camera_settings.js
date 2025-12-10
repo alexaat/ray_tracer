@@ -3,6 +3,8 @@ import createTitle from "./title.js";
 import createVectorInput from "./vector_input.js";
 import createColorPicker from "./color_picker.js";
 
+
+
 export default function createPreviewCameraSettings(previewCamera, changeListener){
 
     const container = document.createElement('div');
@@ -11,11 +13,11 @@ export default function createPreviewCameraSettings(previewCamera, changeListene
     container.appendChild(createNumberInput("width", previewCamera.image_width, (val) => {
         previewCamera = {...previewCamera, image_width: Number(val)} ;
         changeListener(previewCamera);
-    }, {"border": true}));
+    }, {border: true, min: 1, max: 5000, step: 1}));
     container.appendChild(createNumberInput("aspect ratio", previewCamera.aspect_ratio, (val) => {
         previewCamera = {...previewCamera, aspect_ratio: Number(val)};
         changeListener(previewCamera);
-    }, {"border": true}));
+    }, {border: true, min: 0.01, max: 1000, step: 0.1}));
     container.appendChild(createNumberInput("pixel samples", previewCamera.pixel_samples, (val) => {
         previewCamera = {...previewCamera, pixel_samples: Number(val)};
         changeListener(previewCamera);

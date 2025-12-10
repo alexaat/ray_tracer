@@ -78,7 +78,7 @@ const maxRadius = 1000000;
 let shapes = [];
 
 let previewCamera = {
-    image_width: 150.0,    
+    image_width: 20.0,    
     aspect_ratio: 1.3,
     pixel_samples: 20,
     vfov: 22,
