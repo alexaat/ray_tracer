@@ -17,14 +17,13 @@ body {
     align-items: center;
     gap: 8px;    
     box-sizing: border-box;
-
 }
 
 #left-panel{
     background-color: rgb(255, 86, 86);
-    margin-top: 8px;
-   
+    margin-top: 8px;   
 }
+
 #selected-shapes-container{
     display: flex;
     flex-direction: column;
@@ -44,8 +43,6 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-
-
 
 #commands-container{    
     width: 100%;

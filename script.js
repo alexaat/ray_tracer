@@ -19,8 +19,7 @@ import createTubeProperties from "./components/tube_properties.js";
 import createCylinderProperties from "./components/cylinder_properties.js";
 import createBlockProperties from "./components/block_properties.js";
 
-//elements
-const centerPanel = document.querySelector('#center-panel');
+//elements  
 const rightPanel = document.querySelector('#right-panel');
 
 const shapeOptionsContainer = document.querySelector("#shape-options-container");
@@ -29,6 +28,13 @@ const selectedShapesContainer = document.querySelector("#selected-shapes-contain
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
 
+const commandsInput = document.querySelector('#commands-input');
+
+commandsInput.addEventListener("input", (e) => {
+    const command = e.target.value.trim();
+    start_preview_request(command);
+    
+});
 
 previewCanvas.addEventListener("click", () => {
     const imageData = previewCanvas.toDataURL('image/png');
@@ -36,7 +42,6 @@ previewCanvas.addEventListener("click", () => {
     downloadLink.href = imageData;
     downloadLink.click();
 });
-
 
 const default_materials = [
     {"type": "lambertian", "color": [15, 15, 235], "fuzz": 1.0, selected: true},
@@ -73,8 +78,7 @@ async function run(){
     //init preview camera settinds
     init_preview_camera_settings();
 
-    start_preview_request();
-    
+    start_preview_request();    
 }
 
 run();
@@ -249,17 +253,22 @@ function init_preview_camera_settings(){
 
 //request preview 
 let timers = [];
-function start_preview_request(){
+function start_preview_request(command){
 
     for (let timer of timers){
         clearTimeout(timer);
-    }   
+    }  
+    
+    
+    const inputWASM = command ? command : formatToWASM(previewCamera, shapes);
+    
+
 
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
 
-    const inputWASM = formatToWASM(previewCamera, shapes);
+    //const inputWASM = formatToWASM(previewCamera, shapes);
   
    
     let sortedArr = [];
@@ -279,16 +288,7 @@ function start_preview_request(){
             previewContext.fillStyle = color;
             previewContext.fillRect(x, y, 1, 1);
         }, 0.0));
-    }   
-    
-    /*
-    const worker = new Worker('worker.js'); 
-    worker.postMessage(1000000000); // send data to worker
-    worker.onmessage = function (event) {
-    console.log("Result from worker:", event.data);
-    };
-    */
-
+    }
 }
 
 function propertiesUpdateListener(selected, params){
