@@ -22,9 +22,13 @@ import createBlockProperties from "./components/block_properties.js";
 
 //elements  
 const rightPanel = document.querySelector('#right-panel');
+const leftPanel = document.querySelector('#left-panel');
 
-const shapeOptionsContainer = document.querySelector("#shape-options-container");
-const selectedShapesContainer = document.querySelector("#selected-shapes-container");
+// let shapeOptionsContainer = document.querySelector("#shape-options-container");
+// let selectedShapesContainer = document.querySelector("#selected-shapes-container");
+
+let shapeOptionsContainer;
+let selectedShapesContainer;
 
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
@@ -106,6 +110,24 @@ const showListener = (val) => {
 }
 
 function init_shapes_selector(){
+
+
+    shapeOptionsContainer = document.createElement('div');
+    shapeOptionsContainer.setAttribute('id', 'shape-options-container');
+    leftPanel.appendChild(shapeOptionsContainer);
+
+    selectedShapesContainer = document.createElement('div');
+    selectedShapesContainer.setAttribute('id', 'selected-shapes-container');
+    leftPanel.appendChild(selectedShapesContainer);
+
+
+    /*
+            <div id="shape-options-container"></div>
+        <div id="selected-shapes-container">
+        </div> 
+
+    */
+
 
     const shapes_titles = get_shapes_titles();
 
@@ -277,8 +299,6 @@ function start_preview_request(query){
     }
 
     const inputWASM = query ? query : formatToWASM(previewCamera, shapes);
-
-    console.log(JSON.stringify(shapes));
     
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
@@ -329,12 +349,40 @@ function updateSceneFromQuery(scene){
     }
 
     //2. update shapes
-    // for (let shape of parsed.shapes){
-    //     console.log(shape);
-    // }
+    shapes = [];
+    //parse shapes
+    for (let shape of parsed.shapes) {
+        let s = {};
+        for (const [key, value] of Object.entries(shape)) {
+            const id = uuid(); 
+            s = {...s, title: key, id, properties: value};
+            const materialTitle = value.material;
+            delete s.properties.material;
+            let material = parsed.materials[materialTitle];
+            material = {...material, selected: true}; 
+            const materials = [material];
+            //add remaining materials
+            let remaining = default_materials.filter(m => m.type != material.type);
+            remaining = remaining.map(m => {
+                return {...m, selected: false};
+            });
+            materials.push(...remaining);
 
+            s = {...s, materials};
 
+        }        
+       shapes.push(s);
+    }
 
+    for (let i = 0; i < shapes.length; i++){
+        if (i == 0) {
+            shapes[i] = {...shapes[i],  selected: true};
+        } else {
+            shapes[i] = {...shapes[i],  selected: false};
+        }
+    }
+    leftPanel.innerHTML = "";
+    init_shapes_selector();
     init_preview_camera_settings();
     init_preview_screen();
 }

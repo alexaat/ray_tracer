@@ -4,46 +4,26 @@
         "id": "d66c7924-a8ed-41ca-8ff5-24469ee458eb",
         "title": "cylinder",
         "properties": {
-            "top": [
-                0,
-                0,
-                0
-            ],
-            "bottom": [
-                0,
-                2,
-                0
-            ],
+            "top": [0, 0, 0],
+            "bottom": [0, 2, 0],
             "radius": 1
         },
         "materials": [
             {
                 "type": "lambertian",
-                "color": [
-                    15,
-                    15,
-                    235
-                ],
+                "color": [15, 15, 235],
                 "fuzz": 1,
                 "selected": true
             },
             {
                 "type": "metal",
-                "color": [
-                    255,
-                    255,
-                    255
-                ],
+                "color": [255, 255, 255],
                 "fuzz": 0.1,
                 "selected": false
             },
             {
                 "type": "dielectric",
-                "color": [
-                    255,
-                    255,
-                    255
-                ],
+                "color": [255, 255, 255],
                 "refraction_index": 1.6,
                 "selected": false
             }
@@ -54,41 +34,25 @@
         "id": "6d9346d1-5282-4456-b3e5-4f21d83bee2a",
         "title": "sphere",
         "properties": {
-            "center": [
-                0,
-                1,
-                0
-            ],
+            "center": [0, 1, 0],
             "radius": 1
         },
         "materials": [
             {
                 "type": "lambertian",
-                "color": [
-                    15,
-                    15,
-                    235
-                ],
+                "color": [15, 15, 235],
                 "fuzz": 1,
                 "selected": true
             },
             {
                 "type": "metal",
-                "color": [
-                    255,
-                    255,
-                    255
-                ],
+                "color": [255, 255, 255],
                 "fuzz": 0.1,
                 "selected": false
             },
             {
                 "type": "dielectric",
-                "color": [
-                    255,
-                    255,
-                    255
-                ],
+                "color": [255, 255, 255],
                 "refraction_index": 1.6,
                 "selected": false
             }
