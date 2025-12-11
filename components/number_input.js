@@ -44,8 +44,6 @@ export default function createNumberInput(title, value, changeListener, options)
         }  
     }
 
-
-
     container.appendChild(input);
 
     return container;

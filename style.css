@@ -15,12 +15,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-
- 
-    
+    gap: 8px;    
 
 }
+
 #left-panel{
     background-color: rgb(250, 72, 72);
 }
@@ -30,12 +28,10 @@ body {
     gap: 4px;
 }
 
-
 #center-panel{
     background-color: rgb(90, 177, 90);
     padding: 8px;
 }
-
 
 #rendered-image-container{
     display: none;

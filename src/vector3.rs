@@ -154,12 +154,6 @@ impl PartialEq for Vector3 {
     }
 }
 
-// impl Debug for Vector3 {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(f, "({}, {}, {})", self.x, self.y, self.z)
-//     }
-// }
-
 impl Clone for Vector3 {
     fn clone(&self) -> Self {
         Vector3 {

@@ -72,6 +72,3 @@ impl Hittable for HittableList {
         hit_record_option
     }
 }
-
-//pub static CAMERA: Mutex<Option<Camera>> = Mutex::new(None);
-//pub static WORLD: Lazy<Option<HittableList>> = Lazy::new(|| None);
