@@ -256,3 +256,11 @@ pub static SCENE: Mutex<Option<String>> = Mutex::new(None);
 pub fn get_scene() -> String{
     SCENE.lock().unwrap().as_ref().unwrap().clone()
 }
+
+#[wasm_bindgen]
+pub fn validate_query(scene: String) -> bool{
+    if let Ok(_) = read_data_from_string(scene){
+        return true;
+    }
+    false
+}

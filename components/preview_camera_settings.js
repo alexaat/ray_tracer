@@ -7,6 +7,7 @@ export default function createPreviewCameraSettings(previewCamera, changeListene
 
     const container = document.createElement('div');
     container.style = "display: flex; flex-direction: column; padding: 4px; gap: 4px; border: 2px, solid, black; border-radius: 4px; width: 100%; box-sizing: border-box;"
+    container.setAttribute('id', 'camera-settings');
     container.appendChild(createTitle("Camera Settings"));
     container.appendChild(createNumberInput("width", previewCamera.image_width, (val) => {
         previewCamera = {...previewCamera, image_width: Number(val)} ;

@@ -1,7 +1,8 @@
 import init,
     {       
         get_shapes_titles,
-        render_pixel
+        render_pixel,
+        validate_query
 
     } from "./pkg/ray_tracer.js";
 
@@ -28,14 +29,26 @@ const selectedShapesContainer = document.querySelector("#selected-shapes-contain
 const previewCanvas = document.querySelector("#preview-canvas");
 const previewContext = previewCanvas.getContext('2d');
 
-const commandsInput = document.querySelector('#commands-input');
+const queryBorder = document.querySelector('#query-border');
+const queryInput = document.querySelector('#query-input');
 
-commandsInput.addEventListener("input", (e) => {
-    const command = e.target.value.trim();
-    start_preview_request(command);
+//query
+queryInput.addEventListener("input", (e) => {   
+    const query = e.target.value.trim();
+    if(query == ''){
+         queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
+    } else {
+        if(validate_query(query)){
+            queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
+            start_preview_request(query);    
+        } else {
+            queryBorder.style.borderColor = 'rgba(255, 0, 0, 1)';       
+        }
+    }
     
 });
 
+//download image
 previewCanvas.addEventListener("click", () => {
     const imageData = previewCanvas.toDataURL('image/png');
     const downloadLink = document.getElementById('downloadLink');
@@ -253,24 +266,24 @@ function init_preview_camera_settings(){
 
 //request preview 
 let timers = [];
-function start_preview_request(command){
+function start_preview_request(query){
 
     for (let timer of timers){
         clearTimeout(timer);
-    }  
+    }   
     
-    
-    const inputWASM = command ? command : formatToWASM(previewCamera, shapes);
-    
+    if(query){
+        updateSceneFromQuery(query);
+    }
 
+    const inputWASM = query ? query : formatToWASM(previewCamera, shapes);
 
+    console.log(JSON.stringify(shapes));
+    
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
     previewContext.clearRect(0, 0, w, h);   
 
-    //const inputWASM = formatToWASM(previewCamera, shapes);
-  
-   
     let sortedArr = [];
     for (let y = 0; y < h; y++){
         for (let x = 0; x < w; x++){
@@ -304,4 +317,24 @@ function propertiesUpdateListener(selected, params){
     if (properties || materials) {                           
         start_preview_request();  
     }                
+}
+
+function updateSceneFromQuery(scene){
+    const parsed = JSON.parse(scene);  
+    //1. update camera 
+    previewCamera = parsed.camera;
+    const el = document.querySelector('#camera-settings');
+    if (el){
+        el.remove();
+    }
+
+    //2. update shapes
+    // for (let shape of parsed.shapes){
+    //     console.log(shape);
+    // }
+
+
+
+    init_preview_camera_settings();
+    init_preview_screen();
 }
