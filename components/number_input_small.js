@@ -17,7 +17,7 @@ export default function createNumberInputSmall(title, value, changeListener, opt
     if (changeListener) {
         input.addEventListener("change", (e) => changeListener(e.target.value));
     }
-    input.style = 'width: 36px; margin-left: 8px;';  
+    input.style = 'width: 48px; margin-left: 8px;';  
 
     if(options){      
         if(options.min || options.min == 0) {

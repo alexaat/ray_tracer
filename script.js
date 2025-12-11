@@ -238,7 +238,7 @@ function init_preview_screen(){
 }
 
 function init_preview_camera_settings(){
-    centerPanel.appendChild(createPreviewCameraSettings(previewCamera, (val) => {
+    previewCanvas.after(createPreviewCameraSettings(previewCamera, (val) => {
         previewCamera = val; 
         init_preview_screen();
         start_preview_request();          

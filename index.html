@@ -17,9 +17,15 @@
         </div> 
       </div>
       
-      <div id="center-panel" class="panel">       
-        <a id="downloadLink" download="result-image.png"></a>  
-        <canvas id="preview-canvas" style="border:1px solid #333;" class="pointer"></canvas>
+      <div id="center-panel" class="panel">
+        <div class="panel" id="center-panel-top">
+          <a id="downloadLink" download="result-image.png"></a>  
+          <canvas id="preview-canvas" style="border:1px solid #333;" class="pointer"></canvas>
+        </div>
+        <div id="commands-container">
+          <div id="commands-title">commands</div>
+          <input type="text" id="commands-input">
+        </div>
       </div>
       
       <div id="right-panel" class="panel">    

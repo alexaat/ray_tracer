@@ -9,18 +9,21 @@ body {
 }
 
 .panel{
-    margin-left: 8px;
-    margin-right: 8px;
-    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;    
+    box-sizing: border-box;
 
 }
 
 #left-panel{
-    background-color: rgb(250, 72, 72);
+    background-color: rgb(255, 86, 86);
+    margin-top: 8px;
+   
 }
 #selected-shapes-container{
     display: flex;
@@ -28,9 +31,12 @@ body {
     gap: 4px;
 }
 
-#center-panel{
-    background-color: rgb(90, 177, 90);
-    padding: 8px;
+#center-panel-top{
+    background-color: rgb(95, 194, 95);  
+}
+
+#center-panel-top{
+    padding-bottom: 8px;
 }
 
 #rendered-image-container{
@@ -39,8 +45,23 @@ body {
     justify-content: center;
 }
 
+
+
+#commands-container{    
+    width: 100%;
+    background-color: rgba(246, 246, 124, 0.997);
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#commands-input{
+    box-sizing: border-box;
+    width: 100%;
+}
+
 #right-panel{
-    background-color: rgb(57, 57, 249);
+    margin-top: 8px;
+    background-color: rgb(87, 87, 255);
 }
 
 .pointer:hover{
