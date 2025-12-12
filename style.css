@@ -48,7 +48,15 @@ body {
     width: 100%;
     background-color: rgba(246, 246, 124, 0.997);
     padding: 8px;
-    box-sizing: border-box;    
+    box-sizing: border-box; 
+}
+
+#query-title{
+    width: 100%;
+    text-align: right;
+    font-size: 14px;
+    padding-bottom: 2px;
+
 }
 
 #query-input{
@@ -65,6 +73,44 @@ body {
     border-style: solid;
     border-radius: 4px;   
 }
+
+#query-buttons-container{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.query-button{
+    width: 100%;
+    text-align: center;
+    padding: 4px;
+    border-radius: 4px;;
+}
+
+.button-green{
+    background-color: green;
+}
+.button-green:hover{
+    background-color: rgb(0, 201, 0);
+}
+
+.button-amber{
+    background-color: rgb(255, 191, 0);
+}
+.button-amber:hover{
+    background-color: rgb(252, 213, 95);
+}
+
+.button-red{
+    background-color: red;
+}
+.button-red:hover{
+    background-color: rgb(255, 73, 73);    
+}
+
 
 #right-panel{
     margin-top: 8px;

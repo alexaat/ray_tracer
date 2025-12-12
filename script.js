@@ -24,9 +24,6 @@ import createBlockProperties from "./components/block_properties.js";
 const rightPanel = document.querySelector('#right-panel');
 const leftPanel = document.querySelector('#left-panel');
 
-// let shapeOptionsContainer = document.querySelector("#shape-options-container");
-// let selectedShapesContainer = document.querySelector("#selected-shapes-container");
-
 let shapeOptionsContainer;
 let selectedShapesContainer;
 
@@ -36,21 +33,11 @@ const previewContext = previewCanvas.getContext('2d');
 const queryBorder = document.querySelector('#query-border');
 const queryInput = document.querySelector('#query-input');
 
-//query
-queryInput.addEventListener("input", (e) => {   
-    const query = e.target.value.trim();
-    if(query == ''){
-         queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
-    } else {
-        if(validate_query(query)){
-            queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
-            start_preview_request(query);    
-        } else {
-            queryBorder.style.borderColor = 'rgba(255, 0, 0, 1)';       
-        }
-    }
-    
-});
+const buttonGreen = document.querySelector('.button-green');
+const buttonAmber = document.querySelector('.button-amber');
+const buttonRed = document.querySelector('.button-red');
+
+
 
 //download image
 previewCanvas.addEventListener("click", () => {
@@ -94,6 +81,8 @@ async function run(){
 
     //init preview camera settinds
     init_preview_camera_settings();
+
+    init_query_panel();
 
     start_preview_request();    
 }
@@ -269,6 +258,37 @@ function init_preview_camera_settings(){
         init_preview_screen();
         start_preview_request();          
     }));
+}
+
+function init_query_panel(){
+   
+    queryInput.addEventListener("input", (e) => {   
+        const query = e.target.value.trim();
+        if(query == ''){
+            queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
+        } else {
+            if(validate_query(query)){
+                queryBorder.style.borderColor = 'rgba(32, 32, 32, 1)';
+                start_preview_request(query);    
+            } else {
+                queryBorder.style.borderColor = 'rgba(255, 0, 0, 1)';       
+            }
+        }
+        
+    });
+
+    buttonGreen.addEventListener("click", () => {
+        navigator.clipboard.writeText(queryInput.value);
+    });
+
+    buttonAmber.addEventListener("click", () => {       
+        queryInput.value = navigator.clipboard.readText();
+    });
+
+    buttonRed.addEventListener("click", () => {
+        queryInput.value = "";
+    });
+
 }
 //
 ////////end center panel///////////
