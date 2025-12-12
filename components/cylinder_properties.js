@@ -12,8 +12,8 @@ export default function createCylinderProperties(cylinder, changeListener){
     titleElement.innerHTML = cylinder.title;
     container.appendChild(titleElement);
     
-    container.appendChild(createVectorInput("top", cylinder.properties.top, (val) => changeListener({properties: {top: val}})));
-    container.appendChild(createVectorInput("bottom", cylinder.properties.bottom, (val) => changeListener({properties: {bottom: val}})));
+    container.appendChild(createVectorInput("bottom", cylinder.properties.top, (val) => changeListener({properties: {top: val}})));
+    container.appendChild(createVectorInput("top", cylinder.properties.bottom, (val) => changeListener({properties: {bottom: val}})));
   
     const div = document.createElement('div');
     div.style = "box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; padding: 2px;";    

@@ -111,6 +111,7 @@ const showListener = (val) => {
 
 function init_shapes_selector(){
 
+    leftPanel.innerHTML = "";
 
     shapeOptionsContainer = document.createElement('div');
     shapeOptionsContainer.setAttribute('id', 'shape-options-container');
@@ -119,14 +120,6 @@ function init_shapes_selector(){
     selectedShapesContainer = document.createElement('div');
     selectedShapesContainer.setAttribute('id', 'selected-shapes-container');
     leftPanel.appendChild(selectedShapesContainer);
-
-
-    /*
-            <div id="shape-options-container"></div>
-        <div id="selected-shapes-container">
-        </div> 
-
-    */
 
 
     const shapes_titles = get_shapes_titles();
@@ -299,6 +292,8 @@ function start_preview_request(query){
     }
 
     const inputWASM = query ? query : formatToWASM(previewCamera, shapes);
+
+    queryInput.value = inputWASM;
     
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
