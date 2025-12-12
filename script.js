@@ -198,27 +198,21 @@ function update_selected_shapes(){
             start_preview_request();      
         });
 
-
         //change selected item on click
-        shapeTile.addEventListener("click", (e) => {       
+        shapeTile.addEventListener("click", (e) => {
+            if (e.target.classList.contains("shape-delete-button")){               
+                return;
+            }
 
-        if (e.target.classList.contains("shape-delete-button")){
-            return;
-        }
-
-        let child = e.currentTarget;
-        let parent = child.parentNode;
-
-        shapes.map((item) => {
-            item.selected = false;
-            return item;
-        });  
-        
-        let index = Array.prototype.indexOf.call(parent.children, child);
-        shapes[index].selected = true;
-
-        update_selected_shapes();
-
+            let child = e.currentTarget;
+            let parent = child.parentNode;
+            shapes.map((item) => {
+                item.selected = false;
+                return item;
+            });        
+            let index = Array.prototype.indexOf.call(parent.children, child);
+            shapes[index].selected = true;
+            update_selected_shapes();
         });
 
         selectedShapesContainer.appendChild(shapeTile);
