@@ -7,7 +7,7 @@ export default function createColorPicker(title, vector, changeListener, options
     if (options){
         if(options.border){
             container.style.setProperty(   
-                "border", "2px, solid, black"
+                "border", "1px, solid, black"
             );
             container.style.setProperty(                 
                 "border-radius", "4px"                

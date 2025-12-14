@@ -3,7 +3,14 @@ import createTitleSmall from "./title_small.js";
 
 export default function createVectorInput(title, vector, changeListener){
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: column; width: 100%; border: 2px, solid, black; padding: 2px; border-radius: 4px; box-sizing: border-box;"
+    container.style = `
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: 1px, solid, black;
+        padding: 2px;
+        border-radius: 4px;
+        box-sizing: border-box;`;
     
     container.appendChild(createTitleSmall(title));
     const vectorElement = document.createElement('div');

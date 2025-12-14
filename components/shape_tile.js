@@ -4,17 +4,14 @@ export default function getShapeTile(id, title, isSelected, deleteListener){
     const background = isSelected ? 'yellow' : 'red'; 
     
     container.style = `
-        min-width: 100px;
-        border: 2px, solid, black;
-        border-radius: 4px;
-        padding: 2px;
+        min-width: 100px;        
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        box-sizing: border-box;
         `;
     container.style.backgroundColor = background;
     container.classList.add("pointer");
+    container.classList.add('card');
 
 
     const titleElement = document.createElement('div');

@@ -5,7 +5,15 @@ import createColorPicker from "./color_picker.js";
 export default function createMaterialProperties(materials, changeListener){
     let selectedMaterial = materials.find(material => material.selected);
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: column; min-width: 100px; padding: 2px; box-sizing: border-box; border: 2px, solid, black; border-radius: 4px; gap: 4px;";
+    container.style = `
+        display: flex;
+        flex-direction: column;
+        min-width: 100px;
+        padding: 2px;
+        box-sizing: border-box;
+        border: 1px, solid, black;
+        border-radius: 4px;
+        gap: 4px;`;
     
     //title
     const titleElement = document.createElement('div');

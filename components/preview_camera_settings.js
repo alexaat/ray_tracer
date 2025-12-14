@@ -6,7 +6,12 @@ import createColorPicker from "./color_picker.js";
 export default function createPreviewCameraSettings(previewCamera, changeListener){
 
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: column; padding: 4px; gap: 4px; border: 2px, solid, black; border-radius: 4px; width: 100%; box-sizing: border-box;"
+    container.style = `
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;`;
+    container.classList.add('card-static');
     container.setAttribute('id', 'camera-settings');
     container.appendChild(createTitle("Camera Settings"));
     container.appendChild(createNumberInput("width", previewCamera.image_width, (val) => {

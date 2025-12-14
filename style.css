@@ -20,7 +20,7 @@ body {
 }
 
 #left-panel{
-    background-color: rgb(255, 86, 86);
+    background-color: rgb(255, 224, 224);
     margin-top: 8px;   
 }
 
@@ -31,7 +31,7 @@ body {
 }
 
 #center-panel-top{
-    background-color: rgb(95, 194, 95);  
+    background-color: rgb(210, 255, 210);  
 }
 
 #center-panel-top{
@@ -94,7 +94,7 @@ body {
     background-color: green;
 }
 .button-green:hover{
-    background-color: rgb(0, 201, 0);
+     background-color: rgb(0, 157, 0);
 }
 
 .button-amber{
@@ -114,10 +114,30 @@ body {
 
 #right-panel{
     margin-top: 8px;
-    background-color: rgb(87, 87, 255);
+    background-color: rgb(237, 237, 255);
 }
 
 .pointer:hover{
     cursor: pointer;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 4px;
+  border-radius:4px;    
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card-static {
+  box-sizing: border-box;
+  padding: 4px;
+  border-radius:4px;    
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
