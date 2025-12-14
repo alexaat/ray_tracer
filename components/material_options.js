@@ -1,13 +1,19 @@
 export default function createMaterialOptions(list, selected, show, showListener, menuClickListener){
     
     const container = document.createElement('div');        
-    container.style = "min-width: 100px; border: 2px, solid, black; border-radius: 4px; box-sizing: border-box; padding-left: 2px; padding-right: 2px; padding-top: 2px;";
+    container.style = `
+        min-width: 100px;
+        border: 1px solid rgba(123, 123, 123, 1);
+        box-sizing: border-box;
+        padding-top: 2px;
+        box-sizing: border-box;
+        `;
     container.classList.add('pointer');
     container.classList.add('material-options');
 
     //current material
     const currentElement = document.createElement('div');
-    currentElement.style = "width: 100%; display: flex; flex-direction: row; justify-content: space-between";
+    currentElement.style = "width: 100%; display: flex; flex-direction: row; justify-content: space-between; padding: 2px; box-sizing: border-box;";
     const currentElementValueOne = document.createElement('div');
     currentElementValueOne.innerHTML = selected;
     const currentElementValueTwo = document.createElement('div');
@@ -36,6 +42,7 @@ export default function createMaterialOptions(list, selected, show, showListener
             showListener(false);           
         });
         menuItem.classList.add('pointer');
+        menuItem.classList.add('drow-down-item');
         menu.appendChild(menuItem);
     }
 

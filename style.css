@@ -20,8 +20,9 @@ body {
 }
 
 #left-panel{
-    background-color: rgb(255, 224, 224);
-    margin-top: 8px;   
+    background-color: rgb(255, 238, 238);
+    margin-top: 8px;
+    border: 1px, solid, rgb(199, 199, 199);   
 }
 
 #selected-shapes-container{
@@ -31,7 +32,8 @@ body {
 }
 
 #center-panel-top{
-    background-color: rgb(210, 255, 210);  
+    background-color: rgb(238, 255, 238); 
+    border: 1px, solid, rgb(199, 199, 199);    
 }
 
 #center-panel-top{
@@ -46,9 +48,10 @@ body {
 
 #query-container{    
     width: 100%;
-    background-color: rgba(246, 246, 124, 0.997);
+    background-color: rgba(255, 255, 181, 0.997);
     padding: 8px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    border: 1px, solid, rgb(199, 199, 199);    
 }
 
 #query-title{
@@ -69,7 +72,7 @@ body {
 }
 
 #query-border{
-    border-width: 2px;
+    border-width: 1px;
     border-style: solid;
     border-radius: 4px;   
 }
@@ -111,10 +114,10 @@ body {
     background-color: rgb(255, 73, 73);    
 }
 
-
 #right-panel{
     margin-top: 8px;
     background-color: rgb(237, 237, 255);
+    border: 1px, solid, rgb(199, 199, 199);   
 }
 
 .pointer:hover{
@@ -125,7 +128,7 @@ body {
   box-sizing: border-box;
   padding: 4px;
   border-radius:4px;    
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
   transition: 0.3s;
 }
 
@@ -133,11 +136,18 @@ body {
   box-sizing: border-box;
   padding: 4px;
   border-radius:4px;    
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
   transition: 0.3s;
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
 }
 
+.drow-down-item{
+    padding: 2px;
+}
+
+.drow-down-item:hover{
+    background-color: rgba(255, 255, 255, 0.763);
+}

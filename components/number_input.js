@@ -1,6 +1,14 @@
 export default function createNumberInput(title, value, changeListener, options){
     const container = document.createElement('div');
-    container.style = "display: flex; flex-direction: row; justify-content: space-between; width: 100%; padding: 2px; gap: 4px"
+    container.style = `
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 2px;
+        gap: 4px;
+        box-sizing: border-box;
+        `;        
     
     const titleElement = document.createElement('div');
     if (title){
