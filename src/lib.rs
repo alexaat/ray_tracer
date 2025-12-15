@@ -259,7 +259,40 @@ pub fn get_scene() -> String{
 
 #[wasm_bindgen]
 pub fn validate_query(scene: String) -> bool{
-    if let Ok(_) = read_data_from_string(scene){
+    if let Ok(scene) = read_data_from_string(scene){
+        if scene.camera.image_width < 1 || scene.camera.image_width > 5000 {
+            return false;
+        }
+        if scene.camera.aspect_ratio < 0.01 || scene.camera.aspect_ratio > 100.0 {
+            return false;
+        }
+        if scene.camera.pixel_samples < 1 || scene.camera.pixel_samples > 1000 {
+            return false;
+        }
+        if scene.camera.vfov < 1.0 || scene.camera.vfov > 179.0 {
+            return false;
+        }
+        if scene.camera.lookfrom.x < -1000000.0 || scene.camera.lookfrom.x > 1000000.0 {
+            return false;
+        }
+        if scene.camera.lookfrom.y < -1000000.0 || scene.camera.lookfrom.y > 1000000.0 {
+            return false;
+        }
+        if scene.camera.lookfrom.z < -1000000.0 || scene.camera.lookfrom.z > 1000000.0 {
+            return false;
+        }
+        if scene.camera.lookat.x < -1000000.0 || scene.camera.lookat.x > 1000000.0 {
+            return false;
+        }
+        if scene.camera.lookat.y < -1000000.0 || scene.camera.lookat.y > 1000000.0 {
+            return false;
+        }
+        if scene.camera.lookat.z < -1000000.0 || scene.camera.lookat.z > 1000000.0 {
+            return false;
+        }
+
+
+        
         return true;
     }
     false
