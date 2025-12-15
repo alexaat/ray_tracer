@@ -290,6 +290,28 @@ pub fn validate_query(scene: String) -> bool{
         if scene.camera.lookat.z < -1000000.0 || scene.camera.lookat.z > 1000000.0 {
             return false;
         }
+        if scene.camera.vup.x < -1000000.0 || scene.camera.vup.x > 1000000.0 {
+            return false;
+        }
+        if scene.camera.vup.y < -1000000.0 || scene.camera.vup.y > 1000000.0 {
+            return false;
+        }
+        if scene.camera.vup.z < -1000000.0 || scene.camera.vup.z > 1000000.0 {
+            return false;
+        }
+        if scene.camera.defocus_angle < 0.0 || scene.camera.defocus_angle > 180.0 {
+            return false;
+        }
+        if scene.camera.focus_dist < 0.0 || scene.camera.focus_dist > 1000000.0 {
+            return false;
+        }
+        if scene.camera.max_depth < 1 || scene.camera.max_depth > 500 {
+            return false;
+        }
+
+
+
+
 
 
         

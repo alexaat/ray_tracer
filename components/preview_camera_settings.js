@@ -54,7 +54,7 @@ export default function createPreviewCameraSettings(previewCamera, changeListene
     container.appendChild(createNumberInput("focus distance", previewCamera.focus_dist, (val) => {
         previewCamera = {...previewCamera, focus_dist: Number(val)};
         changeListener(previewCamera);
-    }, {border: true, min: 0, max: 5000, step: 1}));
+    }, {border: true, min: 0, max: 1000000, step: 1}));
     container.appendChild(createNumberInput("max depth", previewCamera.max_depth, (val) => {
         previewCamera = {...previewCamera, max_depth: Number(val)};
         changeListener(previewCamera);
