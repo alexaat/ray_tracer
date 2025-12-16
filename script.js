@@ -34,7 +34,6 @@ const queryBorder = document.querySelector('#query-border');
 const queryInput = document.querySelector('#query-input');
 
 const buttonGreen = document.querySelector('.button-green');
-const buttonAmber = document.querySelector('.button-amber');
 const buttonRed = document.querySelector('.button-red');
 
 
@@ -280,15 +279,19 @@ function init_query_panel(){
 
     //copy
     buttonGreen.addEventListener("click", () => {
-        navigator.clipboard.writeText(queryInput.value);
+        queryInput.select();
+        document.execCommand("copy");
+        //queryInput.setSelectionRange(0, 99999); 
+        //navigator.clipboard.writeText(queryInput.value);
+        alert("Copied the text: " + queryInput.value);
     });
 
     //paste
-    buttonAmber.addEventListener("click", ()  =>  {       
-        navigator.clipboard
-        .readText()
-        .then((clipText) => (queryInput.value = clipText));
-    });
+    // buttonAmber.addEventListener("click", ()  =>  {   
+    //     navigator.clipboard        
+    //     .readText()
+    //     .then((clipText) => (queryInput.value = clipText));
+    // });
 
     //delete
     buttonRed.addEventListener("click", () => {
