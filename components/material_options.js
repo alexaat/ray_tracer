@@ -2,11 +2,12 @@ export default function createMaterialOptions(list, selected, show, showListener
     
     const container = document.createElement('div');        
     container.style = `
-        min-width: 100px;
+        min-width: 90px;
         border: 1px solid rgba(123, 123, 123, 1);
         box-sizing: border-box;
         padding-top: 2px;
         box-sizing: border-box;
+        width: 100%;
         `;
     container.classList.add('pointer');
     container.classList.add('material-options');

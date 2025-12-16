@@ -8,7 +8,8 @@ export default function createSphereProperties(sphere, changeListener){
         display: flex;
         flex-direction: column;
         min-width: 100px;
-        gap: 4px;`;
+        gap: 4px;
+        `;
     container.classList.add('card-static');
 
     const titleElement = document.createElement('div');

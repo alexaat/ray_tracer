@@ -104,12 +104,13 @@ function init_shapes_selector(){
 
     shapeOptionsContainer = document.createElement('div');
     shapeOptionsContainer.setAttribute('id', 'shape-options-container');
+    shapeOptionsContainer.style = "width: 100%; padding-left: 4px; padding-right: 4px; box-sizing: border-box;";
     leftPanel.appendChild(shapeOptionsContainer);
 
     selectedShapesContainer = document.createElement('div');
     selectedShapesContainer.setAttribute('id', 'selected-shapes-container');
+    selectedShapesContainer.style = "width: 100%; padding-left: 4px; padding-right: 4px; box-sizing: border-box;";
     leftPanel.appendChild(selectedShapesContainer);
-
 
     const shapes_titles = get_shapes_titles();
 

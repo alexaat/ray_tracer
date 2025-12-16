@@ -8,6 +8,7 @@ export default function getShapeTile(id, title, isSelected, deleteListener){
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        width: 100%;
         `;
     container.style.backgroundColor = background;
     container.classList.add("pointer");

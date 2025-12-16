@@ -18,7 +18,8 @@ export default function createPropertiesNumberInput(title, value, changeListener
             changeListener(e.target.value);
         });
     }
-    input.style = "width: 48px; margin-left: 4px";
+    input.style = "margin-left: 4px";
+    input.classList.add('properties-number-input');
 
     if(options){      
         if(options.min || options.min == 0) {

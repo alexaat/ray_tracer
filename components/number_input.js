@@ -25,7 +25,7 @@ export default function createNumberInput(title, value, changeListener, options)
     if (changeListener) {
         input.addEventListener("change", (e) => changeListener(e.target.value));
     }
-    input.style = "width: 60px";
+    input.style = "width: 56px";
 
 
     if(options){

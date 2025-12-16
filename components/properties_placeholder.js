@@ -5,7 +5,7 @@ export default function createPropertiesPlaceholder(){
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 100px;
+        width: 100%;
         height: 120px;
         `;
     container.classList.add('card-static');    
