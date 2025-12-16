@@ -308,12 +308,6 @@ pub fn validate_query(scene: String) -> bool{
         if scene.camera.max_depth < 1 || scene.camera.max_depth > 500 {
             return false;
         }
-
-
-
-
-
-
         
         return true;
     }

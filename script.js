@@ -277,14 +277,19 @@ function init_query_panel(){
         
     });
 
+    //copy
     buttonGreen.addEventListener("click", () => {
         navigator.clipboard.writeText(queryInput.value);
     });
 
-    buttonAmber.addEventListener("click", () => {       
-        queryInput.value = navigator.clipboard.readText();
+    //paste
+    buttonAmber.addEventListener("click", ()  =>  {       
+        navigator.clipboard
+        .readText()
+        .then((clipText) => (queryInput.value = clipText));
     });
 
+    //delete
     buttonRed.addEventListener("click", () => {
         queryInput.value = "";
     });

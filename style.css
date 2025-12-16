@@ -2,10 +2,14 @@ body {
     background-color: white;
 }
 
+
 #panel-container{
     display: flex;
+    justify-content: center; 
+}
+
+#panel-container{
     flex-direction: row;
-    justify-content: center;
 }
 
 .panel{
@@ -22,7 +26,7 @@ body {
 #left-panel{
     background-color: rgb(255, 238, 238);
     margin-top: 8px;
-    border: 1px, solid, rgb(199, 199, 199);   
+    border: 1px, solid, rgb(199, 199, 199);  
 }
 
 #selected-shapes-container{
@@ -33,7 +37,7 @@ body {
 
 #center-panel-top{
     background-color: rgb(238, 255, 238); 
-    border: 1px, solid, rgb(199, 199, 199);    
+    border: 1px, solid, rgb(199, 199, 199);  
 }
 
 #center-panel-top{
@@ -51,7 +55,7 @@ body {
     background-color: rgba(255, 255, 181, 0.997);
     padding: 8px;
     box-sizing: border-box;
-    border: 1px, solid, rgb(199, 199, 199);    
+    border: 1px, solid, rgb(199, 199, 199); 
 }
 
 #query-title{
@@ -117,7 +121,7 @@ body {
 #right-panel{
     margin-top: 8px;
     background-color: rgb(237, 237, 255);
-    border: 1px, solid, rgb(199, 199, 199);   
+    border: 1px, solid, rgb(199, 199, 199);  
 }
 
 .pointer:hover{
