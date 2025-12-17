@@ -47,6 +47,7 @@ body {
 
 #preview-canvas{
     margin-bottom: 8px;
+    z-index: 1;
 }
 
 
