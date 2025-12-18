@@ -36,8 +36,6 @@ const queryInput = document.querySelector('#query-input');
 const buttonGreen = document.querySelector('.button-green');
 const buttonRed = document.querySelector('.button-red');
 
-
-
 //download image
 previewCanvas.addEventListener("click", () => {
     const imageData = previewCanvas.toDataURL('image/png');
@@ -338,7 +336,7 @@ function start_preview_request(query){
             const color = render_pixel(inputWASM, x, y);
             previewContext.fillStyle = color;
             previewContext.fillRect(x, y, 1, 1);
-        }, 0.0));
+        }, 0.01));
     }
 }
 
