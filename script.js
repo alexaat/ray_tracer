@@ -1,11 +1,9 @@
 import init,
     {       
         get_shapes_titles,
-        render_pixel,
         validate_query
 
     } from "./pkg/ray_tracer.js";
-
 
 import {formatToWASM, uuid, shuffle} from './util.js';
 import createPreviewCameraSettings from "./components/preview_camera_settings.js";
@@ -36,6 +34,9 @@ const queryInput = document.querySelector('#query-input');
 const buttonGreen = document.querySelector('.button-green');
 const buttonRed = document.querySelector('.button-red');
 
+let worker = new Worker("./worker.js", {type: 'module'});
+set_worker_listener(worker);
+
 //download image
 previewCanvas.addEventListener("click", () => {
     const imageData = previewCanvas.toDataURL('image/png');
@@ -64,10 +65,9 @@ let previewCamera = {
     lookat: [0, 0, 0],
     vup: [0, 1, 0],
     background: [190, 190, 190]
-}
+}  
 
 async function run(){
-
     await init();
 
     //init shapes selector
@@ -110,7 +110,7 @@ function init_shapes_selector(){
     leftPanel.appendChild(selectedShapesContainer);
 
     const shapes_titles = get_shapes_titles();
-
+   
     const shapeOptions = createOptions("add shape", shapes_titles, show, showListener, title => { 
         //const title = e.target.value;
         const id = uuid();  
@@ -279,17 +279,8 @@ function init_query_panel(){
     buttonGreen.addEventListener("click", () => {
         queryInput.select();
         document.execCommand("copy");
-        //queryInput.setSelectionRange(0, 99999); 
-        //navigator.clipboard.writeText(queryInput.value);
         alert("Copied the text: " + queryInput.value);
     });
-
-    //paste
-    // buttonAmber.addEventListener("click", ()  =>  {   
-    //     navigator.clipboard        
-    //     .readText()
-    //     .then((clipText) => (queryInput.value = clipText));
-    // });
 
     //delete
     buttonRed.addEventListener("click", () => {
@@ -301,12 +292,11 @@ function init_query_panel(){
 ////////end center panel///////////
 
 //request preview 
-let timers = [];
 function start_preview_request(query){
 
-    for (let timer of timers){
-        clearTimeout(timer);
-    }   
+    worker.terminate();
+    worker = new Worker("./worker.js", {type: 'module'});
+    set_worker_listener(worker);
     
     if(query){
         updateSceneFromQuery(query);
@@ -318,7 +308,8 @@ function start_preview_request(query){
     
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
-    previewContext.clearRect(0, 0, w, h);   
+    previewContext.clearRect(0, 0, w, h);           
+
 
     let sortedArr = [];
     for (let y = 0; y < h; y++){
@@ -328,15 +319,11 @@ function start_preview_request(query){
     }   
 
     let shuffledArr = shuffle(sortedArr);
-
-    for (let p of shuffledArr){      
-        timers.push(setTimeout(() => {
-            const x = p[0];
-            const y = p[1];
-            const color = render_pixel(inputWASM, x, y);
-            previewContext.fillStyle = color;
-            previewContext.fillRect(x, y, 1, 1);
-        }, 0.01));
+    
+    for (let p of shuffledArr){
+        const x = p[0];
+        const y = p[1];
+        worker.postMessage({x, y, inputWASM});
     }
 }
 
@@ -401,4 +388,11 @@ function updateSceneFromQuery(scene){
     init_shapes_selector();
     init_preview_camera_settings();
     init_preview_screen();
+}
+
+function set_worker_listener(worker){
+    worker.onmessage = ({data}) => {
+        previewContext.fillStyle = data.color;
+        previewContext.fillRect(data.x, data.y, 1, 1);
+    }
 }

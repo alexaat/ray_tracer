@@ -10,8 +10,8 @@ export default function createMaterialProperties(materials, changeListener){
         flex-direction: column;
         min-width: 100px;
         padding: 2px;
-        box-sizing: border-box;
-        border: 1px, solid, black;
+        border: 1px solid black;
+        box-sizing: border-box;       
         border-radius: 4px;
         gap: 4px;`;
     

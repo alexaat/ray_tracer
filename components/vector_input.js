@@ -7,8 +7,8 @@ export default function createVectorInput(title, vector, changeListener){
         display: flex;
         flex-direction: column;
         width: 100%;
-        border: 1px, solid, black;
-        padding: 2px;
+        border: 1px solid black;
+        padding: 2px;   
         border-radius: 4px;
         box-sizing: border-box;`;
     

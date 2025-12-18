@@ -21,7 +21,7 @@ export default function createCylinderProperties(cylinder, changeListener){
     container.appendChild(createVectorInput("top", cylinder.properties.bottom, (val) => changeListener({properties: {bottom: val}})));
   
     const div = document.createElement('div');
-    div.style = "box-sizing: border-box; border: 1px, solid, black; border-radius: 4px; padding: 2px;";    
+    div.style = "box-sizing: border-box; border: 1px solid black; border-radius: 4px; padding: 2px;";    
     div.appendChild(createPropertiesNumberInput("radius", cylinder.properties.radius, (val) => changeListener({properties: {radius: Number(val)}}), {min: 0, max: 100000, step: 0.5}));
     container.appendChild(div);
 
