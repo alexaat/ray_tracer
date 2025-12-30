@@ -26,6 +26,7 @@ use crate::io::*;
 use crate::material::*;
 use crate::plane::*;
 use crate::quad::Quad;
+use crate::source_model::SourceModel;
 use crate::sphere::*;
 use crate::vector3::*;
 use std::collections::HashMap;
@@ -35,6 +36,14 @@ use std::sync::Mutex;
 use crate::disk::Disk;
 use crate::tube::Tube;
 use crate::cylinder::Cylinder;
+
+static SOURCE_MODEL: Mutex<Option<SourceModel>> = Mutex::new(None); 
+
+#[wasm_bindgen]
+pub fn set_up_scene(scene: String){
+    let source_model = read_data_from_string(scene).unwrap();
+    *SOURCE_MODEL.lock().unwrap() = Some(source_model);
+}
 
 #[wasm_bindgen]
 pub fn get_shapes_titles() -> Vec<String> {
@@ -72,7 +81,7 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
 
     //2. get materials
     let mut materials: HashMap<String, Rc<dyn Material>> = HashMap::new();
-    for (key, value) in &data.materials {
+    for (key, value) in data.materials {
         let material_type = value.material_type.as_str();
         let mut color = Vector3::new(1.0, 1.0, 1.0);
 
@@ -111,8 +120,8 @@ pub fn render_pixel(scene: String, x: usize, y: usize) -> String {
     }
 
     //3. get shapes
-    for shape in data.shapes {
-        for (key, value) in &shape {
+    for shape in &data.shapes {
+        for (key, value) in shape {
             let title = key as &str;
             match title {
                 "sphere" => {

@@ -308,21 +308,21 @@ function start_preview_request(query){
     
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
-    previewContext.clearRect(0, 0, w, h);           
+    previewContext.clearRect(0, 0, w, h);  
 
 
+    
     let sortedArr = [];
     for (let y = 0; y < h; y++){
         for (let x = 0; x < w; x++){
             sortedArr.push([x,y]);
         }
     }   
-
     let shuffledArr = shuffle(sortedArr);
     
     for (let p of shuffledArr){
         const x = p[0];
-        const y = p[1];
+        const y = p[1];      
         worker.postMessage({x, y, inputWASM});
     }
 }
@@ -391,8 +391,8 @@ function updateSceneFromQuery(scene){
 }
 
 function set_worker_listener(worker){
-    worker.onmessage = ({data}) => {
+    worker.onmessage = ({data}) => { 
         previewContext.fillStyle = data.color;
-        previewContext.fillRect(data.x, data.y, 1, 1);
+        previewContext.fillRect(data.x, data.y, 1, 1);       
     }
 }
