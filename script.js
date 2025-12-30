@@ -1,7 +1,9 @@
 import init,
     {       
         get_shapes_titles,
-        validate_query
+        validate_query,
+        set_up_scene,
+        render_pixel
 
     } from "./pkg/ray_tracer.js";
 
@@ -33,9 +35,6 @@ const queryInput = document.querySelector('#query-input');
 
 const buttonGreen = document.querySelector('.button-green');
 const buttonRed = document.querySelector('.button-red');
-
-let worker = new Worker("./worker.js", {type: 'module'});
-set_worker_listener(worker);
 
 //download image
 previewCanvas.addEventListener("click", () => {
@@ -292,11 +291,7 @@ function init_query_panel(){
 ////////end center panel///////////
 
 //request preview 
-function start_preview_request(query){
-
-    worker.terminate();
-    worker = new Worker("./worker.js", {type: 'module'});
-    set_worker_listener(worker);
+async function start_preview_request(query){
     
     if(query){
         updateSceneFromQuery(query);
@@ -305,12 +300,12 @@ function start_preview_request(query){
     const inputWASM = query ? query : formatToWASM(previewCamera, shapes);
 
     queryInput.value = inputWASM;
-    
+
+    set_up_scene(inputWASM);
+
     const w = previewCamera.image_width;
     const h = Math.trunc(w/previewCamera.aspect_ratio);
-    previewContext.clearRect(0, 0, w, h);  
-
-
+    previewContext.clearRect(0, 0, w, h);
     
     let sortedArr = [];
     for (let y = 0; y < h; y++){
@@ -318,13 +313,31 @@ function start_preview_request(query){
             sortedArr.push([x,y]);
         }
     }   
-    let shuffledArr = shuffle(sortedArr);
-    
-    for (let p of shuffledArr){
-        const x = p[0];
-        const y = p[1];      
-        worker.postMessage({x, y, inputWASM});
-    }
+    const shuffledArr = shuffle(sortedArr);
+
+    tasks = [...shuffledArr];   
+    processBatch();
+
+}
+
+let tasks = [];
+
+//render in batches of 200 
+function processBatch() {
+  let i = 0;
+
+  while (i < 200 && tasks.length) {  
+    const p = tasks.shift();
+    const x = p[0];
+    const y = p[1];
+    const color = render_pixel(x, y);
+    previewContext.fillStyle = color;
+    previewContext.fillRect(x, y, 1, 1);
+    i++;
+  }
+  if (tasks.length) {
+    setTimeout(processBatch, 0); 
+  }
 }
 
 function propertiesUpdateListener(selected, params){
@@ -388,11 +401,4 @@ function updateSceneFromQuery(scene){
     init_shapes_selector();
     init_preview_camera_settings();
     init_preview_screen();
-}
-
-function set_worker_listener(worker){
-    worker.onmessage = ({data}) => { 
-        previewContext.fillStyle = data.color;
-        previewContext.fillRect(data.x, data.y, 1, 1);       
-    }
 }
