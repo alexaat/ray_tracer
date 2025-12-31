@@ -17,8 +17,8 @@ export default function createTubeProperties(tube, changeListener){
     titleElement.innerHTML = tube.title;
     container.appendChild(titleElement);
     
-    container.appendChild(createVectorInput("top", tube.properties.top, (val) => changeListener({properties: {top: val}})));
-    container.appendChild(createVectorInput("bottom", tube.properties.bottom, (val) => changeListener({properties: {bottom: val}})));
+    container.appendChild(createVectorInput("bottom", tube.properties.top, (val) => changeListener({properties: {top: val}})));
+    container.appendChild(createVectorInput("top", tube.properties.bottom, (val) => changeListener({properties: {bottom: val}})));
   
     const div = document.createElement('div');
     div.style = "box-sizing: border-box; border: 1px solid black; border-radius: 4px; padding: 2px;";    
